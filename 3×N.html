@@ -18,3 +18,26 @@ function updateLanes(result){
     });
 }
 </script>
+[in2] → [me2] → [in4] → [run4] → [me4] → [u4]  →  FINAL
+<div class="pipeline">
+  <div>in2</div>
+  <div>me2</div>
+  <div>in4</div>
+  <div>run4</div>
+  <div>me4</div>
+  <div>u4</div>
+</div>
+
+<style>
+.pipeline {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  font-family: monospace;
+}
+.pipeline div {
+  border: 1px solid #0ff;
+  padding: 10px;
+  text-align: center;
+}
+</style>
