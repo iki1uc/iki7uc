@@ -1,1 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>3×2 – Vorwärts‑Operator</title>
+<style>
+  body{background:#000;color:#0ff;font-family:monospace;padding:20px;}
+  .cell{padding:6px;margin:4px;border:1px solid #033;display:inline-block;width:90px;text-align:center;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<h2>3×2 – VORWÄRTS‑OPERATOR</h2>
+<div id="grid"></div>
+<pre id="out">READY</pre>
+
+<script>
+// SUPER-ID (6 Felder)
+const SUPER_IDS = ["⟡A1","⟡A2","⟡B1","⟡B2","⟡C1","⟡C2"];
+
+// Moves (minimal)
+const MOVES = {
+  "⟡A1":"AN","⟡A2":"SC",
+  "⟡B1":"NV","⟡B2":"ST",
+  "⟡C1":"SG","⟡C2":"HX"
+};
+
+// Achsen
+const AXIS_PRIMARY   = ["I","Z","W"];
+const AXIS_SECONDARY = ["K","T"];
+
+// Flow
+const FLOW = {
+  AN:"SC", SC:"NV", NV:"ST", ST:"SG", SG:"HX", HX:"END"
+};
+
+// Operator
+function OP(i){
+  const sid  = SUPER_IDS[i];
+  const move = MOVES[sid];
+  const row  = Math.floor(i/2);
+  const col  = i%2;
+  return {
+    sid,
+    move,
+    axis1: AXIS_PRIMARY[row],
+    axis2: AXIS_SECONDARY[col],
+    flow: FLOW[move]
+  };
+}
+
+// UI
+const grid=document.getElementById("grid");
+const out=document.getElementById("out");
+SUPER_IDS.forEach((sid,i)=>{
+  const d=document.createElement("div");
+  d.className="cell";
+  d.textContent=sid;
+  d.onclick=()=>{const r=OP(i);out.textContent=`${r.sid}\n${r.move}\n${r.axis1}/${r.axis2}\n→ ${r.flow}`};
+  grid.appendChild(d);
+});
+</script>
+
+</body>
+</html>
 
