@@ -1,1 +1,15 @@
+<script type="module">
+import { real_match } from "./real_match.js";
+
+export function processImpulse(data){
+    // 1) Impuls an Overdrive / real_match weitergeben
+    const result = real_match(data);
+
+    // 2) Ausgabe minimal anzeigen (Debug ohne Verzerrung)
+    console.log("Impulse:", result);
+
+    // 3) Rückgabe an index oder Unterordner
+    return result;
+}
+</script>
 
