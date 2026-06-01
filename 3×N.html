@@ -1,32 +1,8 @@
-<script type="module">
-import { real_match } from "./real_match.js";
-
-export function processImpulse(data){
-
-    const result = real_match(data);
-
-    updateLanes(result);
-
-    return result;
-}
-
-function updateLanes(result){
-    const lanes = document.querySelectorAll(".lane");
-
-    lanes.forEach((lane, i) => {
-        lane.textContent = `${i} | ${result.mode} | ${result.output.value}`;
-    });
-}
-</script>
-[in2] → [me2] → [in4] → [run4] → [me4] → [u4]  →  FINAL
-<div class="pipeline">
-  <div>in2</div>
-  <div>me2</div>
-  <div>in4</div>
-  <div>run4</div>
-  <div>me4</div>
-  <div>u4</div>
-</div>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>3×N Lauf</title>
 
 <style>
 .pipeline {
@@ -40,4 +16,81 @@ function updateLanes(result){
   padding: 10px;
   text-align: center;
 }
+.lanes {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+.lane {
+  border: 1px solid #0f0;
+  padding: 5px;
+  font-family: monospace;
+}
 </style>
+</head>
+
+<body>
+
+<h2>3×N Pipeline</h2>
+
+<input id="inputValue" placeholder="Wert eingeben">
+<button id="runBtn">Impulse senden</button>
+
+<p>[in2] → [me2] → [in4] → [run4] → [me4] → [u4] → FINAL</p>
+
+<div class="pipeline">
+  <div>in2</div>
+  <div>me2</div>
+  <div>in4</div>
+  <div>run4</div>
+  <div>me4</div>
+  <div>u4</div>
+</div>
+
+<h3>Lanes (16‑fach)</h3>
+<div class="lanes">
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+  <div class="lane"></div>
+</div>
+
+<script type="module">
+import { TECH_LANES } from "./core/tech_lanes.js";
+import { real_match } from "./real_match.js";
+import "./rcalc.js";
+
+document.getElementById("runBtn").addEventListener("click", () => {
+    const value = document.getElementById("inputValue").value;
+    processImpulse(value);
+});
+
+export function processImpulse(data){
+    const result = real_match(data);
+    updateLanes(result);
+    return result;
+}
+
+function updateLanes(result){
+    const lanes = document.querySelectorAll(".lane");
+    lanes.forEach((lane, i) => {
+        lane.textContent = `${i} | ${result.mode} | ${result.output.value}`;
+    });
+}
+</script>
+
+</body>
+</html>
