@@ -1,1 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3×11 – SCHALTWERK</title>
+<style>
+  body{
+    margin:0;
+    background:#000;
+    color:#0ff;
+    font-family:monospace;
+    padding:20px;
+  }
+  .cell{
+    padding:6px;
+    margin:4px;
+    border:1px solid #033;
+    display:inline-block;
+    width:90px;
+    text-align:center;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<h2>3×11 SCHALTWERK</h2>
+<div id="grid"></div>
+<pre id="out">READY</pre>
+
+<script>
+// ======================================================
+// SUPER-ID – 33 Felder (3 × 11)
+// ======================================================
+const SUPER_IDS = [
+  "⟡A1","⟡A2","⟡A3","⟡A4","⟡A5","⟡A6","⟡A7","⟡A8","⟡A9","⟡A10","⟡A11",
+  "⟡B1","⟡B2","⟡B3","⟡B4","⟡B5","⟡B6","⟡B7","⟡B8","⟡B9","⟡B10","⟡B11",
+  "⟡C1","⟡C2","⟡C3","⟡C4","⟡C5","⟡C6","⟡C7","⟡C8","⟡C9","⟡C10","⟡C11"
+];
+
+// ======================================================
+// MOVE-SET – 33 Schaltungen (Platzhalter, anpassbar)
+// ======================================================
+const MOVES = {
+  "⟡A1":"AN","⟡A2":"SC","⟡A3":"NV","⟡A4":"ST","⟡A5":"SG",
+  "⟡A6":"HX","⟡A7":"MX","⟡A8":"IQ","⟡A9":"AL","⟡A10":"SH","⟡A11":"CU",
+
+  "⟡B1":"MO","⟡B2":"PI","⟡B3":"AX","⟡B4":"BC","⟡B5":"RW",
+  "⟡B6":"ER","⟡B7":"IQ","⟡B8":"CU","⟡B9":"AX","⟡B10":"RW","⟡B11":"AN",
+
+  "⟡C1":"SC","⟡C2":"NV","⟡C3":"ST","⟡C4":"SG","⟡C5":"HX",
+  "⟡C6":"MX","⟡C7":"MO","⟡C8":"PI","⟡C9":"AL","⟡C10":"SH","⟡C11":"BC"
+};
+
+// ======================================================
+// ACHSEN – 3 Primär × 11 Sekundär
+// ======================================================
+const AXIS_PRIMARY   = ["I","Z","W"]; // Impuls / Zustand / Wirkung
+const AXIS_SECONDARY = [
+  "K","T","P","R","S",
+  "E","U","V","W","X","Y"
+]; 
+// Y = neue Sekundärachse (z.B. Yield / Yoke / Y‑Layer)
+
+// ======================================================
+// FLOW – Weiterleitung der Moves
+// ======================================================
+const FLOW = {
+  AN:"ST", SC:"AL", NV:"PI", ST:"IQ", SG:"AL",
+  HX:"END", MX:"MO", IQ:"CU", AL:"AX", SH:"PI",
+  CU:"RW", MO:"END", PI:"IQ", AX:"END", BC:"AX",
+  RW:"END", ER:"RW"
+};
+
+// ======================================================
+// OPERATOR-FORMEL
+// ======================================================
+function OP(index){
+  const sid  = SUPER_IDS[index];
+  const move = MOVES[sid];
+
+  const row = Math.floor(index / 11);
+  const col = index % 11;
+
+  const axis1 = AXIS_PRIMARY[row];
+  const axis2 = AXIS_SECONDARY[col];
+
+  const chain = FLOW[move] || "END";
+
+  return { sid, move, axis1, axis2, chain };
+}
+
+// ======================================================
+// Minimal-UI – nur zum Anklicken der Schaltung
+// ======================================================
+const grid = document.getElementById("grid");
+const out  = document.getElementById("out");
+
+SUPER_IDS.forEach((sid, index)=>{
+  const div = document.createElement("div");
+  div.className = "cell";
+  div.textContent = sid;
+  div.onclick = ()=>{
+    const r = OP(index);
+    out.textContent =
+      `${r.sid}\nMOVE=${r.move}\nAXIS=${r.axis1}/${r.axis2}\nFLOW=${r.chain}`;
+  };
+  grid.appendChild(div);
+});
+</script>
+
+</body>
+</html>
 
