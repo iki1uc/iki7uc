@@ -1,1 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RAWWATOR – 3×4</title>
+<style>
+  body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#020617;
+    color:#e5e7eb;
+    font-family:system-ui,sans-serif;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(4,70px);
+    grid-template-rows:repeat(3,70px);
+    gap:8px;
+  }
+  .cell{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    background:#0b1120;
+    border:1px solid #1f2937;
+    cursor:pointer;
+    font-size:16px;
+    transition:.15s;
+  }
+  .cell:hover{
+    background:#111827;
+    border-color:#38bdf8;
+    color:#e0f2fe;
+  }
+  #out{
+    position:fixed;
+    bottom:16px;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:monospace;
+    font-size:14px;
+    color:#a5f3fc;
+  }
+</style>
+</head>
+<body>
+
+<div class="grid" id="grid"></div>
+<div id="out">RAWWATOR 3×4: ready.</div>
+
+<script>
+// ======================================================
+// RAWWATOR — SUPER-ID SYSTEM (⟡ + 2 Zeichen)
+// ======================================================
+
+const SUPER_IDS = [
+  "⟡A1","⟡A2","⟡A3","⟡A4",
+  "⟡B1","⟡B2","⟡B3","⟡B4",
+  "⟡C1","⟡C2","⟡C3","⟡C4"
+];
+
+// ======================================================
+// MOVE-SET (Operator + iki7uc-Paper-Funktionen)
+// ======================================================
+
+const MOVES12 = [
+  "AN","SC","NV","ST",
+  "SG","HX","MX","IQ",
+  "AL","SH","CU","MO"
+];
+
+// ======================================================
+// FUNKTIONS-MATRIX (iki7uc PAPER → 3×4)
+// ======================================================
+
+const FUNKTION = {
+  "⟡A1":"SHIFT",
+  "⟡A2":"TECHMAP",
+  "⟡A3":"EVENTS",
+  "⟡A4":"MAERCHEN",
+
+  "⟡B1":"ALL4ALL",
+  "⟡B2":"ANKER",
+  "⟡B3":"PIPELINE",
+  "⟡B4":"MAXI4D",
+
+  "⟡C1":"CUBE-LIVE",
+  "⟡C2":"RENDER",
+  "⟡C3":"TECH_6IY",
+  "⟡C4":"TECH_NIEX8"
+};
+
+// ======================================================
+// ACHSEN (12 Achsen = 3 Primär × 4 Sekundär)
+// ======================================================
+
+const AXIS_PRIMARY   = ["I","Z","W"];       // Impuls, Zustand, Wirkung
+const AXIS_SECONDARY = ["K","T","P","R"];   // Kontext, Zeit, Perspektive, Rotation
+
+// ======================================================
+// OPERATOR-FORMEL (Master)
+// ======================================================
+
+function OP12(index){
+  const row = Math.floor(index / 4);   // 0..2
+  const col = index % 4;               // 0..3
+
+  const superID = SUPER_IDS[index];
+  const move    = MOVES12[index];
+  const axis1   = AXIS_PRIMARY[row];
+  const axis2   = AXIS_SECONDARY[col];
+  const func    = FUNKTION[superID];
+
+  return { superID, move, axis1, axis2, func };
+}
+
+// ======================================================
+// UI
+// ======================================================
+
+const grid = document.getElementById("grid");
+const out  = document.getElementById("out");
+
+SUPER_IDS.forEach((sid, index)=>{
+  const div = document.createElement("div");
+  div.className = "cell";
+  div.textContent = sid;
+  div.dataset.index = index;
+
+  div.addEventListener("click", ()=>{
+    const r = OP12(index);
+    out.textContent =
+      `${r.superID} → MOVE=${r.move} | AXIS=${r.axis1}/${r.axis2} | FUNC=${r.func}`;
+  });
+
+  grid.appendChild(div);
+});
+</script>
+
+</body>
+</html>
 
