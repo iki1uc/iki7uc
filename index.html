@@ -1,1 +1,54 @@
-processImpulse(data)
+<script type="module">
+import { processImpulse } from "./3xN.html";
+
+function sendImpulse(){
+    const data = {
+        value: 7,
+        direction: "forward",
+        raw: "◼",
+        mult: 1
+    };
+
+    const result = processImpulse(data);
+    console.log("INDEX RESULT:", result);
+}
+
+sendImpulse();
+</script>
+
+<div class="lanes">
+  <div class="lane">F2 88</div>
+  <div class="lane">R1 88</div>
+  <div class="lane">M4 88</div>
+  <div class="lane">M8 88</div>
+
+  <div class="lane">M16 88</div>
+  <div class="lane">M128 88</div>
+  <div class="lane">F2 88</div>
+  <div class="lane">R1 88</div>
+
+  <div class="lane">M4 88</div>
+  <div class="lane">M8 88</div>
+  <div class="lane">M16 88</div>
+  <div class="lane">M128 88</div>
+
+  <div class="lane">F2 88</div>
+  <div class="lane">R1 88</div>
+  <div class="lane">M4 88</div>
+  <div class="lane">M8 88</div>
+</div>
+
+<style>
+.lanes{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-top:20px;
+}
+.lane{
+  border:1px solid #0ff;
+  padding:10px;
+  font-family:monospace;
+  text-align:center;
+}
+</style>
