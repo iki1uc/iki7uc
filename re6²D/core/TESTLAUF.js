@@ -27,4 +27,3 @@ export function TESTLAUF() {
 
     return ergebnis;
 }
-
