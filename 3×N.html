@@ -1,17 +1,17 @@
-export function processImpulse(data){
+<script type="module">
+import { processImpulse } from "./3xN.html";
 
-    // 1) Impuls an real_match geben
-    const result = real_match(data);
+function sendImpulse(){
+    const data = {
+        value: 7,
+        direction: "forward",
+        raw: "◼",
+        mult: 1
+    };
 
-    // 2) Wenn RAW → in slot_XX.raw
-    if(result.raw){
-        // 88_in/slot_XX.raw
-    }
-
-    // 3) Wenn Operator → in impulse_XXX.json
-    if(result.value !== undefined){
-        // 88_in/impulse_XXX.json
-    }
-
-    return result;
+    const result = processImpulse(data);
+    console.log("INDEX RESULT:", result);
 }
+
+sendImpulse();
+</script>
