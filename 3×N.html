@@ -1,15 +1,16 @@
 <script type="module">
 import { real_match } from "./real_match.js";
 
+// 3×N.html = Bahn-Controller
 export function processImpulse(data){
-    // 1) Impuls an Overdrive / real_match weitergeben
+
+    // Impuls an Overdrive / Router weitergeben
     const result = real_match(data);
 
-    // 2) Ausgabe minimal anzeigen (Debug ohne Verzerrung)
-    console.log("Impulse:", result);
+    // Minimaler Debug-Auswurf (verzerrt NICHTS)
+    console.log("3×N Impulse:", result);
 
-    // 3) Rückgabe an index oder Unterordner
+    // Ergebnis zurückgeben an index oder Unterordner
     return result;
 }
 </script>
-
