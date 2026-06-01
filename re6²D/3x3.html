@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RAWWATOR – 3x3</title>
+  <style>
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#020617;
+      color:#e5e7eb;
+      font-family:system-ui,sans-serif;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,60px);
+      grid-template-rows:repeat(3,60px);
+      gap:6px;
+    }
+    .cell{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:8px;
+      background:#0b1120;
+      border:1px solid #1f2937;
+      cursor:pointer;
+      font-size:14px;
+      transition:.15s;
+    }
+    .cell:hover{
+      background:#111827;
+      border-color:#38bdf8;
+      color:#e0f2fe;
+    }
+    #out{
+      position:fixed;
+      bottom:16px;
+      left:50%;
+      transform:translateX(-50%);
+      font-family:monospace;
+      font-size:13px;
+      color:#a5f3fc;
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid" id="grid"></div>
+<div id="out">RAWWATOR: ready.</div>
+
+<script>
+// RAWWATOR PAPER 1 — 3x3.html
+// ============================
+// ESSENZ: 3×3-GRID → FORMEL → OPERATOR
+
+const CELL_IDS      = ["A1","A2","A3","B1","B2","B3","C1","C2","C3"];
+const MOVES         = ["AN","SC","NV","ST","SG","HX","MX","IQ","AL"]; // Anchor, Scanner, Navi, Station, Signal, Halt, Molekül, IQ, ALL4ALL
+const AXIS_PRIMARY  = ["I","Z","W"]; // Impuls, Zustand, Wirkung
+const AXIS_SECONDARY= ["K","T","P"]; // Kontext, Zeit, Perspektive
+
+// OPERATOR-FORMEL:
+// Eingabe: cellIndex (0..8)
+// Ausgabe: { id, move, axis1, axis2 }
+function OP(cellIndex){
+  const row = Math.floor(cellIndex / 3);   // 0..2
+  const col = cellIndex % 3;               // 0..2
+  const id   = CELL_IDS[cellIndex];
+  const move = MOVES[cellIndex];
+  const axis1 = AXIS_PRIMARY[row];
+  const axis2 = AXIS_SECONDARY[col];
+  return { id, move, axis1, axis2 };
+}
+
+// UI-AUFBAU
+const grid = document.getElementById("grid");
+const out  = document.getElementById("out");
+
+CELL_IDS.forEach((id, index)=>{
+  const div = document.createElement("div");
+  div.className = "cell";
+  div.textContent = id;
+  div.dataset.index = index;
+  div.addEventListener("click", ()=>{
+    const r = OP(index);
+    // hier würde der Operator weiterleiten (ALL4ALL, NAVI, etc.)
+    out.textContent =
+      `OP(${r.id}) → MOVE=${r.move} | AXIS=${r.axis1}/${r.axis2}`;
+  });
+  grid.appendChild(div);
+});
+</script>
+
+</body>
+</html>
 
