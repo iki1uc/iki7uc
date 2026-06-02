@@ -1,5 +1,19 @@
-// PASSAGE_ENGINE.js
-export function PASSAGE_ENGINE(molekuel) {
+<script>
+
+// 1) GRID GENERATOR
+…
+
+
+// 2) GRID VIEW
+…
+
+
+// 3) SCANNER XX
+…
+
+
+// 4) PASSAGE ENGINE (HIER!)
+function PASSAGE_ENGINE(molekuel) {
     return [
         molekuel.passage.in2,
         molekuel.passage.me2,
@@ -9,3 +23,9 @@ export function PASSAGE_ENGINE(molekuel) {
         molekuel.passage.u4
     ];
 }
+
+
+// 5) RENDER 2D MASK
+…
+
+</script>
