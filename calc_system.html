@@ -1,3 +1,23 @@
+function forcalc(state){
+    return {
+        axis: "3x2",
+        direction: "forward",
+        value: state.value,
+        raw: state.raw ?? null,
+        mult: state.mult ?? 1
+    };
+}
+
+function revcalc(state){
+    return {
+        axis: "3x1",
+        direction: "backward",
+        value: state.value,
+        raw: state.raw ?? null,
+        mult: state.mult ?? 1
+    };
+}
+
 function rcalc(event){
     const state = event.state ?? {};
 
