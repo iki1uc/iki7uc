@@ -1,5 +1,6 @@
-// SCANNER_XX.js
-export function SCANNER_XX(molekuel) {
+// SCANNER_XX – PURE VERSION (kein export, kein import)
+
+function SCANNER_XX(molekuel) {
     return {
         roh: molekuel.xx.roh,
         signatur: molekuel.xx.signatur,
