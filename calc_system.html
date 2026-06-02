@@ -1,3 +1,14 @@
+dState(){
+    return JSON.parse(localStorage.getItem("calc_state")) || { value: 10, mult: 1 };
+}
+
+function saveState(state){
+    localStorage.setItem("calc_state", JSON.stringify(state));
+}
+
+// ---------------------------------------------------------
+// 1) FORCALC
+// ---------------------------------------------------------
 function forcalc(state){
     return {
         axis: "3x2",
@@ -8,6 +19,9 @@ function forcalc(state){
     };
 }
 
+// ---------------------------------------------------------
+// 2) REVCALC
+// ---------------------------------------------------------
 function revcalc(state){
     return {
         axis: "3x1",
@@ -18,6 +32,9 @@ function revcalc(state){
     };
 }
 
+// ---------------------------------------------------------
+// 3) RCALC (Router)
+// ---------------------------------------------------------
 function rcalc(event){
     const state = event.state ?? {};
 
@@ -40,3 +57,65 @@ function rcalc(event){
         result: state
     };
 }
+
+// ---------------------------------------------------------
+// 4) REAL_MATCH (Dispatcher)
+// ---------------------------------------------------------
+function real_match(event){
+    const state = event.state ?? event;
+    const direction = event.direction ?? "neutral";
+
+    const routed = rcalc({
+        direction: direction,
+        state: state
+    });
+
+    return {
+        input: state,
+        mode: routed.mode,
+        output: routed.result
+    };
+}
+
+// ---------------------------------------------------------
+// 5) TEST BUTTONS (JETZT MIT SPEICHER)
+// ---------------------------------------------------------
+function testForward(){
+    let state = loadState();
+    state.value += 1; // Beispiel: Energie steigt
+    saveState(state);
+
+    print(real_match({
+        direction: "forward",
+        state: state
+    }));
+}
+
+function testBackward(){
+    let state = loadState();
+    state.value -= 1; // Beispiel: Energie sinkt
+    saveState(state);
+
+    print(real_match({
+        direction: "backward",
+        state: state
+    }));
+}
+
+function testNeutral(){
+    let state = loadState();
+    print(real_match({
+        direction: "neutral",
+        state: state
+    }));
+}
+
+// ---------------------------------------------------------
+// 6) OUTPUT
+// ---------------------------------------------------------
+function print(obj){
+    document.getElementById("out").textContent =
+        JSON.stringify(obj, null, 4);
+}
+
+</script>
