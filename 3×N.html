@@ -1,124 +1,32 @@
-ALT_IST:
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>3×N Lauf – PURE Version</title>
+C/V_PIPELINE = {
+  state: {
+    input,
+    impulse,
+    lane_values
+  },
 
-<style>
-  body {
-    background: #000;
-    color: #0ff;
-    font-family: monospace;
-    padding: 20px;
+  impulse_engine: {
+    forward,
+    backward,
+    neutral
+  },
+
+  router: {
+    select_direction,
+    select_axis
+  },
+
+  dispatcher: {
+    input → mode → output
+  },
+
+  lanes: {
+    16 parallele Bedeutungs-Träger
+  },
+
+  display: {
+    slot,
+    mode,
+    transformed_value
   }
-
-  h2, h3 {
-    color: #0ff;
-  }
-
-  .pipeline {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 10px;
-    margin-top: 10px;
-  }
-
-  .pipeline div {
-    border: 1px solid #0ff;
-    padding: 10px;
-    text-align: center;
-  }
-
-  .lanes {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 5px;
-  }
-
-  .lane {
-    border: 1px solid #0f0;
-    padding: 5px;
-    color: #0f0;
-  }
-
-  input {
-    padding: 6px;
-    margin-right: 10px;
-  }
-
-  button {
-    padding: 6px 12px;
-    cursor: pointer;
-  }
-</style>
-</head>
-
-<body>
-
-<h2>3×N Pipeline (Standalone)</h2>
-
-<input id="inputValue" placeholder="Wert eingeben">
-<button id="runBtn">Impulse senden</button>
-
-<p>[in2] → [me2] → [in4] → [run4] → [me4] → [u4] → FINAL</p>
-
-<div class="pipeline">
-  <div>in2</div>
-  <div>me2</div>
-  <div>in4</div>
-  <div>run4</div>
-  <div>me4</div>
-  <div>u4</div>
-</div>
-
-<h3>Lanes (16‑fach)</h3>
-<div class="lanes">
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-  <div class="lane"></div>
-</div>
-
-<script>
-function real_match(input) {
-    return {
-        mode: "OK",
-        output: { value: input.toUpperCase() }
-    };
 }
-
-document.getElementById("runBtn").addEventListener("click", () => {
-    const value = document.getElementById("inputValue").value;
-    processImpulse(value);
-});
-
-function processImpulse(data){
-    const result = real_match(data);
-    updateLanes(result);
-    return result;
-}
-
-function updateLanes(result){
-    const lanes = document.querySelectorAll(".lane");
-    lanes.forEach((lane, i) => {
-        lane.textContent = `${i} | ${result.mode} | ${result.output.value}`;
-    });
-}
-</script>
-
-</body>
-</html>
