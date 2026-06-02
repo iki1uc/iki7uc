@@ -1,19 +1,13 @@
 <script>
-
-// ---------------------------------------------------------
 // STATE SPEICHERN / LADEN
-// ---------------------------------------------------------
 function loadState(){
     return JSON.parse(localStorage.getItem("calc_state")) || { value: 10, mult: 1 };
 }
-
 function saveState(state){
     localStorage.setItem("calc_state", JSON.stringify(state));
 }
 
-// ---------------------------------------------------------
-// 1) FORCALC
-// ---------------------------------------------------------
+// FORCALC (3×2)
 function forcalc(state){
     return {
         axis: "3x2",
@@ -24,9 +18,7 @@ function forcalc(state){
     };
 }
 
-// ---------------------------------------------------------
-// 2) REVCALC
-// ---------------------------------------------------------
+// REVCALC (3×1)
 function revcalc(state){
     return {
         axis: "3x1",
@@ -37,90 +29,47 @@ function revcalc(state){
     };
 }
 
-// ---------------------------------------------------------
-// 3) RCALC (Router)
-// ---------------------------------------------------------
+// RCALC (Router)
 function rcalc(event){
     const state = event.state ?? {};
-
     if(event.direction === "forward"){
-        return {
-            mode: "forward",
-            result: forcalc(state)
-        };
+        return { mode: "forward", result: forcalc(state) };
     }
-
     if(event.direction === "backward"){
-        return {
-            mode: "backward",
-            result: revcalc(state)
-        };
+        return { mode: "backward", result: revcalc(state) };
     }
-
-    return {
-        mode: "neutral",
-        result: state
-    };
+    return { mode: "neutral", result: state };
 }
 
-// ---------------------------------------------------------
-// 4) REAL_MATCH (Dispatcher)
-// ---------------------------------------------------------
+// REAL_MATCH (Dispatcher)
 function real_match(event){
     const state = event.state ?? event;
     const direction = event.direction ?? "neutral";
-
-    const routed = rcalc({
-        direction: direction,
-        state: state
-    });
-
-    return {
-        input: state,
-        mode: routed.mode,
-        output: routed.result
-    };
+    const routed = rcalc({ direction: direction, state: state });
+    return { input: state, mode: routed.mode, output: routed.result };
 }
 
-// ---------------------------------------------------------
-// 5) TEST BUTTONS (JETZT MIT SPEICHER)
-// ---------------------------------------------------------
+// TEST BUTTONS
 function testForward(){
     let state = loadState();
     state.value += 1;
     saveState(state);
-
-    print(real_match({
-        direction: "forward",
-        state: state
-    }));
+    print(real_match({ direction: "forward", state: state }));
 }
-
 function testBackward(){
     let state = loadState();
     state.value -= 1;
     saveState(state);
-
-    print(real_match({
-        direction: "backward",
-        state: state
-    }));
+    print(real_match({ direction: "backward", state: state }));
 }
-
 function testNeutral(){
     let state = loadState();
-    print(real_match({
-        direction: "neutral",
-        state: state
-    }));
+    print(real_match({ direction: "neutral", state: state }));
 }
 
-// ---------------------------------------------------------
-// 6) OUTPUT
-// ---------------------------------------------------------
+// OUTPUT
 function print(obj){
     document.getElementById("out").textContent =
         JSON.stringify(obj, null, 4);
 }
-
 </script>
