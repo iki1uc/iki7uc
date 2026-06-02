@@ -8,20 +8,26 @@
     story: ["A Anfang", "M Mitte", "E Ende"]
   };
 
-  const meta = document.getElementById("meta");
-
-  function updateMask(slot){
+  // interne Funktion
+  function _updateMask(slot){
     const w = MASKE.welt[ slot % 3 ];
     const l = MASKE.life[ slot % 3 ];
     const s = MASKE.story[ slot % 3 ];
+
+    const meta = document.getElementById("meta");
     meta.textContent += ` | W:${w} | L:${l} | S:${s}`;
   }
 
+  // externe Hook-Funktion
+  window.updateMask = function(slot){
+    _updateMask(slot);
+  };
+
+  // render erweitern
   const oldRender = window.render;
   window.render = function(){
     oldRender();
-    updateMask(window.index);
+    _updateMask(window.index);
   };
 
 })();
-
