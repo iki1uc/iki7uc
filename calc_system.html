@@ -87,7 +87,7 @@ function real_match(event){
 // ---------------------------------------------------------
 function testForward(){
     let state = loadState();
-    state.value += 1; // Beispiel: Energie steigt
+    state.value += 1;
     saveState(state);
 
     print(real_match({
@@ -98,7 +98,7 @@ function testForward(){
 
 function testBackward(){
     let state = loadState();
-    state.value -= 1; // Beispiel: Energie sinkt
+    state.value -= 1;
     saveState(state);
 
     print(real_match({
