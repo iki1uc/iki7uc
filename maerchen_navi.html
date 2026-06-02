@@ -1,79 +1,83 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Märchen-Navi 360°</title>
-    <style>
-        body {
-            background: #111;
-            color: #0f0;
-            font-family: monospace;
-            padding: 20px;
-        }
-        .nav {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .nav button {
-            background: #0f0;
-            color: #111;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-        }
-        .nav button:hover {
-            background: #9f9;
-        }
-        #story, #zoomState, #genState {
-            border: 1px solid #0f0;
-            padding: 20px;
-            white-space: pre-wrap;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>iki1uc 8X Wasser-Track</title>
+  <style>
+    body {
+      margin: 0;
+      background: #02040a;
+      color: #aeeaff;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .scene {
+      text-align: center;
+      line-height: 1.2;
+      white-space: pre;
+    }
+
+    .portal-line {
+      font-size: 32px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #4fd5ff, 0 0 16px #2aa9ff;
+      animation: wave 3s infinite ease-in-out;
+    }
+
+    .center-line {
+      font-size: 28px;
+      color: #ffffff;
+      text-shadow: 0 0 10px #4fd5ff;
+    }
+
+    .track {
+      margin-top: 24px;
+      font-size: 24px;
+      color: #ffdd88;
+      text-shadow: 0 0 6px #ffdd88;
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .track.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @keyframes wave {
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(8px); }
+      100% { transform: translateY(0px); }
+    }
+  </style>
 </head>
 <body>
+  <div class="scene">
+    <div class="portal-line">
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+    </div>
+    <div class="center-line">
+          I K I 1 U C
+    </div>
+    <div class="portal-line">
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+    </div>
 
-<h1>Märchen-Navigation 360°</h1>
+    <div id="track" class="track">
+XXXXXXXX        88888888        &gt;&gt;&gt;&gt;&gt;&gt;&gt;
+    </div>
+  </div>
 
-<div class="nav">
-    <button onclick="setAxis('rew')">rew</button>
-    <button onclick="setAxis('me')">me</button>
-    <button onclick="setAxis('for')">for</button>
-</div>
-
-<div id="story">Wähle oben ein Märchen…</div>
-<div id="zoomState"></div>
-<div id="genState"></div>
-
-<script>
-// -------------------------
-// 1) MÄRCHEN (ALT bleibt)
-// -------------------------
-const stories = {
-    rew: `
-MÄRCHEN 1 – Rückwärts
-
-Es war einmal ein Wanderer,
-der immer nur rückwärts ging.
-
-Eines Tages stolperte er über einen Stein.
-
-Da erkannte er:
-"Wer nur zurückschaut, sieht nicht, wohin er fällt."
-    `,
-
-    me: `
-MÄRCHEN 2 – Mitte
-
-Es war einmal ein Kind,
-das fragte, warum Sterne funkeln.
-
-Die Mutter sagte:
-"Weil jede Frage ein Licht entzündet."
-
-Und so begann das Kind zu verstehen.
-    `,
-
-    for: `
+  <script>
+    setTimeout(() => {
+      document.getElementById('track').classList.add('active');
+    }, 1200);
+  </script>
+</body>
+</html>
