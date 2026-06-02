@@ -1,4 +1,4 @@
-/* mini_3ja.js — 3×3 JA-Mechanik */
+/* mini_3ja.js — 3×JA-Mechanik rew / me / for */
 
 (function(){
 
@@ -10,15 +10,18 @@
 
   window.JA3 = {
     set(axis){
-      if(axis==="rew") JA.rew = true;
-      if(axis==="me")  JA.me  = true;
-      if(axis==="for") JA.for = true;
+      if(axis === "rew") JA.rew = true;
+      if(axis === "me")  JA.me  = true;
+      if(axis === "for") JA.for = true;
+    },
+    auto(axis){
+      // axis = "rew" | "me" | "for"
+      this.set(axis);
     },
     ready,
     debug(){
-      return { ...JA, ready:ready() };
+      return { ...JA, ready: ready() };
     }
   };
 
 })();
-
