@@ -1,20 +1,121 @@
-<script>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>3×Märchen ×4 – PURE</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #0ff;
+      font-family: monospace;
+      padding: 20px;
+    }
+    #meta {
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #aaa;
+    }
+    #storyBox {
+      white-space: pre-wrap;
+      border: 1px solid #0ff;
+      padding: 10px;
+      min-height: 160px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
 
-// ===============================
-// 0) BASIS-MOLEKÜL
-// ===============================
-const ITEM_MOLEKUEL = {
-    navi: { ui:0, ie:0, ah:0, ha:0, äh:0, hä:0 },
-    passage: { in2:null, me2:null, in4:null, run4:null, me4:null, u4:null },
-    xx: { roh:"", signatur:"" },
-    acht88: { links:0, rechts:0 },
-    meta: { id:"ITEM-BASE", version:"1.0" }
+<div id="meta"></div>
+<div id="storyBox"></div>
+<button id="nextBtn">Weiter</button>
+
+<script>
+// 3 Märchen (rew / me / for)
+const stories = {
+  rew: `MÄRCHEN 1 – Rückwärts
+
+Es war einmal ein Wanderer,
+der immer nur rückwärts ging.
+
+Eines Tages stolperte er über einen Stein.
+
+Da erkannte er:
+"Wer nur zurückschaut, sieht nicht, wohin er fällt."`,
+
+  me: `MÄRCHEN 2 – Mitte
+
+Es war einmal ein Kind,
+das fragte, warum Sterne funkeln.
+
+Die Mutter sagte:
+"Weil jede Frage ein Licht entzündet."
+
+Und so begann das Kind zu verstehen.`,
+
+  for: `MÄRCHEN 3 – Vorwärts
+
+Ein Mann saß unter einem Apfelbaum.
+Ein Apfel fiel und traf ihn leicht am Kopf.
+
+Er dachte:
+"Zum Glück war es kein Kürbis."
+
+Und so begann seine Reise der Erkenntnis.`
 };
 
-// ===============================
-// 1) GRID 4×4
-// ===============================
-const ITEM_GRID_4x4 = [
-  [ { ...ITEM_MOLEKUEL, pos:{x:0,y:0} }, { ...ITEM_MOLEKUEL, pos:{x:1,y:0} }, { ...ITEM_MOLEKUEL, pos:{x:2,y:0} }, { ...ITEM_MOLEKUEL, pos:{x:3,y:0} } ],
-  [ { ...ITEM_MOLEKUEL, pos:{x:0,y:1} }, { ...ITEM_MOLEKUEL, pos:{x:1,y:1} }, { ...ITEM_MOLEKUEL, pos:{x:2,y:1} }, { ...ITEM_MOLEKUEL, pos:{x:3,y:1} } ],
-  [ { ...ITEM_MOLEKUEL, pos:{x:0,y:2} }, { ...ITEM_MOLEKUEL, pos:{x:1,y:2} }, { ...ITEM_MOLEKUEL, pos:{x:2,y:2} }, { ...
+// 3 Märchen × 4 = 12 Slots
+// Jede Kombination bekommt eine Position + Info
+const sequence = [];
+const keys = ["rew", "me", "for"];
+
+for (let round = 1; round <= 4; round++) {
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    sequence.push({
+      id: `${key.toUpperCase()}_R${round}`,
+      round,
+      slot: sequence.length + 1,
+      key,
+      text: stories[key]
+    });
+  }
+}
+
+// Zustand
+let index = 0;
+
+function render() {
+  const metaEl = document.getElementById("meta");
+  const boxEl  = document.getElementById("storyBox");
+
+  if (index < sequence.length) {
+    const item = sequence[index];
+    metaEl.textContent =
+      `Slot: ${item.slot}/12 | Märchen: ${item.key} | Runde: ${item.round}`;
+    boxEl.textContent = item.text;
+  } else {
+    // „unmögliche“ Zone – hat trotzdem Bedeutung
+    metaEl.textContent = `Slot: ${index+1} | STATUS: OUT_OF_RANGE`;
+    boxEl.textContent =
+      `Kein definierter Eintrag mehr.\n` +
+      `Auch diese falsche Anzeige ist ein Signal.`;
+  }
+}
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+  index++;
+  render();
+});
+
+// Startzustand
+render();
+</script>
+
+</body>
+</html>
