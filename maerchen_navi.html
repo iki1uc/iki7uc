@@ -1,1 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Märchen-Navi</title>
+    <style>
+        body {
+            background: #111;
+            color: #0f0;
+            font-family: monospace;
+            padding: 20px;
+        }
+        .nav {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .nav button {
+            background: #0f0;
+            color: #111;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .nav button:hover {
+            background: #9f9;
+        }
+        #story {
+            border: 1px solid #0f0;
+            padding: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Märchen-Navigation</h1>
+
+<div class="nav">
+    <button onclick="show('rew')">rew</button>
+    <button onclick="show('me')">me</button>
+    <button onclick="show('for')">for</button>
+</div>
+
+<div id="story">Wähle oben ein Märchen…</div>
+
+<script>
+const stories = {
+    rew: `
+MÄRCHEN 1 – Rückwärts
+
+Es war einmal ein Wanderer,
+der immer nur rückwärts ging.
+
+Eines Tages stolperte er über einen Stein.
+
+Da erkannte er:
+"Wer nur zurückschaut, sieht nicht, wohin er fällt."
+    `,
+
+    me: `
+MÄRCHEN 2 – Mitte
+
+Es war einmal ein Kind,
+das fragte, warum Sterne funkeln.
+
+Die Mutter sagte:
+"Weil jede Frage ein Licht entzündet."
+
+Und so begann das Kind zu verstehen.
+    `,
+
+    for: `
+MÄRCHEN 3 – Vorwärts
+
+Ein Mann saß unter einem Apfelbaum.
+Ein Apfel fiel und traf ihn leicht am Kopf.
+
+Er dachte:
+"Zum Glück war es kein Kürbis."
+
+Und so begann seine Reise der Erkenntnis.
+    `
+};
+
+function show(key){
+    document.getElementById("story").textContent = stories[key];
+}
+</script>
+
+</body>
+</html>
 
