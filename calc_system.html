@@ -1,75 +1,24 @@
-<script>
-// STATE SPEICHERN / LADEN
-function loadState(){
-    return JSON.parse(localStorage.getItem("calc_state")) || { value: 10, mult: 1 };
-}
-function saveState(state){
-    localStorage.setItem("calc_state", JSON.stringify(state));
-}
+const CV = {
+  state: () => JSON.parse(localStorage.getItem("cv_state")) || { value: 10, mult: 1 },
 
-// FORCALC (3×2)
-function forcalc(state){
-    return {
-        axis: "3x2",
-        direction: "forward",
-        value: state.value,
-        raw: state.raw ?? null,
-        mult: state.mult ?? 1
-    };
-}
+  save: s => localStorage.setItem("cv_state", JSON.stringify(s)),
 
-// REVCALC (3×1)
-function revcalc(state){
-    return {
-        axis: "3x1",
-        direction: "backward",
-        value: state.value,
-        raw: state.raw ?? null,
-        mult: state.mult ?? 1
-    };
-}
+  impulse: {
+    forward:  s => ({ axis:"3x2", direction:"forward",  value:s.value, mult:s.mult }),
+    backward: s => ({ axis:"3x1", direction:"backward", value:s.value, mult:s.mult }),
+    neutral:  s => ({ axis:"3x0", direction:"neutral",  value:s.value, mult:s.mult })
+  },
 
-// RCALC (Router)
-function rcalc(event){
-    const state = event.state ?? {};
-    if(event.direction === "forward"){
-        return { mode: "forward", result: forcalc(state) };
-    }
-    if(event.direction === "backward"){
-        return { mode: "backward", result: revcalc(state) };
-    }
-    return { mode: "neutral", result: state };
-}
+  router(event){
+    const s = event.state ?? CV.state();
+    if(event.direction === "forward")  return CV.impulse.forward(s);
+    if(event.direction === "backward") return CV.impulse.backward(s);
+    return CV.impulse.neutral(s);
+  },
 
-// REAL_MATCH (Dispatcher)
-function real_match(event){
-    const state = event.state ?? event;
-    const direction = event.direction ?? "neutral";
-    const routed = rcalc({ direction: direction, state: state });
-    return { input: state, mode: routed.mode, output: routed.result };
-}
-
-// TEST BUTTONS
-function testForward(){
-    let state = loadState();
-    state.value += 1;
-    saveState(state);
-    print(real_match({ direction: "forward", state: state }));
-}
-function testBackward(){
-    let state = loadState();
-    state.value -= 1;
-    saveState(state);
-    print(real_match({ direction: "backward", state: state }));
-}
-function testNeutral(){
-    let state = loadState();
-    print(real_match({ direction: "neutral", state: state }));
-}
-
-// OUTPUT
-function print(obj){
-    document.getElementById("out").textContent =
-        JSON.stringify(obj, null, 4);
-}
-</script>
+  dispatch(event){
+    const s = event.state ?? CV.state();
+    const out = CV.router(event);
+    return { input:s, mode:out.direction, output:out };
+  }
+};
