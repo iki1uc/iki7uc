@@ -2,76 +2,90 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>iki1uc 8X Wasser-Track</title>
+  <title>3×Märchen ×4 – PURE Engine</title>
   <style>
     body {
-      margin: 0;
-      background: #02040a;
-      color: #aeeaff;
+      background: #000;
+      color: #0ff;
       font-family: monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      padding: 20px;
     }
-
-    .scene {
-      text-align: center;
-      line-height: 1.2;
-      white-space: pre;
+    #meta { margin-bottom: 10px; color: #aaa; }
+    #storyBox {
+      white-space: pre-wrap;
+      border: 1px solid #0ff;
+      padding: 10px;
+      min-height: 160px;
     }
-
-    .portal-line {
-      font-size: 32px;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #4fd5ff, 0 0 16px #2aa9ff;
-      animation: wave 3s infinite ease-in-out;
-    }
-
-    .center-line {
-      font-size: 28px;
-      color: #ffffff;
-      text-shadow: 0 0 10px #4fd5ff;
-    }
-
-    .track {
-      margin-top: 24px;
-      font-size: 24px;
-      color: #ffdd88;
-      text-shadow: 0 0 6px #ffdd88;
-      opacity: 0;
-      transform: translateX(-40px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .track.active {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    @keyframes wave {
-      0%   { transform: translateY(0px); }
-      50%  { transform: translateY(8px); }
-      100% { transform: translateY(0px); }
-    }
+    button { margin-top: 10px; padding: 6px 12px; }
   </style>
 </head>
 <body>
-  <div class="scene">
-    <div class="portal-line">
-..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..
-    </div>
-    <div class="center-line">
-          I K I 1 U C
-    </div>
-    <div class="portal-line">
-..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..
-    </div>
 
-    <div id="track" class="track">
-XXXXXXXX        88888888        &gt;&gt;&gt;&gt;&gt;&gt;&gt;
-    </div>
-  </div>
-</body>
-</html>
+<div id="meta"></div>
+<div id="storyBox"></div>
+<button id="nextBtn">Weiter</button>
+
+<script>
+// --- 1) MÄRCHEN ---
+const stories = {
+  rew: `MÄRCHEN 1 – Rückwärts
+
+Es war einmal ein Wanderer,
+der immer nur rückwärts ging.
+
+Eines Tages stolperte er über einen Stein.
+
+Da erkannte er:
+"Wer nur zurückschaut, sieht nicht, wohin er fällt."`,
+
+  me: `MÄRCHEN 2 – Mitte
+
+Es war einmal ein Kind,
+das fragte, warum Sterne funkeln.
+
+Die Mutter sagte:
+"Weil jede Frage ein Licht entzündet."
+
+Und so begann das Kind zu verstehen.`,
+
+  for: `MÄRCHEN 3 – Vorwärts
+
+Ein Mann saß unter einem Apfelbaum.
+Ein Apfel fiel und traf ihn leicht am Kopf.
+
+Er dachte:
+"Zum Glück war es kein Kürbis."
+
+Und so begann seine Reise der Erkenntnis.`
+};
+
+// --- 2) 3×4 SEQUENZ ---
+const keys = ["rew", "me", "for"];
+const sequence = [];
+
+for (let r = 1; r <= 4; r++) {
+  for (let k of keys) {
+    sequence.push({
+      key: k,
+      round: r,
+      text: stories[k]
+    });
+  }
+}
+
+// --- 3) ZUSTAND ---
+let index = 0;
+
+// --- 4) ANZEIGE ---
+function render() {
+  const meta = document.getElementById("meta");
+  const box  = document.getElementById("storyBox");
+
+  if (index < sequence.length) {
+    const item = sequence[index];
+    meta.textContent = `Slot ${index+1}/12 | ${item.key} | Runde ${item.round}`;
+    box.textContent  = item.text;
+  } else {
+    meta.textContent = `Slot ${index+1} | OUT_OF_RANGE`;
+    box.textContent  = `Auch diese falsche Anzeige ist ein
