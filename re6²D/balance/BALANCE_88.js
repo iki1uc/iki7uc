@@ -1,5 +1,6 @@
-// BALANCE_88.js
-export function BALANCE_88(molekuel) {
+// BALANCE 88 – PURE VERSION
+
+function BALANCE_88(molekuel) {
     const diff = molekuel.acht88.links - molekuel.acht88.rechts;
 
     return {
