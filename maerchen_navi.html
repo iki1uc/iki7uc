@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Märchen-Navi</title>
+    <title>Märchen-Navi 360°</title>
     <style>
         body {
             background: #111;
@@ -25,26 +25,32 @@
         .nav button:hover {
             background: #9f9;
         }
-        #story {
+        #story, #zoomState, #genState {
             border: 1px solid #0f0;
             padding: 20px;
             white-space: pre-wrap;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
-<h1>Märchen-Navigation</h1>
+<h1>Märchen-Navigation 360°</h1>
 
 <div class="nav">
-    <button onclick="show('rew')">rew</button>
-    <button onclick="show('me')">me</button>
-    <button onclick="show('for')">for</button>
+    <button onclick="setAxis('rew')">rew</button>
+    <button onclick="setAxis('me')">me</button>
+    <button onclick="setAxis('for')">for</button>
 </div>
 
 <div id="story">Wähle oben ein Märchen…</div>
+<div id="zoomState"></div>
+<div id="genState"></div>
 
 <script>
+// -------------------------
+// 1) MÄRCHEN (ALT bleibt)
+// -------------------------
 const stories = {
     rew: `
 MÄRCHEN 1 – Rückwärts
@@ -71,23 +77,3 @@ Und so begann das Kind zu verstehen.
     `,
 
     for: `
-MÄRCHEN 3 – Vorwärts
-
-Ein Mann saß unter einem Apfelbaum.
-Ein Apfel fiel und traf ihn leicht am Kopf.
-
-Er dachte:
-"Zum Glück war es kein Kürbis."
-
-Und so begann seine Reise der Erkenntnis.
-    `
-};
-
-function show(key){
-    document.getElementById("story").textContent = stories[key];
-}
-</script>
-
-</body>
-</html>
-
