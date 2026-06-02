@@ -1,12 +1,26 @@
-// BALANCE 88 – PURE VERSION
+export function ITEM_ROUTER(m) {
 
-function BALANCE_88(molekuel) {
-    const diff = molekuel.acht88.links - molekuel.acht88.rechts;
+    const direction = m.navi?.direction ?? "neutral";
+    const value = m.impulse?.value ?? 0;
+    const mult = m.impulse?.mult ?? 1;
+
+    const xx = {
+        roh: m.xx?.roh ?? "",
+        signatur: m.xx?.signatur ?? "",
+        länge: (m.xx?.signatur ?? "").length
+    };
+
+    const balance = BALANCE_88(m);
+
+    const coreInput = { direction, value, mult };
+    const coreResult = processImpulse(coreInput);
 
     return {
-        links: molekuel.acht88.links,
-        rechts: molekuel.acht88.rechts,
-        drift: diff,
-        stabil: diff === 0
+        pos: m.pos,
+        meta: m.meta,
+        xx,
+        balance,
+        input: coreInput,
+        core: coreResult
     };
 }
