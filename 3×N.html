@@ -2,37 +2,61 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>3×N Lauf</title>
+<title>3×N Lauf – PURE Version</title>
 
 <style>
-.pipeline {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-  font-family: monospace;
-}
-.pipeline div {
-  border: 1px solid #0ff;
-  padding: 10px;
-  text-align: center;
-}
-.lanes {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
-}
-.lane {
-  border: 1px solid #0f0;
-  padding: 5px;
-  font-family: monospace;
-}
+  body {
+    background: #000;
+    color: #0ff;
+    font-family: monospace;
+    padding: 20px;
+  }
+
+  h2, h3 {
+    color: #0ff;
+  }
+
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .pipeline div {
+    border: 1px solid #0ff;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .lanes {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
+
+  .lane {
+    border: 1px solid #0f0;
+    padding: 5px;
+    color: #0f0;
+  }
+
+  input {
+    padding: 6px;
+    margin-right: 10px;
+  }
+
+  button {
+    padding: 6px 12px;
+    cursor: pointer;
+  }
 </style>
 </head>
 
 <body>
 
-<h2>3×N Pipeline</h2>
+<h2>3×N Pipeline (Standalone)</h2>
 
 <input id="inputValue" placeholder="Wert eingeben">
 <button id="runBtn">Impulse senden</button>
@@ -68,17 +92,23 @@
   <div class="lane"></div>
 </div>
 
-<script type="module">
-import { TECH_LANES } from "./core/tech_lanes.js";
-import { real_match } from "./real_match.js";
-import "./rcalc.js";
+<script>
+// PURE VERSION – keine Imports, keine Module
+
+// Fake-Processing-Engine (du kannst sie später ersetzen)
+function real_match(input) {
+    return {
+        mode: "OK",
+        output: { value: input.toUpperCase() }
+    };
+}
 
 document.getElementById("runBtn").addEventListener("click", () => {
     const value = document.getElementById("inputValue").value;
     processImpulse(value);
 });
 
-export function processImpulse(data){
+function processImpulse(data){
     const result = real_match(data);
     updateLanes(result);
     return result;
