@@ -1,1 +1,75 @@
+<script>
+// ===============================
+// 1) GRID GENERATOR (8×8)
+// ===============================
+
+function createGrid(w, h) {
+    const grid = [];
+    for (let y = 0; y < h; y++) {
+        const row = [];
+        for (let x = 0; x < w; x++) {
+            row.push({
+                pos: { x, y },
+                xx: {
+                    roh: `${x}${y}`,
+                    signatur: `XX-${x}${y}`
+                }
+            });
+        }
+        grid.push(row);
+    }
+    return grid;
+}
+
+const GRID = createGrid(8, 8);
+
+// ===============================
+// 2) GRID VIEW (pure)
+// ===============================
+
+function GRID_VIEW(grid) {
+    return grid
+        .map(row =>
+            row.map(cell => `[${cell.pos.x},${cell.pos.y}]`).join(" ")
+        )
+        .join("\n");
+}
+
+// ===============================
+// 3) SCANNER XX (pure)
+// ===============================
+
+function SCANNER_XX(molekuel) {
+    return {
+        roh: molekuel.xx.roh,
+        signatur: molekuel.xx.signatur,
+        länge: molekuel.xx.signatur.length
+    };
+}
+
+// ===============================
+// 4) RENDER 2D MASK
+// ===============================
+
+const container = document.getElementById("grid-container");
+
+GRID.forEach(row => {
+    row.forEach(cell => {
+        const div = document.createElement("div");
+        div.className = "cell";
+        div.textContent = cell.pos.x + "" + cell.pos.y;
+
+        div.addEventListener("click", () => {
+            const scan = SCANNER_XX(cell);
+            document.getElementById("cell-info").textContent =
+                `pos: ${cell.pos.x},${cell.pos.y}\n` +
+                `roh: ${scan.roh}\n` +
+                `signatur: ${scan.signatur}\n` +
+                `länge: ${scan.länge}`;
+        });
+
+        container.appendChild(div);
+    });
+});
+</script>
 
