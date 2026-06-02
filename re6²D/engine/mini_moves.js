@@ -2,21 +2,24 @@
 
 (function(){
 
-  function move(direction){
-    if(!window.JA3.ready()) return; // nur wenn 3×JA erfüllt
+  function apply(dir){
+    // dir: -1 = rew, 0 = me, +1 = for
+    if(typeof window.index !== "number") return;
 
-    if(direction==="rewME") window.index--;
-    if(direction==="ME")    window.index += 0;
-    if(direction==="forME") window.index++;
+    if(dir === -1) window.index--;
+    if(dir ===  0) window.index += 0;
+    if(dir === +1) window.index++;
 
-    window.render();
+    if(typeof window.render === "function"){
+      window.render();
+    }
   }
 
   window.MOVES = {
-    rewME(){ move("rewME"); },
-    ME(){ move("ME"); },
-    forME(){ move("forME"); }
+    apply,
+    rewME(){ apply(-1); },
+    ME(){ apply(0); },
+    forME(){ apply(+1); }
   };
 
 })();
-
