@@ -1,4 +1,4 @@
-// IMPULSE_ENGINE.js
+// IMPULSE ENGINE – PURE VERSION (kein export, kein import)
 
 // Multiplikatoren-Tabelle
 const MULT = {
@@ -18,7 +18,8 @@ const LANES = [
     "F2","R1","M4","M8"
 ];
 
-export function processImpulse(data){
+// PURE ENGINE – keine Module
+function processImpulse(data){
     const { value, direction, mult } = data;
 
     // 1) Richtung bestimmen
@@ -43,4 +44,3 @@ export function processImpulse(data){
         lanes
     };
 }
-
