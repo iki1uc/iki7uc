@@ -1,4 +1,9 @@
-dState(){
+<script>
+
+// ---------------------------------------------------------
+// STATE SPEICHERN / LADEN
+// ---------------------------------------------------------
+function loadState(){
     return JSON.parse(localStorage.getItem("calc_state")) || { value: 10, mult: 1 };
 }
 
