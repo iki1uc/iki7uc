@@ -88,4 +88,18 @@ function render() {
     box.textContent  = item.text;
   } else {
     meta.textContent = `Slot ${index+1} | OUT_OF_RANGE`;
-    box.textContent  = `Auch diese falsche Anzeige ist ein
+    box.textContent  = `Auch diese falsche Anzeige ist ein Signal.`;
+  }
+}
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+  index++;
+  render();
+});
+
+// --- START ---
+render();
+</script>
+
+</body>
+</html>
