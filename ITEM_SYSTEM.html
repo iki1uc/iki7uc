@@ -1,1 +1,115 @@
+<script>
+
+// ===============================
+// 0) BASIS-MOLEKÜL
+// ===============================
+const ITEM_MOLEKUEL = {
+    navi: { ui:0, ie:0, ah:0, ha:0, äh:0, hä:0 },
+    passage: { in2:null, me2:null, in4:null, run4:null, me4:null, u4:null },
+    xx: { roh:"", signatur:"" },
+    acht88: { links:0, rechts:0 },
+    meta: { id:"ITEM-BASE", version:"1.0" }
+};
+
+// ===============================
+// 1) GRID 4×4
+// ===============================
+const ITEM_GRID_4x4 = [
+  [ { ...ITEM_MOLEKUEL, pos:{x:0,y:0} }, { ...ITEM_MOLEKUEL, pos:{x:1,y:0} }, { ...ITEM_MOLEKUEL, pos:{x:2,y:0} }, { ...ITEM_MOLEKUEL, pos:{x:3,y:0} } ],
+  [ { ...ITEM_MOLEKUEL, pos:{x:0,y:1} }, { ...ITEM_MOLEKUEL, pos:{x:1,y:1} }, { ...ITEM_MOLEKUEL, pos:{x:2,y:1} }, { ...ITEM_MOLEKUEL, pos:{x:3,y:1} } ],
+  [ { ...ITEM_MOLEKUEL, pos:{x:0,y:2} }, { ...ITEM_MOLEKUEL, pos:{x:1,y:2} }, { ...ITEM_MOLEKUEL, pos:{x:2,y:2} }, { ...ITEM_MOLEKUEL, pos:{x:3,y:2} } ],
+  [ { ...ITEM_MOLEKUEL, pos:{x:0,y:3} }, { ...ITEM_MOLEKUEL, pos:{x:1,y:3} }, { ...ITEM_MOLEKUEL, pos:{x:2,y:3} }, { ...ITEM_MOLEKUEL, pos:{x:3,y:3} } ]
+];
+
+// ===============================
+// 2) NAVI ROUTER
+// ===============================
+function NAVI_ROUTER(m) {
+    return {
+        ui: m.navi.ui,
+        ie: m.navi.ie,
+        ah: m.navi.ah,
+        ha: m.navi.ha,
+        äh: m.navi.äh,
+        hä: m.navi.hä
+    };
+}
+
+// ===============================
+// 3) PASSAGE ENGINE
+// ===============================
+function PASSAGE_ENGINE(m) {
+    return [
+        m.passage.in2,
+        m.passage.me2,
+        m.passage.in4,
+        m.passage.run4,
+        m.passage.me4,
+        m.passage.u4
+    ];
+}
+
+// ===============================
+// 4) SCANNER XX
+// ===============================
+function SCANNER_XX(m) {
+    return {
+        roh: m.xx.roh,
+        signatur: m.xx.signatur,
+        länge: m.xx.signatur.length
+    };
+}
+
+// ===============================
+// 5) BALANCE 88 (Dummy bis du willst)
+// ===============================
+function BALANCE_88(m) {
+    return {
+        links: m.acht88.links,
+        rechts: m.acht88.rechts
+    };
+}
+
+// ===============================
+// 6) TECH LANES
+// ===============================
+const TECH_LANES = [
+  { id:0, code:"F2", name:"Forward 3×2" },
+  { id:1, code:"R1", name:"Reverse 3×1" },
+  { id:2, code:"M4", name:"Multiply ×4" },
+  { id:3, code:"M8", name:"Multiply ×8" },
+  { id:4, code:"M16", name:"Multiply ×16" },
+  { id:5, code:"M128", name:"Multiply ×128" },
+  { id:6, code:"RAW", name:"Raw Symbol Check" },
+  { id:7, code:"88", name:"88 Symbol Check" },
+  { id:8, code:"F2R", name:"Forward→Reverse" },
+  { id:9, code:"R1F", name:"Reverse→Forward" },
+  { id:10, code:"STAB", name:"Stability Monitor" },
+  { id:11, code:"LAT", name:"Latency Monitor" },
+  { id:12, code:"XRAW", name:"Cross Raw Compare" },
+  { id:13, code:"X88", name:"Cross 88 Compare" },
+  { id:14, code:"TX", name:"Transaction Watch" },
+  { id:15, code:"SAFE", name:"Failsafe Guard" }
+];
+
+// ===============================
+// 7) TESTLAUF
+// ===============================
+function TESTLAUF() {
+    const out = [];
+    for (const row of ITEM_GRID_4x4) {
+        for (const cell of row) {
+            out.push({
+                pos: cell.pos,
+                navi: NAVI_ROUTER(cell),
+                passage: PASSAGE_ENGINE(cell),
+                scan: SCANNER_XX(cell),
+                balance: BALANCE_88(cell)
+            });
+        }
+    }
+    return out;
+}
+
+</script>
 
