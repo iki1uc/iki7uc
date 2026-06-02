@@ -1,6 +1,6 @@
-// IMPULSE ENGINE – PURE VERSION (kein export, kein import)
+/* IMPULSE ENGINE – PURE VERSION (kein export, kein import) */
 
-// Multiplikatoren-Tabelle
+/* Multiplikatoren-Tabelle */
 const MULT = {
     "F2": 2,
     "R1": -1,
@@ -10,7 +10,7 @@ const MULT = {
     "M128": 128
 };
 
-// 16 Bahnen in Reihenfolge
+/* 16 Bahnen in Reihenfolge */
 const LANES = [
     "F2","R1","M4","M8",
     "M16","M128","F2","R1",
@@ -18,7 +18,7 @@ const LANES = [
     "F2","R1","M4","M8"
 ];
 
-// PURE ENGINE – keine Module
+/* PURE ENGINE – keine Module */
 function processImpulse(data){
     const { value, direction, mult } = data;
 
