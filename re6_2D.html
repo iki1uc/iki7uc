@@ -1,75 +1,39 @@
 <script>
-// ===============================
-// 1) GRID GENERATOR (8×8)
-// ===============================
+const stories = {
+    rew: `
+MÄRCHEN 1 – Rückwärts
 
-function createGrid(w, h) {
-    const grid = [];
-    for (let y = 0; y < h; y++) {
-        const row = [];
-        for (let x = 0; x < w; x++) {
-            row.push({
-                pos: { x, y },
-                xx: {
-                    roh: `${x}${y}`,
-                    signatur: `XX-${x}${y}`
-                }
-            });
-        }
-        grid.push(row);
-    }
-    return grid;
-}
+Es war einmal ein Wanderer,
+der immer nur rückwärts ging.
 
-const GRID = createGrid(8, 8);
+Eines Tages stolperte er über einen Stein.
 
-// ===============================
-// 2) GRID VIEW (pure)
-// ===============================
+Da erkannte er:
+"Wer nur zurückschaut, sieht nicht, wohin er fällt."
+    `,
 
-function GRID_VIEW(grid) {
-    return grid
-        .map(row =>
-            row.map(cell => `[${cell.pos.x},${cell.pos.y}]`).join(" ")
-        )
-        .join("\n");
-}
+    me: `
+MÄRCHEN 2 – Mitte
 
-// ===============================
-// 3) SCANNER XX (pure)
-// ===============================
+Es war einmal ein Kind,
+das fragte, warum Sterne funkeln.
 
-function SCANNER_XX(molekuel) {
-    return {
-        roh: molekuel.xx.roh,
-        signatur: molekuel.xx.signatur,
-        länge: molekuel.xx.signatur.length
-    };
-}
+Die Mutter sagte:
+"Weil jede Frage ein Licht entzündet."
 
-// ===============================
-// 4) RENDER 2D MASK
-// ===============================
+Und so begann das Kind zu verstehen.
+    `,
 
-const container = document.getElementById("grid-container");
+    for: `
+MÄRCHEN 3 – Vorwärts
 
-GRID.forEach(row => {
-    row.forEach(cell => {
-        const div = document.createElement("div");
-        div.className = "cell";
-        div.textContent = cell.pos.x + "" + cell.pos.y;
+Ein Mann saß unter einem Apfelbaum.
+Ein Apfel fiel und traf ihn leicht am Kopf.
 
-        div.addEventListener("click", () => {
-            const scan = SCANNER_XX(cell);
-            document.getElementById("cell-info").textContent =
-                `pos: ${cell.pos.x},${cell.pos.y}\n` +
-                `roh: ${scan.roh}\n` +
-                `signatur: ${scan.signatur}\n` +
-                `länge: ${scan.länge}`;
-        });
+Er dachte:
+"Zum Glück war es kein Kürbis."
 
-        container.appendChild(div);
-    });
-});
+Und so begann seine Reise der Erkenntnis.
+    `
+};
 </script>
-
