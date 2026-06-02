@@ -2,22 +2,26 @@
 
 (function(){
 
-  const box = document.getElementById("storyBox");
-
-  function effect(){
-    const text = box.textContent;
-    const len  = text.length;
-
-    if(len < 120) return ">";     // ASCII
-    if(len < 260) return ":)";    // Emoti
-    return "𓂀";                  // Symbol
+  function effectFor(text){
+    const len = text.length;
+    if(len < 120) return ">";
+    if(len < 260) return ":)";
+    return "𓂀";
   }
+
+  function applyEffects(box){
+    if(!box) return;
+    const mark = effectFor(box.textContent || "");
+    box.textContent += "\n\n" + mark;
+  }
+
+  window.applyEffects = applyEffects;
 
   const oldRender = window.render;
   window.render = function(){
     oldRender();
-    box.textContent += "\n\n" + effect();
+    const box = document.getElementById("storyBox");
+    applyEffects(box);
   };
 
 })();
-
