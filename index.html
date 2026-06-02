@@ -1,17 +1,85 @@
-<script type="module">
-import { processImpulse } from "./3xN/3xN.js";
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>iki1uc 8X Wasser-Track</title>
+  <style>
+    body {
+      margin: 0;
+      background: #02040a;
+      color: #aeeaff;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-function sendImpulse(){
-    const data = {
-        value: 7,
-        direction: "forward",
-        raw: "◼",
-        mult: 1
-    };
+    .scene {
+      text-align: center;
+      line-height: 1.2;
+      white-space: pre;
+    }
 
-    const result = processImpulse(data);
-    console.log("INDEX RESULT:", result);
-}
+    .portal-line {
+      font-size: 32px; /* 8X-Style */
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #4fd5ff, 0 0 16px #2aa9ff;
+      animation: wave 3s infinite ease-in-out;
+    }
 
-sendImpulse();
-</script>
+    .center-line {
+      font-size: 28px;
+      color: #ffffff;
+      text-shadow: 0 0 10px #4fd5ff;
+    }
+
+    .track {
+      margin-top: 24px;
+      font-size: 24px;
+      color: #ffdd88;
+      text-shadow: 0 0 6px #ffdd88;
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .track.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @keyframes wave {
+      0%   { transform: translateY(0px);   }
+      50%  { transform: translateY(8px);   }
+      100% { transform: translateY(0px);   }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="portal-line">
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+    </div>
+    <div class="center-line">
+          I K I 1 U C
+    </div>
+    <div class="portal-line">
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+    </div>
+
+    <div id="track" class="track">
+XXXXXXXX        88888888        &gt;&gt;&gt;&gt;&gt;&gt;&gt;
+    </div>
+  </div>
+
+  <script>
+    // „Sicherer Track-Effekt“: nur Optik, kein Schaden :)
+    // Track erscheint nach kurzer Zeit wie ein Domino-/Wasser-Impuls
+    setTimeout(() => {
+      document.getElementById('track').classList.add('active');
+    }, 1200);
+  </script>
+</body>
+</html>
