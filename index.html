@@ -1,194 +1,51 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <title>iki7uc – RAW / 3×13 / ALL4ALL</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>
+async function loadSystem() {
 
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #05060a;
-      color: #f5f5f5;
-    }
-    header {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid #333;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #080910;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 1rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    header .tag {
-      font-size: 0.7rem;
-      padding: 0.15rem 0.4rem;
-      border-radius: 999px;
-      border: 1px solid #555;
-      text-transform: uppercase;
-    }
-    main {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
-      gap: 1rem;
-      padding: 1rem;
-    }
-    section {
-      border: 1px solid #333;
-      border-radius: 6px;
-      padding: 0.75rem;
-      background: #0b0d16;
-    }
-    section h2 {
-      margin: 0 0 0.5rem;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #c0c0ff;
-    }
-    .small {
-      font-size: 0.75rem;
-      opacity: 0.8;
-    }
-    #grid {
-      display: grid;
-      grid-template-columns: repeat(13, minmax(0, 1fr));
-      gap: 2px;
-      margin-top: 0.5rem;
-    }
-    .cell {
-      border: 1px solid #222;
-      min-height: 1.4rem;
-      font-size: 0.65rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #11131f;
-      cursor: default;
-    }
-    .cell.empty   { background: #05060a; color: #444; }
-    #log {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.7rem;
-      white-space: pre-wrap;
-      max-height: 60vh;
-      overflow: auto;
-      background: #05060a;
-      padding: 0.5rem;
-      border-radius: 4px;
-    }
-    footer {
-      padding: 0.5rem 1rem;
-      border-top: 1px solid #333;
-      font-size: 0.7rem;
-      opacity: 0.7;
-    }
-    @media (max-width: 800px) {
-      main {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-  </style>
-</head>
+  // 1) Alle Dateien definieren
+  const files = [
+    "transwarp/math2me_richtung.json",
+    "transwarp/math2me_modus.json",
+    "transwarp/math2me_matrix.json",
+    "transwarp/2memath_massnahmen.json",
+    "transwarp/2memath_zeitfenster.json",
+    "transwarp/2memath_primabweichung.json",
+    "beam/u4beam_pidrift.json",
+    "beam/u4beam_interferenz.json",
+    "beam/beam4u_ablichtung.json"
+  ];
 
-<body>
-  <header>
-    <h1>iki7uc / RAW‑Viewer</h1>
-    <div class="tag">3×13 · ALL4ALL · RAW</div>
-  </header>
+  // 2) Laden aller Dateien
+  const items = [];
+  for (const f of files) {
+    const r = await fetch(f);
+    const j = await r.json();
+    j.file = f;        // Name → Selbst-Erklärbarkeit
+    items.push(j);
+  }
 
-  <main>
-    <section>
-      <h2>3×13 Grid (2D‑Ablichtung)</h2>
-      <div class="small">GEN‑Filter · ALL4ALL‑Routing · 2D‑Projektion</div>
-      <div id="grid"></div>
-    </section>
+  // 3) mini/maxi erklären
+  const modus = items.find(i => i.file.includes("modus"));
+  const miniMaxi = modus?.sache || "unbekannt";
 
-    <section>
-      <h2>RAW / Log</h2>
-      <div class="small">index.json + Module + GEN‑Sortierung</div>
-      <div id="log">initialisiere iki7uc RAW‑View…</div>
-    </section>
-  </main>
+  document.getElementById("modus").textContent =
+    "Modus: " + miniMaxi + " (aus math2me_modus.json)";
 
-  <footer>
-    iki7uc · RAW‑ITEM / MOLEKÜL / CODE – 2D‑sichtbar, 1D–12D‑kompatibel
-  </footer>
+  // 4) 3×13-Grid erzeugen
+  const grid = document.getElementById("grid");
+  items.forEach(i => {
+    const cell = document.createElement("div");
+    cell.className = "cell";
 
-  <script>
-    async function loadModules() {
-      const indexCfg = await fetch("index.json").then(r => r.json());
-      const modules = {};
+    cell.innerHTML = `
+      <b>${i.file}</b><br>
+      Achse: ${i.axis}<br>
+      Sache: ${i.sache}<br>
+      Zeit: ${i.zeit}<br>
+      Essenz: ${i.essenz}<br>
+      Künstler: ${i.kuenstler.join(", ")}
+    `;
 
-      for (const src of indexCfg.sources) {
-        try {
-          modules[src] = await fetch(src).then(r => r.json());
-        } catch (e) {
-          console.warn("Fehlt:", src);
-        }
-      }
-
-      return { indexCfg, modules };
-    }
-
-    function pickCells(modules, indexCfg) {
-      const allCells = [];
-
-      for (const [name, mod] of Object.entries(modules)) {
-        if (!mod.id) continue;
-        if (mod.id.gen < indexCfg.policy.min_gen) continue;
-
-        if (mod.payload && Array.isArray(mod.payload.cells)) {
-          mod.payload.cells.forEach(c => {
-            allCells.push({
-              sid: c.sid || name,
-              src: name.replace(".json",""),
-              gen: mod.id.gen
-            });
-          });
-        }
-      }
-
-      allCells.sort((a,b) => b.gen - a.gen);
-      return allCells.slice(0, 39);
-    }
-
-    const gridEl = document.getElementById("grid");
-    const logEl  = document.getElementById("log");
-
-    function renderGrid(raw) {
-      gridEl.innerHTML = "";
-      const total = 39;
-      for (let i = 0; i < total; i++) {
-        const cellData = raw.cells[i];
-        const div = document.createElement("div");
-        div.classList.add("cell");
-        if (!cellData) {
-          div.classList.add("empty");
-          div.textContent = "·";
-        } else {
-          div.textContent = cellData.sid + " / " + cellData.src;
-        }
-        gridEl.appendChild(div);
-      }
-    }
-
-    function renderLog(raw) {
-      logEl.textContent = JSON.stringify(raw, null, 2);
-    }
-
-    loadModules().then(({indexCfg, modules}) => {
-      const cells = pickCells(modules, indexCfg);
-      renderGrid({ cells });
-      renderLog({ indexCfg, modules });
-    });
-  </script>
-</body>
-</html>
+    grid.appendChild(cell);
+  });
+}
+</script>
