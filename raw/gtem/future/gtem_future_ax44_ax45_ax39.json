@@ -1,1 +1,75 @@
+{
+  "station": {
+    "id": "AXXX",
+    "role": "GENERIC_NODE",
+    "task": "observe_and_contribute"
+  },
+
+  "sensorik": {
+    "px_live": true,
+    "scan_state": "pending",
+    "scan_result": null,
+    "history": []
+  },
+
+  "matrix_3x3": {
+    "center": "SELF",
+    "north": null,
+    "south": null,
+    "east": null,
+    "west": null,
+    "ne": null,
+    "nw": null,
+    "se": null,
+    "sw": null
+  },
+
+  "safety": {
+    "primary_axis": "AXXX",
+    "backup_axis": "AXYY",
+    "mode": "auto_failover",
+    "status": "armed"
+  },
+
+  "controls": {
+    "up": true,
+    "zack": true,
+    "all4all": true,
+    "klick": true,
+    "down": true,
+    "rew": true,
+    "me": true,
+    "for": true
+  },
+
+  "beat": "1/4",
+  "band_12plus1": {
+    "index": 0,
+    "up": "AX12",
+    "down": "AX24"
+  },
+
+  "anchor": {
+    "self": "A-AXXX",
+    "next": null,
+    "prev": null,
+    "beam": "AX11",
+    "all4all": "AX08",
+    "all8all": "AX08"
+  },
+
+  "generation": {
+    "huhn": "pending",
+    "ei": "pending",
+    "omelett": "pending",
+    "satt": "pending",
+    "auto_next": true
+  },
+
+  "meta": {
+    "ready": true,
+    "empty": false,
+    "contributes_to_system": true
+  }
+}
 
