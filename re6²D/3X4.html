@@ -54,6 +54,14 @@
 
 <script>
 // ======================================================
+// GLOBALE VIER-SCHICHTEN-SLOTS (R°, F°, L°, E°)
+// ======================================================
+window.lastR = null;   // 3×1 – Rückwärts
+window.lastF = null;   // 3×2 – Vorwärts
+window.lastL = null;   // 3×7 – Welt
+window.lastE = null;   // 3×4 – Engine
+
+// ======================================================
 // BORG PROTOCOL (Maßnahmen) – für 3×4
 // ======================================================
 function borgProtocol(r){
@@ -103,9 +111,28 @@ function borgProtocol(r){
 }
 
 // ======================================================
+// VIER-SCHICHTEN-KERN (R°, F°, L°, E°)
+// ======================================================
+function vierSchichtenKern(r){
+  const R = r.R ? "OK" : "MISS";
+  const F = r.F ? "OK" : "MISS";
+  const L = r.L ? "OK" : "MISS";
+  const E = r.E ? "OK" : "MISS";
+
+  const full = (R==="OK" && F==="OK" && L==="OK" && E==="OK");
+
+  return {
+    R, F, L, E,
+    status: full ? "FULL" : "PARTIAL",
+    message: full
+      ? "Komplettum aktiv. System schwebt."
+      : "Vier‑Schichten‑Kohärenz unvollständig."
+  };
+}
+
+// ======================================================
 // RAWWATOR — SUPER-ID SYSTEM (⟡ + 2 Zeichen)
 // ======================================================
-
 const SUPER_IDS = [
   "⟡A1","⟡A2","⟡A3","⟡A4",
   "⟡B1","⟡B2","⟡B3","⟡B4",
@@ -115,7 +142,6 @@ const SUPER_IDS = [
 // ======================================================
 // MOVE-SET (Operator + iki7uc-Paper-Funktionen)
 // ======================================================
-
 const MOVES12 = [
   "AN","SC","NV","ST",
   "SG","HX","MX","IQ",
@@ -125,7 +151,6 @@ const MOVES12 = [
 // ======================================================
 // FUNKTIONS-MATRIX (iki7uc PAPER → 3×4)
 // ======================================================
-
 const FUNKTION = {
   "⟡A1":"SHIFT",
   "⟡A2":"TECHMAP",
@@ -146,14 +171,12 @@ const FUNKTION = {
 // ======================================================
 // ACHSEN (12 Achsen = 3 Primär × 4 Sekundär)
 // ======================================================
-
 const AXIS_PRIMARY   = ["I","Z","W"];       // Impuls, Zustand, Wirkung
 const AXIS_SECONDARY = ["K","T","P","R"];   // Kontext, Zeit, Perspektive, Rotation
 
 // ======================================================
 // OPERATOR-FORMEL (Master)
 // ======================================================
-
 function OP12(index){
   const row = Math.floor(index / 4);   // 0..2
   const col = index % 4;               // 0..3
@@ -170,7 +193,6 @@ function OP12(index){
 // ======================================================
 // UI
 // ======================================================
-
 const grid = document.getElementById("grid");
 const out  = document.getElementById("out");
 
@@ -184,9 +206,21 @@ SUPER_IDS.forEach((sid, index)=>{
     const r = OP12(index);
     const borg = borgProtocol(r);
 
+    // Engine-Schicht speichern
+    window.lastE = r;
+
+    // Vier-Schichten-Kern auswerten
+    const vsk = vierSchichtenKern({
+      R: window.lastR,
+      F: window.lastF,
+      L: window.lastL,
+      E: window.lastE
+    });
+
     out.textContent =
       `${r.superID} → MOVE=${r.move} | AXIS=${r.axis1}/${r.axis2} | FUNC=${r.func}\n` +
-      `[BORG] ${borg.message}`;
+      `[BORG] ${borg.message}\n` +
+      `[VSK] ${vsk.message}`;
   });
 
   grid.appendChild(div);
