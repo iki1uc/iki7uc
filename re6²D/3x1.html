@@ -5,33 +5,33 @@ function borgProtocol(r){
     message: ""
   };
 
-  // 1) Achsen prüfen (Engine braucht Achsen, aber keinen Flow)
+  // 1) Achsen-Pflicht (UPG‑X akzeptiert nur Achsen, keinen Flow)
   if(!r.axis1 || !r.axis2){
     result.status = "ERROR";
     result.action = "ADD_AXIS";
-    result.message = "Achsenkohärenz fehlt. Engine-Struktur instabil.";
+    result.message = "Achsen fehlen. UPG‑X verweigert Alt‑Struktur.";
     return result;
   }
 
-  // 2) Kritische Moves → Warnung
+  // 2) Kritische Moves → Warnung (GEN‑Trennung)
   if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
     result.status = "WARN";
     result.action = "CHECK_PATH";
-    result.message = "Kritischer Operator im Engine-Layer. Pipeline prüfen.";
+    result.message = "Kritischer Move. GEN‑Trennung aktiv.";
     return result;
   }
 
-  // 3) Stabile Moves → OK
+  // 3) Stabile Moves → OK (aber ohne Flow)
   if(r.move === "AN" || r.move === "SC" || r.move === "ST" || r.move === "END"){
     result.status = "OK";
     result.action = "CONTINUE";
-    result.message = "Engine-Sequenz stabil. Fortfahren.";
+    result.message = "UPG‑X akzeptiert. Achsen stabil.";
     return result;
   }
 
-  // 4) Default
+  // 4) Default → Analyse
   result.status = "INFO";
   result.action = "ANALYZE";
-  result.message = "Analyse läuft. Kontext wird eingefordert.";
+  result.message = "Analyse läuft. GEN‑Kontext wird angefordert.";
   return result;
 }
