@@ -1,1 +1,38 @@
+{
+  "id": {
+    "huhn": "H-MB-BEAM-L00-R00",
+    "ei": "E-molecules-molecule_beam-v1",
+    "omelett": "O-MB-BEAM_PHASE-BEAM-IN",
+    "satt": "S-01-BEAM-L00",
+    "beam": "B-BEAM_PHASE-BEAM-IN"
+  },
+  "meta": {
+    "axis": "BEAM",
+    "layer": "IN",
+    "language": "L00",
+    "resume": "R00",
+    "beam_type": "BEAM_PHASE"
+  },
+  "content": {
+    "mask_word": "",
+    "story": { "de": "", "en": "", "tr": "" },
+    "artists": [],
+    "scientists": []
+  },
+  "links": {
+    "molecule": "",
+    "code": "",
+    "maxi": "",
+    "eich": "",
+    "48bahn": ""
+  },
+  "error_check": {
+    "axis_valid": true,
+    "layer_valid": true,
+    "language_valid": true,
+    "resume_valid": true,
+    "beam_valid": true,
+    "file_valid": true
+  }
+}
 
