@@ -1,1 +1,25 @@
+{
+  "HUHN_ID": "H-06-IN-L01-R01",
+  "EI_ID": "E-items-item_axis06-v1",
+  "OMELETT_ID": "O-M06-BEAM_SOLID-06-IN",
+  "SATT_ID": "S-01-06-L01",
+  "BEAM_ID": "B-BEAM_SOLID-06-IN",
+  "axis": "06",
+  "layer": "IN",
+  "language": "L01",
+  "resume": "R01",
+  "mask_word": "",
+  "story": { "de": "", "en": "", "tr": "" },
+  "artists": [{ "id": "A01", "note": "" }, { "id": "A02", "note": "" }],
+  "scientists": [{ "id": "S01", "note": "" }, { "id": "S02", "note": "" }],
+  "beam_type": "BEAM_SOLID",
+  "error_check": {
+    "axis_valid": true,
+    "layer_valid": true,
+    "language_valid": true,
+    "resume_valid": true,
+    "beam_valid": true,
+    "file_valid": true
+  }
+}
 
