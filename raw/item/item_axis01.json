@@ -1,35 +1,41 @@
 {
-  "HUHN_ID": "H-AX-LY-Lxx-Rxx",
-  "EI_ID": "E-items-FILENAME-v1",
-  "OMELETT_ID": "O-Mxx-BEAM_TYPE-AX-LY",
-  "SATT_ID": "S-01-AX-Lxx",
-  "BEAM_ID": "B-BEAM_TYPE-AX-LY",
-
-  "axis": "AX",
-  "layer": "LY",
-  "language": "Lxx",
-  "resume": "Rxx",
-
-  "mask_word": "",
-
-  "story": {
-    "de": "",
-    "en": "",
-    "tr": ""
+  "id": {
+    "huhn": "H-01-IN-L01-R01",
+    "ei": "E-items-item_axis01-v1",
+    "omelett": "O-M01-BEAM_SOLID-01-IN",
+    "satt": "S-01-01-L01",
+    "beam": "B-BEAM_SOLID-01-IN"
   },
-
-  "artists": [
-    { "id": "A01", "note": "" },
-    { "id": "A02", "note": "" }
-  ],
-
-  "scientists": [
-    { "id": "S01", "note": "" },
-    { "id": "S02", "note": "" }
-  ],
-
-  "beam_type": "BEAM_TYPE",
-
+  "meta": {
+    "axis": "01",
+    "layer": "IN",
+    "language": "L01",
+    "resume": "R01",
+    "beam_type": "BEAM_SOLID"
+  },
+  "content": {
+    "mask_word": "",
+    "story": {
+      "de": "",
+      "en": "",
+      "tr": ""
+    },
+    "artists": [
+      { "id": "A01", "note": "" },
+      { "id": "A02", "note": "" }
+    ],
+    "scientists": [
+      { "id": "S01", "note": "" },
+      { "id": "S02", "note": "" }
+    ]
+  },
+  "links": {
+    "molecule": "",
+    "code": "",
+    "maxi": "",
+    "eich": "",
+    "48bahn": ""
+  },
   "error_check": {
     "axis_valid": true,
     "layer_valid": true,
