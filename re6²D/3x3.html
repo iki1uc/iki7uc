@@ -1,57 +1,12 @@
 {
-  "station": {
-    "id": "AXXX",
-    "role": "RUNG",
-    "zone": "0-120"
-  },
-
-  "matrix": {
-    "mode": "3x3",
-    "self": "AXXX",
-    "north": null,
-    "south": null,
-    "east": null,
-    "west": null,
-    "ne": null,
-    "nw": null,
-    "se": null,
-    "sw": null
-  },
-
-  "sensorik": {
-    "px": true,
-    "scan": "pending",
-    "result": null
-  },
-
-  "routing": {
-    "up": "AXUP",
-    "down": "AXDOWN",
-    "rew": "AXREW",
-    "me": "AXME",
-    "for": "AXFOR",
-    "zack": "AXZACK",
-    "klick": "AXKLICK"
-  },
-
-  "anchors": {
-    "self": "A-AXXX",
-    "beam": "AX11",
-    "all4all": "AX08",
-    "all8all": "AX08"
-  },
-
-  "backup": {
-    "primary": "AXXX",
-    "secondary": "AXYY",
-    "mode": "auto"
-  },
-
-  "borg": {
-    "status": "pending"
-  },
-
-  "upgx": {
-    "status": "pending"
-  }
+  "axis": "3x3",
+  "id": { "tech": "T-3x3", "eich": "E-3x3", "gen": "G-3x3" },
+  "zoom": [4,16,64,128],
+  "axes": { "main":12, "eich":1, "gen":1, "total":14 },
+  "raw_ref": "RAW-ID-CORE",
+  "payload": [
+    ["rew","me","for"],
+    ["story","resume","meta"],
+    ["ist","soll","delta"]
+  ]
 }
