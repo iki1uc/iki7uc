@@ -2,94 +2,43 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>3×7 – Weltmatrix</title>
+<title>3×7 – UPG‑X WELT‑MODUL</title>
 <style>
   body{background:#000;color:#0ff;font-family:monospace;padding:20px;}
-  .cell{padding:6px;margin:4px;border:1px solid #033;display:inline-block;width:90px;text-align:center;}
+  .cell{
+    padding:6px;margin:4px;border:1px solid #033;
+    display:inline-block;width:90px;text-align:center;cursor:pointer;
+  }
 </style>
 </head>
 <body>
 
-<h2>3×7 – WELT‑MATRIX</h2>
+<h2>3×7 – UPG‑X WELT‑MODUL</h2>
 <div id="grid"></div>
-<pre id="out">READY</pre>
+<pre id="out">UPG‑X READY</pre>
 
 <script>
 // ------------------------------------------------------
-// BORG PROTOCOL (Maßnahmen)
+// UPG‑X BORG PROTOCOL (NEU, störungsfrei)
 // ------------------------------------------------------
 function borgProtocol(r){
   const result = { status:"OK", action:"", message:"" };
 
-  if(!r.flow){
-    result.status = "ERROR";
-    result.action = "ADD_FLOW";
-    result.message = "Unvollständige Sequenz erkannt. Ergänzung erforderlich.";
+  // 1) Flow verboten → Flow ignorieren
+  if(r.flow){
+    result.status = "INFO";
+    result.action = "NEUTRALIZE_FLOW";
+    result.message = "Flow erkannt, aber UPG‑X neutralisiert ihn.";
     return result;
   }
 
+  // 2) Achsen optional (UPG‑X erlaubt Achsen oder achsenfrei)
   if(!r.axis1 || !r.axis2){
-    result.status = "ERROR";
-    result.action = "ADD_AXIS";
-    result.message = "Achsenkohärenz fehlt. Struktur instabil.";
-    return result;
-  }
-
-  if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
-    result.status = "WARN";
-    result.action = "CHECK_PATH";
-    result.message = "Fehlstelle lokalisiert. Kohärenz bricht. Reparatur empfohlen.";
-    return result;
-  }
-
-  if(r.move === "AN" || r.move === "SC" || r.move === "END"){
     result.status = "OK";
-    result.action = "CONTINUE";
-    result.message = "Sequenz stabil. Fortfahren.";
+    result.action = "AXIS_FREE";
+    result.message = "Achsenfrei. UPG‑X akzeptiert.";
     return result;
   }
 
-  result.status = "INFO";
-  result.action = "ANALYZE";
-  result.message = "Analyse läuft. Kontext wird eingefordert.";
-  return result;
-}
-
-// ------------------------------------------------------
-// MEER / SYNCH-KERN (Komplettum)
-// ------------------------------------------------------
-function synchKern(r){
-  const sync = { status:"OK", message:"" };
-
-  if(!r.flow){
-    sync.status = "BREAK";
-    sync.message = "Meer-Kohärenz unterbrochen. Flow fehlt.";
-    return sync;
-  }
-
-  if(!r.axis1 || !r.axis2){
-    sync.status = "DRIFT";
-    sync.message = "Achsen-Drift erkannt. Meer instabil.";
-    return sync;
-  }
-
-  if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
-    sync.status = "DARK";
-    sync.message = "Dunkelzone im Meer. Vorsicht.";
-    return sync;
-  }
-
-  sync.status = "LIGHT";
-  sync.message = "Meer stabil. Komplettum aktiv.";
-  return sync;
-}
-
-// ------------------------------------------------------
-// Achsen
-// ------------------------------------------------------
-const AXIS = ["I","Z","W"];
-
-// ------------------------------------------------------
-// Zustände
-// ------------------------------------------------------
-const STATES = ["AN","SC","NV","ST","SG","HX","
+  // 3) Kritische Moves → neutralisieren
+  if(r.move
