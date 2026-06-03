@@ -1,12 +1,11 @@
 {
-  "axis": "AX-3x12",
-  "id": { "tech": "T-12XX", "eich": "E-12XX", "gen": "G-12XX" },
+  "axis": "AX-3x13",
+  "id": { "tech": "T-13XX", "eich": "E-13XX", "gen": "G-13XX" },
   "zoom": { "levels": [4,16,64,128] },
   "axes": { "main":12, "eich":1, "gen":1, "total":14 },
-  "rotation": {
-    "block_A": { "$ref": "3x4" },
-    "block_B": { "$ref": "3x4", "mode": "invert" },
-    "block_C": { "$ref": "3x4", "mode": "rotate" }
+  "projection": {
+    "grid": 39,
+    "source": ["3x4","3x6","3x9","3x5","3x10","3x11"]
   },
   "raw_ref": "RAW-ID-CORE"
 }
