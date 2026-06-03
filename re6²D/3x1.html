@@ -5,34 +5,31 @@ function borgProtocol(r){
     message: ""
   };
 
-  if(!r.flow){
-    result.status = "ERROR";
-    result.action = "ADD_FLOW";
-    result.message = "Unvollständige Sequenz erkannt. Ergänzung erforderlich.";
-    return result;
-  }
-
+  // 1) Achsen prüfen (Engine braucht Achsen, aber keinen Flow)
   if(!r.axis1 || !r.axis2){
     result.status = "ERROR";
     result.action = "ADD_AXIS";
-    result.message = "Achsenkohärenz fehlt. Struktur instabil.";
+    result.message = "Achsenkohärenz fehlt. Engine-Struktur instabil.";
     return result;
   }
 
-  if(r.move === "NV⁻¹" || r.move === "SG⁻¹"){
+  // 2) Kritische Moves → Warnung
+  if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
     result.status = "WARN";
     result.action = "CHECK_PATH";
-    result.message = "Fehlstelle lokalisiert. Kohärenz bricht. Reparatur empfohlen.";
+    result.message = "Kritischer Operator im Engine-Layer. Pipeline prüfen.";
     return result;
   }
 
-  if(r.move === "AN⁻¹" || r.move === "END"){
+  // 3) Stabile Moves → OK
+  if(r.move === "AN" || r.move === "SC" || r.move === "ST" || r.move === "END"){
     result.status = "OK";
     result.action = "CONTINUE";
-    result.message = "Sequenz stabil. Fortfahren.";
+    result.message = "Engine-Sequenz stabil. Fortfahren.";
     return result;
   }
 
+  // 4) Default
   result.status = "INFO";
   result.action = "ANALYZE";
   result.message = "Analyse läuft. Kontext wird eingefordert.";
