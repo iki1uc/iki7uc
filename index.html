@@ -1,119 +1,187 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>3×Märchen ×4 – PURE Engine</title>
+  <meta charset="UTF-8" />
+  <title>iki7uc – RAW / 3×13 / ALL4ALL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Basis-Style, bewusst minimal -->
   <style>
+    * { box-sizing: border-box; }
     body {
-      background: #000;
-      color: #0ff;
-      font-family: monospace;
-      padding: 20px;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #05060a;
+      color: #f5f5f5;
     }
-    #meta { margin-bottom: 10px; color: #aaa; }
-    #storyBox {
+    header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #080910;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    header .tag {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 999px;
+      border: 1px solid #555;
+      text-transform: uppercase;
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+      gap: 1rem;
+      padding: 1rem;
+    }
+    section {
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 0.75rem;
+      background: #0b0d16;
+    }
+    section h2 {
+      margin: 0 0 0.5rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #c0c0ff;
+    }
+    .small {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(13, minmax(0, 1fr));
+      gap: 2px;
+      margin-top: 0.5rem;
+    }
+    .cell {
+      border: 1px solid #222;
+      min-height: 1.4rem;
+      font-size: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #11131f;
+      cursor: default;
+    }
+    .cell.src-3x2 { background: #1f2937; }
+    .cell.src-3x6 { background: #153e52; }
+    .cell.src-3x7 { background: #3b1f52; }
+    .cell.empty   { background: #05060a; color: #444; }
+    #log {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.7rem;
       white-space: pre-wrap;
-      border: 1px solid #0ff;
-      padding: 10px;
-      min-height: 160px;
+      max-height: 60vh;
+      overflow: auto;
+      background: #05060a;
+      padding: 0.5rem;
+      border-radius: 4px;
     }
-    button { margin-top: 10px; padding: 6px 12px; }
+    footer {
+      padding: 0.5rem 1rem;
+      border-top: 1px solid #333;
+      font-size: 0.7rem;
+      opacity: 0.7;
+    }
+    @media (max-width: 800px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
   </style>
 </head>
 <body>
+  <header>
+    <h1>iki7uc / RAW‑Viewer</h1>
+    <div class="tag">3×13 · ALL4ALL · RAW</div>
+  </header>
 
-<div id="meta"></div>
-<div id="storyBox"></div>
-<button id="nextBtn">Weiter</button>
+  <main>
+    <!-- Linke Seite: 3×13 / 2D‑View -->
+    <section>
+      <h2>3×13 Grid (2D‑Ablichtung)</h2>
+      <div class="small">
+        Anzeige: SID + Quelle (3×2 / 3×6 / 3×7) – nur 2D‑Projektion, RAW bleibt vollständig.
+      </div>
+      <div id="grid"></div>
+    </section>
 
-<script>
-// --- 1) MÄRCHEN ---
-const stories = {
-  rew: `MÄRCHEN 1 – Rückwärts
+    <!-- Rechte Seite: RAW‑Dump / Log -->
+    <section>
+      <h2>RAW / Log</h2>
+      <div class="small">
+        Hier kannst du später den echten RAW‑Block (ITEM / MOLEKÜL / CODE) einblenden.
+      </div>
+      <div id="log">initialisiere iki7uc RAW‑View…</div>
+    </section>
+  </main>
 
-Es war einmal ein Wanderer,
-der immer nur rückwärts ging.
+  <footer>
+    iki7uc · RAW‑ITEM / MOLEKÜL / CODE – 2D‑sichtbar, 1D–12D‑kompatibel
+  </footer>
 
-Eines Tages stolperte er über einen Stein.
+  <script>
+    // --- Platzhalter: hier kommt später dein echter RAW‑Loader rein ---
+    // Für jetzt: Demo‑Daten, damit du sofort was siehst.
 
-Da erkannte er:
-"Wer nur zurückschaut, sieht nicht, wohin er fällt."`,
+    const demoRaw = {
+      meta: {
+        version: "0.1",
+        mode: "DEMO",
+        note: "Ersetze das durch echten ALL4ALL / BORG / iki7uc‑RAW."
+      },
+      cells: [
+        // Jede Zelle = 2D‑Projektion eines RAW‑ITEM/MOLEKÜL/CODE‑Blocks
+        { sid: "R01", src: "3x2" },
+        { sid: "R02", src: "3x7" },
+        { sid: "R03", src: "3x6" },
+        // … hier kannst du später per JS aus echtem RAW generieren
+      ]
+    };
 
-  me: `MÄRCHEN 2 – Mitte
+    const gridEl = document.getElementById("grid");
+    const logEl  = document.getElementById("log");
 
-Es war einmal ein Kind,
-das fragte, warum Sterne funkeln.
+    function renderGrid(raw) {
+      gridEl.innerHTML = "";
+      // 3×13 = 39 Zellen – wir füllen einfach 39 Slots, Rest = empty
+      const total = 39;
+      for (let i = 0; i < total; i++) {
+        const cellData = raw.cells[i];
+        const div = document.createElement("div");
+        div.classList.add("cell");
+        if (!cellData) {
+          div.classList.add("empty");
+          div.textContent = "·";
+        } else {
+          div.classList.add("src-" + cellData.src);
+          div.textContent = cellData.sid + " / " + cellData.src;
+        }
+        gridEl.appendChild(div);
+      }
+    }
 
-Die Mutter sagte:
-"Weil jede Frage ein Licht entzündet."
+    function renderLog(raw) {
+      logEl.textContent = JSON.stringify(raw, null, 2);
+    }
 
-Und so begann das Kind zu verstehen.`,
+    // Initialer Demo‑Render
+    renderGrid(demoRaw);
+    renderLog(demoRaw);
 
-  for: `MÄRCHEN 3 – Vorwärts
-
-Ein Mann saß unter einem Apfelbaum.
-Ein Apfel fiel und traf ihn leicht am Kopf.
-
-Er dachte:
-"Zum Glück war es kein Kürbis."
-
-Und so begann seine Reise der Erkenntnis.`
-};
-
-// --- 2) 3×4 SEQUENZ ---
-const keys = ["rew", "me", "for"];
-const sequence = [];
-
-for (let r = 1; r <= 4; r++) {
-  for (let k of keys) {
-    sequence.push({
-      key: k,
-      round: r,
-      text: stories[k]
-    });
-  }
-}
-
-// --- 3) ZUSTAND ---
-let index = 0;
-
-// --- 4) ANZEIGE ---
-function render() {
-  const meta = document.getElementById("meta");
-  const box  = document.getElementById("storyBox");
-
-  if (index < sequence.length) {
-    const item = sequence[index];
-    meta.textContent = `Slot ${index+1}/12 | ${item.key} | Runde ${item.round}`;
-    box.textContent  = item.text;
-  } else {
-    meta.textContent = `Slot ${index+1} | OUT_OF_RANGE`;
-    box.textContent  = `Auch diese falsche Anzeige ist ein Signal.`;
-  }
-}
-
-document.getElementById("nextBtn").onclick = () => {
-  index++;
-  render();
-};
-
-render();
-</script>
-
-<!-- =============================== -->
-<!-- ENGINE-MODULE (RICHTIGE EBENE) -->
-<!-- =============================== -->
-
-<script src="re6²D/engine/IMPULSE_ENGINE.js"></script>
-<script src="re6²D/engine/3xN.js"></script>
-<script src="re6²D/engine/ITEM_ROUTER.js"></script>
-<script src="re6²D/engine/CV.js"></script>
-
-<script src="re6²D/engine/mini_mask.js"></script>
-<script src="re6²D/engine/mini_3ja.js"></script>
-<script src="re6²D/engine/mini_moves.js"></script>
-<script src="re6²D/engine/mini_effects.js"></script>
-<script src="re6²D/engine/mini_timer.js"></script>
-
+    // Später: hier ersetzt du demoRaw durch echten ALL4ALL‑/BORG‑Output,
+    // z.B. via fetch('raw.json') oder direkt aus deinem Engine‑Script.
+  </script>
 </body>
 </html>
