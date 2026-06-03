@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>3×13 – GEN ANKER / ALL4ALL</title>
+<title>3×13 – UPG‑X ANKER / ALL4ALL / RAW‑BORG</title>
 <style>
   body{
     margin:0;
@@ -29,68 +29,124 @@
     margin-top:16px;
     white-space:pre;
   }
+  .bar{
+    margin-bottom:10px;
+  }
+  button{
+    background:#022;
+    color:#0ff;
+    border:1px solid #044;
+    padding:4px 8px;
+    margin-right:6px;
+    cursor:pointer;
+    font-family:monospace;
+    font-size:11px;
+  }
+  button.active{
+    border-color:#0ff;
+  }
 </style>
 </head>
 <body>
 
-<h2>3×13 – GEN ANKER / ALL4ALL</h2>
+<h2>3×13 – UPG‑X / ANKER / ALL4ALL</h2>
+
+<div class="bar">
+  SOURCE:
+  <button data-src="3x2">3×2 (F°)</button>
+  <button data-src="3x6">3×6 (L°‑Flow)</button>
+  <button data-src="3x7">3×7 (L°‑Welt)</button>
+</div>
+
 <div class="grid" id="grid"></div>
-<pre id="out">GEN-ANKER READY</pre>
+<pre id="out">UPG‑X ANKER READY (1‑gegen‑1 GEN‑Modus)</pre>
 
 <script>
 // ======================================================
-// 3×13 – ANKER / ALL4ALL / AXIS-EXIT
+// UMGEBUNG: GEN‑QUELLEN (werden von 3×2 / 3×6 / 3×7 gefüttert)
 // ======================================================
+// Erwartet wird, dass andere Module sowas setzen:
+// window.genSources["3x2"] = { sid, move, axis1, axis2, flow, ... }
+// window.genSources["3x6"] = { ... }
+// window.genSources["3x7"] = { ... }
 
-// 3 Reihen: R / F / L+E (nur symbolisch, keine harte Bindung)
-const ROW_TAGS = ["R","F","X"]; // X = L+E / Welt+Engine
+window.genSources = window.genSources || {};
+let activeSourceKey = "3x2"; // Default: 3×2
 
-// 13 Spalten: reine Anker-Slots
+// ======================================================
+// RAW‑BORG‑CHECK (leicht, nur Status‑Tagging)
+// ======================================================
+function rawBorgCheck(sig){
+  if(!sig) return { status:"NONE", msg:"kein Signal" };
+
+  if(!sig.flow && !sig.chain){
+    return { status:"RAW", msg:"RAW‑Signal ohne Flow/Kette" };
+  }
+
+  if(sig.move === "NV" || sig.move === "SG" || sig.move === "HX"){
+    return { status:"WARN", msg:"kritischer Move (NV/SG/HX)" };
+  }
+
+  return { status:"OK", msg:"BORG‑kompatibel" };
+}
+
+// ======================================================
+// 3×13 – IDs
+// ======================================================
+const ROW_TAGS = ["R","F","X"]; // R° / F° / L°+E° symbolisch
 const COL_COUNT = 13;
 
-// SUPER-ID: ⟡R01..⟡R13, ⟡F01..⟡F13, ⟡X01..⟡X13
 function makeSuperId(row, col){
   const tag = ROW_TAGS[row];
   const num = String(col+1).padStart(2,"0");
   return `⟡${tag}${num}`;
 }
 
-// ANKER-MOVE: alles ist AN / ALL4ALL
-const MOVE_ANCHOR = "AN";
-const FUNC_ALL4ALL = "ALL4ALL";
-
-// GLOBAL: letzter Eingang aus 3×N (von außen)
-window.lastSignal = window.lastSignal || null;
-
 // ======================================================
-// CORE: ANKER-OPERATOR
-// nimmt ein beliebiges Signal r_in (von 3×1..3×N)
-// und verankert es in einem 3×13-Slot
+// UPG‑X ANKER‑OPERATOR
+// – Achsen verlassen (axisExit = true)
+// – ALL4ALL‑Funktion
+// – 1‑gegen‑1: genau EINE GEN‑Quelle pro Anker
 // ======================================================
-function ANKER_OP(row, col, incoming){
+function ANKER_UPGX(row, col, sourceKey){
   const sid = makeSuperId(row, col);
+  const incoming = window.genSources[sourceKey] || null;
 
-  // axisExit: wenn true → Achsen werden bewusst ignoriert
-  const axisExit = true;
+  const borg = rawBorgCheck(incoming);
 
   const anchor = {
     sid,
-    move: MOVE_ANCHOR,
-    func: FUNC_ALL4ALL,
-    axisExit,
-    // Original-Signal aus 3×N:
-    source: incoming || null
+    move: "AN",          // reiner Anker
+    func: "ALL4ALL",     // ALL4ALL‑Träger
+    axisExit: true,      // Achsen verlassen
+    sourceKey,           // welche GEN‑Quelle
+    borgStatus: borg,    // RAW/BORG‑Tag
+    source: incoming     // Original‑Signal (unvermischt)
   };
 
   return anchor;
 }
 
 // ======================================================
-// UI
+// UI – Source‑Buttons
 // ======================================================
-const grid = document.getElementById("grid");
 const out  = document.getElementById("out");
+const grid = document.getElementById("grid");
+const srcButtons = document.querySelectorAll("button[data-src]");
 
+srcButtons.forEach(btn=>{
+  btn.onclick = ()=>{
+    srcButtons.forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    activeSourceKey = btn.dataset.src;
+    out.textContent = `UPG‑X ANKER READY – aktive Quelle: ${activeSourceKey}`;
+  };
+});
+srcButtons[0].classList.add("active");
+
+// ======================================================
+// UI – 3×13‑Grid
+// ======================================================
 for(let r=0;r<3;r++){
   for(let c=0;c<COL_COUNT;c++){
     const div = document.createElement("div");
@@ -99,29 +155,29 @@ for(let r=0;r<3;r++){
     div.textContent = sid;
 
     div.onclick = ()=>{
-      const anchor = ANKER_OP(r, c, window.lastSignal);
+      const anchor = ANKER_UPGX(r, c, activeSourceKey);
 
       out.textContent =
-`[3×13 ANKER]
+`[3×13 UPG‑X ANKER]
 SID=${anchor.sid}
 MOVE=${anchor.move}
 FUNC=${anchor.func}
 AXIS_EXIT=${anchor.axisExit}
 
-SOURCE=${anchor.source ? JSON.stringify(anchor.source,null,2) : "none"}`;
+SOURCE_KEY=${anchor.sourceKey}
+BORG_STATUS=${anchor.borgStatus.status}
+BORG_MSG=${anchor.borgStatus.msg}
+
+SOURCE_PAYLOAD=${
+  anchor.source
+    ? JSON.stringify(anchor.source, null, 2)
+    : "none (GEN‑Quelle hat noch nichts geliefert)"
+}`;
     };
 
     grid.appendChild(div);
   }
 }
-
-// ======================================================
-// EXTERNER HOOK:
-// andere 3×N-Module können hierher schreiben:
-// window.lastSignal = { sid, move, axis1, axis2, flow, ... }
-// ======================================================
-
 </script>
 </body>
 </html>
-
