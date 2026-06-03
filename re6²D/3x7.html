@@ -15,20 +15,77 @@
 <pre id="out">READY</pre>
 
 <script>
+// -------------------------------
+// BORG PROTOCOL (Maßnahmen)
+// -------------------------------
+function borgProtocol(r){
+  const result = {
+    status: "OK",
+    action: "",
+    message: ""
+  };
+
+  // 1) Flow fehlt → unvollständig
+  if(!r.flow){
+    result.status = "ERROR";
+    result.action = "ADD_FLOW";
+    result.message = "Unvollständige Sequenz erkannt. Ergänzung erforderlich.";
+    return result;
+  }
+
+  // 2) Achse fehlt → struktureller Fehler
+  if(!r.axis1 || !r.axis2){
+    result.status = "ERROR";
+    result.action = "ADD_AXIS";
+    result.message = "Achsenkohärenz fehlt. Struktur instabil.";
+    return result;
+  }
+
+  // 3) Kritische Moves → Warnung
+  if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
+    result.status = "WARN";
+    result.action = "CHECK_PATH";
+    result.message = "Fehlstelle lokalisiert. Kohärenz bricht. Reparatur empfohlen.";
+    return result;
+  }
+
+  // 4) Stabile Moves → OK
+  if(r.move === "AN" || r.move === "SC" || r.move === "END"){
+    result.status = "OK";
+    result.action = "CONTINUE";
+    result.message = "Sequenz stabil. Fortfahren.";
+    return result;
+  }
+
+  // 5) Default
+  result.status = "INFO";
+  result.action = "ANALYZE";
+  result.message = "Analyse läuft. Kontext wird eingefordert.";
+  return result;
+}
+
+// -------------------------------
 // Achsen
+// -------------------------------
 const AXIS = ["I","Z","W"];
 
+// -------------------------------
 // Zustände
+// -------------------------------
 const STATES = ["AN","SC","NV","ST","SG","HX","END"];
 
+// -------------------------------
 // Weltmarker
+// -------------------------------
 function worldMarker(move){
   if(move==="AN"||move==="SC"||move==="END") return "⟡L+";
   if(move==="NV"||move==="SG"||move==="HX") return "⟡L-";
   return "";
 }
 
+// -------------------------------
 // Matrix erzeugen
+// -------------------------------
 const grid=document.getElementById("grid");
 const out=document.getElementById("out");
 
@@ -37,11 +94,17 @@ STATES.forEach(state=>{
     const d=document.createElement("div");
     d.className="cell";
     d.textContent = state + " " + worldMarker(state);
-    d.onclick = ()=>{ out.textContent = `${axis}\n${state}\n${worldMarker(state)}` };
-    grid.appendChild(d);
-  });
-});
-</script>
 
-</body>
-</html>
+    d.onclick = ()=>{
+      const r = {
+        sid: axis + "-" + state,
+        move: state,
+        axis1: axis,
+        axis2: "L",
+        flow: state // Weltmatrix hat keinen Flow → wir simulieren ihn
+      };
+
+      const borg = borgProtocol(r);
+
+      out.textContent =
+        `${r.sid}\n${r.move}\n${r.axis1}/${r.axis2}\n→ ${worldMarker(r.move)}\n\n[BORG
