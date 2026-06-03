@@ -54,6 +54,55 @@
 
 <script>
 // ======================================================
+// BORG PROTOCOL (Maßnahmen) – für 3×4
+// ======================================================
+function borgProtocol(r){
+  const result = {
+    status: "OK",
+    action: "",
+    message: ""
+  };
+
+  // 1) Funktions-Fehler → unvollständig
+  if(!r.func){
+    result.status = "ERROR";
+    result.action = "ADD_FUNC";
+    result.message = "Funktionszuordnung fehlt. Systemzustand unvollständig.";
+    return result;
+  }
+
+  // 2) Achse fehlt → struktureller Fehler
+  if(!r.axis1 || !r.axis2){
+    result.status = "ERROR";
+    result.action = "ADD_AXIS";
+    result.message = "Achsenkohärenz fehlt. Engine-Struktur instabil.";
+    return result;
+  }
+
+  // 3) Kritische Moves → Warnung
+  if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
+    result.status = "WARN";
+    result.action = "CHECK_PATH";
+    result.message = "Kritischer Operator im Engine-Layer. Pipeline prüfen.";
+    return result;
+  }
+
+  // 4) Stabile Moves → OK
+  if(r.move === "AN" || r.move === "SC" || r.move === "ST" || r.move === "END"){
+    result.status = "OK";
+    result.action = "CONTINUE";
+    result.message = "Engine-Sequenz stabil. Fortfahren.";
+    return result;
+  }
+
+  // 5) Default
+  result.status = "INFO";
+  result.action = "ANALYZE";
+  result.message = "Engine-Analyse läuft. Kontext wird eingefordert.";
+  return result;
+}
+
+// ======================================================
 // RAWWATOR — SUPER-ID SYSTEM (⟡ + 2 Zeichen)
 // ======================================================
 
@@ -133,8 +182,11 @@ SUPER_IDS.forEach((sid, index)=>{
 
   div.addEventListener("click", ()=>{
     const r = OP12(index);
+    const borg = borgProtocol(r);
+
     out.textContent =
-      `${r.superID} → MOVE=${r.move} | AXIS=${r.axis1}/${r.axis2} | FUNC=${r.func}`;
+      `${r.superID} → MOVE=${r.move} | AXIS=${r.axis1}/${r.axis2} | FUNC=${r.func}\n` +
+      `[BORG] ${borg.message}`;
   });
 
   grid.appendChild(div);
@@ -143,4 +195,3 @@ SUPER_IDS.forEach((sid, index)=>{
 
 </body>
 </html>
-
