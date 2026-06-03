@@ -1,105 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>3×9 – RAWWATOR SCHALTWERK</title>
-<style>
-  body{
-    margin:0;
-    background:#000;
-    color:#0ff;
-    font-family:monospace;
-    padding:20px;
-  }
-  .cell{
-    padding:6px;
-    margin:4px;
-    border:1px solid #033;
-    display:inline-block;
-    width:90px;
-    text-align:center;
-    cursor:pointer;
-  }
-</style>
-</head>
-<body>
+{
+  "axis": "PI-3x9",
+  "slots": [
+    { "pos": [1,1], "k": 1,  "pi_dev": 0.14 },
+    { "pos": [1,2], "k": 2,  "pi_dev": 0.28 },
+    { "pos": [1,3], "k": 3,  "pi_dev": 0.42 },
+    { "pos": [1,4], "k": 4,  "pi_dev": 0.57 },
+    { "pos": [1,5], "k": 5,  "pi_dev": 0.71 },
+    { "pos": [1,6], "k": 6,  "pi_dev": 0.85 },
+    { "pos": [1,7], "k": 7,  "pi_dev": 0.99 },
+    { "pos": [1,8], "k": 8,  "pi_dev": 0.13 },
+    { "pos": [1,9], "k": 9,  "pi_dev": 0.27 },
 
-<h2>3×9 SCHALTWERK</h2>
-<div id="grid"></div>
-<pre id="out">READY</pre>
-
-<script>
-// ======================================================
-// SUPER-ID (⟡ + 2 Zeichen) — 27 Felder
-// ======================================================
-const SUPER_IDS = [
-  "⟡A1","⟡A2","⟡A3","⟡A4","⟡A5","⟡A6","⟡A7","⟡A8","⟡A9",
-  "⟡B1","⟡B2","⟡B3","⟡B4","⟡B5","⟡B6","⟡B7","⟡B8","⟡B9",
-  "⟡C1","⟡C2","⟡C3","⟡C4","⟡C5","⟡C6","⟡C7","⟡C8","⟡C9"
-];
-
-// ======================================================
-// MOVE-SET (27 Schaltungen) — RAW-WAR-Reduktion
-// (erste Reihe: System/Impuls, zweite: Cube/Tech, dritte: Meta/Fehler)
-// ======================================================
-const MOVES = {
-  "⟡A1":"AN","⟡A2":"SC","⟡A3":"NV","⟡A4":"ST","⟡A5":"SG","⟡A6":"HX","⟡A7":"MX","⟡A8":"IQ","⟡A9":"AL",
-  "⟡B1":"SH","⟡B2":"CU","⟡B3":"MO","⟡B4":"PI","⟡B5":"AX","⟡B6":"BC","⟡B7":"RW","⟡B8":"ER","⟡B9":"IQ",
-  "⟡C1":"CU","⟡C2":"AX","⟡C3":"RW","⟡C4":"AN","⟡C5":"SC","⟡C6":"NV","⟡C7":"ST","⟡C8":"SG","⟡C9":"HX"
-};
-
-// ======================================================
-// ACHSEN (3 × 9 = 27 Kombinationen)
-// ======================================================
-const AXIS_PRIMARY   = ["I","Z","W"];                 // Impuls / Zustand / Wirkung
-const AXIS_SECONDARY = ["K","T","P","R","S","E","U","V","W"]; 
-// 9 Sekundärachsen: K,T,P,R,S,E,U,V,W (z.B. Kern, Takt, Pfad, Route, Signal, Ebene, Überlagerung, Vector, Warp)
-
-// ======================================================
-// DURCHLAUF-KETTE (Schaltung → Weiterleitung)
-// ======================================================
-const FLOW = {
-  AN:"ST", SC:"AL", NV:"PI", ST:"IQ", SG:"AL", HX:"END", MX:"MO",
-  IQ:"CU", AL:"AX", SH:"PI", CU:"RW", MO:"END", PI:"IQ", AX:"END",
-  BC:"AX", RW:"END", ER:"RW"
-};
-
-// ======================================================
-// OPERATOR-FORMEL (Master)
-// ======================================================
-function OP(index){
-  const sid  = SUPER_IDS[index];
-  const move = MOVES[sid];
-
-  const row = Math.floor(index / 9);
-  const col = index % 9;
-
-  const axis1 = AXIS_PRIMARY[row];
-  const axis2 = AXIS_SECONDARY[col];
-
-  const chain = FLOW[move];
-
-  return { sid, move, axis1, axis2, chain };
+    { "pos": [2,1], "k": 10, "pi_dev": 0.41 },
+    ...
+  ]
 }
-
-// ======================================================
-// Minimal-UI – nur zum Anklicken der Schaltung
-// ======================================================
-const grid = document.getElementById("grid");
-const out  = document.getElementById("out");
-
-SUPER_IDS.forEach((sid, index)=>{
-  const div = document.createElement("div");
-  div.className = "cell";
-  div.textContent = sid;
-  div.onclick = ()=>{
-    const r = OP(index);
-    out.textContent =
-      `${r.sid}\nMOVE=${r.move}\nAXIS=${r.axis1}/${r.axis2}\nFLOW=${r.chain}`;
-  };
-  grid.appendChild(div);
-});
-</script>
-
-</body>
-</html>
