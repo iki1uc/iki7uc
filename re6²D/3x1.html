@@ -1,83 +1,57 @@
-function borgProtocol(r){
-  const result = {
-    status: "OK",
-    action: "",
-    message: ""
-  };
+{
+  "station": {
+    "id": "AXXX",
+    "role": "RUNG",
+    "zone": "0-120"
+  },
 
-  // 1) Achsen-Pflicht (UPG‑X akzeptiert nur Achsen, keinen Flow)
-  if(!r.axis1 || !r.axis2){
-    result.status = "ERROR";
-    result.action = "ADD_AXIS";
-    result.message = "Achsen fehlen. UPG‑X verweigert Alt‑Struktur.";
-    return result;
+  "matrix": {
+    "mode": "3x3",
+    "self": "AXXX",
+    "north": null,
+    "south": null,
+    "east": null,
+    "west": null,
+    "ne": null,
+    "nw": null,
+    "se": null,
+    "sw": null
+  },
+
+  "sensorik": {
+    "px": true,
+    "scan": "pending",
+    "result": null
+  },
+
+  "routing": {
+    "up": "AXUP",
+    "down": "AXDOWN",
+    "rew": "AXREW",
+    "me": "AXME",
+    "for": "AXFOR",
+    "zack": "AXZACK",
+    "klick": "AXKLICK"
+  },
+
+  "anchors": {
+    "self": "A-AXXX",
+    "beam": "AX11",
+    "all4all": "AX08",
+    "all8all": "AX08"
+  },
+
+  "backup": {
+    "primary": "AXXX",
+    "secondary": "AXYY",
+    "mode": "auto"
+  },
+
+  "borg": {
+    "status": "pending"
+  },
+
+  "upgx": {
+    "status": "pending"
   }
-
-  // 2) Kritische Moves → Warnung (GEN‑Trennung)
-  if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
-    result.status = "WARN";
-    result.action = "CHECK_PATH";
-    result.message = "Kritischer Move. GEN‑Trennung aktiv.";
-    return result;
-  }
-
-  // 3) Stabile Moves → OK (aber ohne Flow)
-  if(r.move === "AN" || r.move === "SC" || r.move === "ST" || r.move === "END"){
-    result.status = "OK";
-    result.action = "CONTINUE";
-    result.message = "UPG‑X akzeptiert. Achsen stabil.";
-    return result;
-  }
-
-  // 4) Default → Analyse
-  result.status = "INFO";
-  result.action = "ANALYZE";
-  result.message = "Analyse läuft. GEN‑Kontext wird angefordert.";
-  return result;
-}function upgxStatus(r){
-  const status = {
-    upgx: "OK",
-    axis: "",
-    move: "",
-    message: ""
-  };
-
-  // Achsen prüfen
-  if(!r.axis1 || !r.axis2){
-    status.upgx = "ERROR";
-    status.axis = "MISS";
-    status.message = "UPG‑X verweigert: Achsen fehlen.";
-    return status;
-  }
-
-  status.axis = "OK";
-
-  // Move prüfen
-  if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
-    status.upgx = "WARN";
-    status.move = "CRITICAL";
-    status.message = "UPG‑X: kritischer Move, GEN‑Trennung aktiv.";
-    return status;
-  }
-
-  if(r.move === "AN" || r.move === "SC" || r.move === "ST" || r.move === "END"){
-    status.upgx = "OK";
-    status.move = "STABLE";
-    status.message = "UPG‑X akzeptiert.";
-    return status;
-  }
-
-  status.upgx = "INFO";
-  status.move = "UNKNOWN";
-  status.message = "UPG‑X fordert GEN‑Kontext.";
-  return status;
-}const borg = borgProtocol(r);
-const upgx = upgxStatus(r);
-
-out.textContent =
-`${r.sid}
-MOVE=${r.move}
-AXIS=${r.axis1}/${r.axis2}
-
-[BORG]  ${borg.status} – ${borg.message}
-[UPG‑X] ${upgx.upgx} – ${upgx.message}`;
+}
