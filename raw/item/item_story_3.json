@@ -1,1 +1,25 @@
+{
+  "HUHN_ID": "H-ST-FR3-L01-R03",
+  "EI_ID": "E-items-item_story_3-v1",
+  "OMELETT_ID": "O-MST-BEAM_GHOST-ST-FR3",
+  "SATT_ID": "S-01-ST-L01",
+  "BEAM_ID": "B-BEAM_GHOST-ST-FR3",
+  "axis": "ST",
+  "layer": "FRAME3",
+  "language": "L01",
+  "resume": "R03",
+  "mask_word": "",
+  "story": { "de": "", "en": "", "tr": "" },
+  "artists": [{ "id": "A01", "note": "" }, { "id": "A02", "note": "" }],
+  "scientists": [{ "id": "S01", "note": "" }, { "id": "S02", "note": "" }],
+  "beam_type": "BEAM_GHOST",
+  "error_check": {
+    "axis_valid": true,
+    "layer_valid": true,
+    "language_valid": true,
+    "resume_valid": true,
+    "beam_valid": true,
+    "file_valid": true
+  }
+}
 
