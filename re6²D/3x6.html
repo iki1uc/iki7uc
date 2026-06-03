@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>3×6 – RAWWATOR SCHALTWERK</title>
+<title>3×6 – RAWWATOR SCHALTWERK (GEN)</title>
 <style>
   body{
     margin:0;
@@ -24,81 +24,84 @@
 </head>
 <body>
 
-<h2>3×6 SCHALTWERK</h2>
+<h2>3×6 SCHALTWERK (GEN)</h2>
 <div id="grid"></div>
 <pre id="out">READY</pre>
 
 <script>
 // ======================================================
-// SUPER-ID (⟡ + 2 Zeichen)
+// VIER-SCHICHTEN-SLOTS (R°, F°, L°, E°)
 // ======================================================
-const SUPER_IDS = [
-  "⟡A1","⟡A2","⟡A3","⟡A4","⟡A5","⟡A6",
-  "⟡B1","⟡B2","⟡B3","⟡B4","⟡B5","⟡B6",
-  "⟡C1","⟡C2","⟡C3","⟡C4","⟡C5","⟡C6"
-];
+window.lastR = window.lastR || null;
+window.lastF = window.lastF || null;
+window.lastL = window.lastL || null;
+window.lastE = window.lastE || null;
 
 // ======================================================
-// MOVE-SET (18 Schaltungen)
+// BORG PROTOCOL – GEN VERSION
 // ======================================================
-const MOVES = {
-  "⟡A1":"AN","⟡A2":"SC","⟡A3":"NV","⟡A4":"ST","⟡A5":"SG","⟡A6":"HX",
-  "⟡B1":"MX","⟡B2":"IQ","⟡B3":"AL","⟡B4":"SH","⟡B5":"CU","⟡B6":"MO",
-  "⟡C1":"PI","⟡C2":"AX","⟡C3":"BC","⟡C4":"RW","⟡C5":"ER","⟡C6":"IQ"
-};
+function borgProtocol(r){
+  const result = { status:"OK", action:"", message:"" };
 
-// ======================================================
-// ACHSEN (3 × 6 = 18 Kombinationen)
-// ======================================================
-const AXIS_PRIMARY   = ["I","Z","W"];
-const AXIS_SECONDARY = ["K","T","P","R","S","E"];
+  // Flow MUSS existieren (3×6 ist Flow-Schaltwerk)
+  if(!r.chain){
+    result.status = "ERROR";
+    result.action = "ADD_FLOW";
+    result.message = "Flow fehlt. Schaltwerk unvollständig.";
+    return result;
+  }
 
-// ======================================================
-// DURCHLAUF-KETTE (Schaltung → Weiterleitung)
-// ======================================================
-const FLOW = {
-  AN:"ST", SC:"AL", NV:"PI", ST:"IQ", SG:"AL", HX:"END",
-  MX:"MO", IQ:"CU", AL:"AX", SH:"PI", CU:"RW", MO:"END",
-  PI:"IQ", AX:"END", BC:"RW", RW:"END", ER:"RW"
-};
+  // Achsen prüfen
+  if(!r.axis1 || !r.axis2){
+    result.status = "ERROR";
+    result.action = "ADD_AXIS";
+    result.message = "Achsenkohärenz fehlt. Struktur instabil.";
+    return result;
+  }
 
-// ======================================================
-// OPERATOR-FORMEL (Master)
-// ======================================================
-function OP(index){
-  const sid  = SUPER_IDS[index];
-  const move = MOVES[sid];
+  // Kritische Moves
+  if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
+    result.status = "WARN";
+    result.action = "CHECK_PATH";
+    result.message = "Kritischer Move. Pfad prüfen.";
+    return result;
+  }
 
-  const row = Math.floor(index / 6);
-  const col = index % 6;
+  // Stabile Moves
+  if(r.move === "AN" || r.move === "SC" || r.move === "ST" || r.move === "END"){
+    result.status = "OK";
+    result.action = "CONTINUE";
+    result.message = "Schaltwerk stabil.";
+    return result;
+  }
 
-  const axis1 = AXIS_PRIMARY[row];
-  const axis2 = AXIS_SECONDARY[col];
-
-  const chain = FLOW[move];
-
-  return { sid, move, axis1, axis2, chain };
+  // Default
+  result.status = "INFO";
+  result.action = "ANALYZE";
+  result.message = "Analyse läuft.";
+  return result;
 }
 
 // ======================================================
-// UI (minimal, nur zum Anklicken der Schaltung)
+// VIER-SCHICHTEN-KERN (GEN-X)
 // ======================================================
-const grid = document.getElementById("grid");
-const out  = document.getElementById("out");
+function vierSchichtenKern(r){
+  const R = r.R ? "OK" : "MISS";
+  const F = r.F ? "OK" : "MISS";
+  const L = r.L ? "OK" : "MISS";
+  const E = r.E ? "OK" : "MISS";
 
-SUPER_IDS.forEach((sid, index)=>{
-  const div = document.createElement("div");
-  div.className = "cell";
-  div.textContent = sid;
-  div.onclick = ()=>{
-    const r = OP(index);
-    out.textContent =
-      `${r.sid}\nMOVE=${r.move}\nAXIS=${r.axis1}/${r.axis2}\nFLOW=${r.chain}`;
+  const full = (R==="OK" && F==="OK" && L==="OK" && E==="OK");
+
+  return {
+    R, F, L, E,
+    status: full ? "FULL" : "PARTIAL",
+    message: full
+      ? "GEN-X aktiv. System schwebt."
+      : "GEN-X unvollständig."
   };
-  grid.appendChild(div);
-});
-</script>
+}
 
-</body>
-</html>
-
+// ======================================================
+// SUPER-ID (⟡ + 2 Zeichen)
+//
