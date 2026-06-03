@@ -5,7 +5,6 @@
   <title>iki7uc – RAW / 3×13 / ALL4ALL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Basis-Style, bewusst minimal -->
   <style>
     * { box-sizing: border-box; }
     body {
@@ -74,9 +73,6 @@
       background: #11131f;
       cursor: default;
     }
-    .cell.src-3x2 { background: #1f2937; }
-    .cell.src-3x6 { background: #153e52; }
-    .cell.src-3x7 { background: #3b1f52; }
     .cell.empty   { background: #05060a; color: #444; }
     #log {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -101,6 +97,7 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>iki7uc / RAW‑Viewer</h1>
@@ -108,21 +105,15 @@
   </header>
 
   <main>
-    <!-- Linke Seite: 3×13 / 2D‑View -->
     <section>
       <h2>3×13 Grid (2D‑Ablichtung)</h2>
-      <div class="small">
-        Anzeige: SID + Quelle (3×2 / 3×6 / 3×7) – nur 2D‑Projektion, RAW bleibt vollständig.
-      </div>
+      <div class="small">GEN‑Filter · ALL4ALL‑Routing · 2D‑Projektion</div>
       <div id="grid"></div>
     </section>
 
-    <!-- Rechte Seite: RAW‑Dump / Log -->
     <section>
       <h2>RAW / Log</h2>
-      <div class="small">
-        Hier kannst du später den echten RAW‑Block (ITEM / MOLEKÜL / CODE) einblenden.
-      </div>
+      <div class="small">index.json + Module + GEN‑Sortierung</div>
       <div id="log">initialisiere iki7uc RAW‑View…</div>
     </section>
   </main>
@@ -132,30 +123,48 @@
   </footer>
 
   <script>
-    // --- Platzhalter: hier kommt später dein echter RAW‑Loader rein ---
-    // Für jetzt: Demo‑Daten, damit du sofort was siehst.
+    async function loadModules() {
+      const indexCfg = await fetch("index.json").then(r => r.json());
+      const modules = {};
 
-    const demoRaw = {
-      meta: {
-        version: "0.1",
-        mode: "DEMO",
-        note: "Ersetze das durch echten ALL4ALL / BORG / iki7uc‑RAW."
-      },
-      cells: [
-        // Jede Zelle = 2D‑Projektion eines RAW‑ITEM/MOLEKÜL/CODE‑Blocks
-        { sid: "R01", src: "3x2" },
-        { sid: "R02", src: "3x7" },
-        { sid: "R03", src: "3x6" },
-        // … hier kannst du später per JS aus echtem RAW generieren
-      ]
-    };
+      for (const src of indexCfg.sources) {
+        try {
+          modules[src] = await fetch(src).then(r => r.json());
+        } catch (e) {
+          console.warn("Fehlt:", src);
+        }
+      }
+
+      return { indexCfg, modules };
+    }
+
+    function pickCells(modules, indexCfg) {
+      const allCells = [];
+
+      for (const [name, mod] of Object.entries(modules)) {
+        if (!mod.id) continue;
+        if (mod.id.gen < indexCfg.policy.min_gen) continue;
+
+        if (mod.payload && Array.isArray(mod.payload.cells)) {
+          mod.payload.cells.forEach(c => {
+            allCells.push({
+              sid: c.sid || name,
+              src: name.replace(".json",""),
+              gen: mod.id.gen
+            });
+          });
+        }
+      }
+
+      allCells.sort((a,b) => b.gen - a.gen);
+      return allCells.slice(0, 39);
+    }
 
     const gridEl = document.getElementById("grid");
     const logEl  = document.getElementById("log");
 
     function renderGrid(raw) {
       gridEl.innerHTML = "";
-      // 3×13 = 39 Zellen – wir füllen einfach 39 Slots, Rest = empty
       const total = 39;
       for (let i = 0; i < total; i++) {
         const cellData = raw.cells[i];
@@ -165,7 +174,6 @@
           div.classList.add("empty");
           div.textContent = "·";
         } else {
-          div.classList.add("src-" + cellData.src);
           div.textContent = cellData.sid + " / " + cellData.src;
         }
         gridEl.appendChild(div);
@@ -176,12 +184,11 @@
       logEl.textContent = JSON.stringify(raw, null, 2);
     }
 
-    // Initialer Demo‑Render
-    renderGrid(demoRaw);
-    renderLog(demoRaw);
-
-    // Später: hier ersetzt du demoRaw durch echten ALL4ALL‑/BORG‑Output,
-    // z.B. via fetch('raw.json') oder direkt aus deinem Engine‑Script.
+    loadModules().then(({indexCfg, modules}) => {
+      const cells = pickCells(modules, indexCfg);
+      renderGrid({ cells });
+      renderLog({ indexCfg, modules });
+    });
   </script>
 </body>
 </html>
