@@ -1,1 +1,9 @@
+{
+  "sache": "Richtung des Systems",
+  "auswertung": "Bestimmt die Startachse und den GEN-Impuls",
+  "zeit": "t0 – Vorbereitungsphase",
+  "essenz": "Ohne Richtung keine Kohärenz",
+  "fallderfaelle": "Richtungsdrift → TECH stoppt",
+  "kuenstler": ["K1-Linie", "K2-Fläche", "K3-Raum", "K4-Perspektive"]
+}
 
