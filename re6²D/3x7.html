@@ -15,17 +15,12 @@
 <pre id="out">READY</pre>
 
 <script>
-// -------------------------------
+// ------------------------------------------------------
 // BORG PROTOCOL (Maßnahmen)
-// -------------------------------
+// ------------------------------------------------------
 function borgProtocol(r){
-  const result = {
-    status: "OK",
-    action: "",
-    message: ""
-  };
+  const result = { status:"OK", action:"", message:"" };
 
-  // 1) Flow fehlt → unvollständig
   if(!r.flow){
     result.status = "ERROR";
     result.action = "ADD_FLOW";
@@ -33,7 +28,6 @@ function borgProtocol(r){
     return result;
   }
 
-  // 2) Achse fehlt → struktureller Fehler
   if(!r.axis1 || !r.axis2){
     result.status = "ERROR";
     result.action = "ADD_AXIS";
@@ -41,7 +35,6 @@ function borgProtocol(r){
     return result;
   }
 
-  // 3) Kritische Moves → Warnung
   if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
     result.status = "WARN";
     result.action = "CHECK_PATH";
@@ -49,7 +42,6 @@ function borgProtocol(r){
     return result;
   }
 
-  // 4) Stabile Moves → OK
   if(r.move === "AN" || r.move === "SC" || r.move === "END"){
     result.status = "OK";
     result.action = "CONTINUE";
@@ -57,54 +49,47 @@ function borgProtocol(r){
     return result;
   }
 
-  // 5) Default
   result.status = "INFO";
   result.action = "ANALYZE";
   result.message = "Analyse läuft. Kontext wird eingefordert.";
   return result;
 }
 
-// -------------------------------
-// Achsen
-// -------------------------------
-const AXIS = ["I","Z","W"];
+// ------------------------------------------------------
+// MEER / SYNCH-KERN (Komplettum)
+// ------------------------------------------------------
+function synchKern(r){
+  const sync = { status:"OK", message:"" };
 
-// -------------------------------
-// Zustände
-// -------------------------------
-const STATES = ["AN","SC","NV","ST","SG","HX","END"];
+  if(!r.flow){
+    sync.status = "BREAK";
+    sync.message = "Meer-Kohärenz unterbrochen. Flow fehlt.";
+    return sync;
+  }
 
-// -------------------------------
-// Weltmarker
-// -------------------------------
-function worldMarker(move){
-  if(move==="AN"||move==="SC"||move==="END") return "⟡L+";
-  if(move==="NV"||move==="SG"||move==="HX") return "⟡L-";
-  return "";
+  if(!r.axis1 || !r.axis2){
+    sync.status = "DRIFT";
+    sync.message = "Achsen-Drift erkannt. Meer instabil.";
+    return sync;
+  }
+
+  if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
+    sync.status = "DARK";
+    sync.message = "Dunkelzone im Meer. Vorsicht.";
+    return sync;
+  }
+
+  sync.status = "LIGHT";
+  sync.message = "Meer stabil. Komplettum aktiv.";
+  return sync;
 }
 
-// -------------------------------
-// Matrix erzeugen
-// -------------------------------
-const grid=document.getElementById("grid");
-const out=document.getElementById("out");
+// ------------------------------------------------------
+// Achsen
+// ------------------------------------------------------
+const AXIS = ["I","Z","W"];
 
-STATES.forEach(state=>{
-  AXIS.forEach(axis=>{
-    const d=document.createElement("div");
-    d.className="cell";
-    d.textContent = state + " " + worldMarker(state);
-
-    d.onclick = ()=>{
-      const r = {
-        sid: axis + "-" + state,
-        move: state,
-        axis1: axis,
-        axis2: "L",
-        flow: state // Weltmatrix hat keinen Flow → wir simulieren ihn
-      };
-
-      const borg = borgProtocol(r);
-
-      out.textContent =
-        `${r.sid}\n${r.move}\n${r.axis1}/${r.axis2}\n→ ${worldMarker(r.move)}\n\n[BORG
+// ------------------------------------------------------
+// Zustände
+// ------------------------------------------------------
+const STATES = ["AN","SC","NV","ST","SG","HX","
