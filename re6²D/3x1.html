@@ -34,4 +34,50 @@ function borgProtocol(r){
   result.action = "ANALYZE";
   result.message = "Analyse läuft. GEN‑Kontext wird angefordert.";
   return result;
-}
+}function upgxStatus(r){
+  const status = {
+    upgx: "OK",
+    axis: "",
+    move: "",
+    message: ""
+  };
+
+  // Achsen prüfen
+  if(!r.axis1 || !r.axis2){
+    status.upgx = "ERROR";
+    status.axis = "MISS";
+    status.message = "UPG‑X verweigert: Achsen fehlen.";
+    return status;
+  }
+
+  status.axis = "OK";
+
+  // Move prüfen
+  if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
+    status.upgx = "WARN";
+    status.move = "CRITICAL";
+    status.message = "UPG‑X: kritischer Move, GEN‑Trennung aktiv.";
+    return status;
+  }
+
+  if(r.move === "AN" || r.move === "SC" || r.move === "ST" || r.move === "END"){
+    status.upgx = "OK";
+    status.move = "STABLE";
+    status.message = "UPG‑X akzeptiert.";
+    return status;
+  }
+
+  status.upgx = "INFO";
+  status.move = "UNKNOWN";
+  status.message = "UPG‑X fordert GEN‑Kontext.";
+  return status;
+}const borg = borgProtocol(r);
+const upgx = upgxStatus(r);
+
+out.textContent =
+`${r.sid}
+MOVE=${r.move}
+AXIS=${r.axis1}/${r.axis2}
+
+[BORG]  ${borg.status} – ${borg.message}
+[UPG‑X] ${upgx.upgx} – ${upgx.message}`;
