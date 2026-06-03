@@ -15,25 +15,29 @@
 <pre id="out">READY</pre>
 
 <script>
-// ------------------------------------------------------
-// BORG PROTOCOL (Maßnahmen)
-// ------------------------------------------------------
-function borgProtocol(r){
-  const result = {
-    status: "OK",
-    action: "",
-    message: ""
-  };
+// ======================================================
+// GLOBALE SCHICHTEN (für Komplettum)
+// ======================================================
+window.lastR = window.lastR || null;
+window.lastF = window.lastF || null;
+window.lastL = window.lastL || null;
+window.lastE = window.lastE || null;
 
-  // 1) Flow fehlt → unvollständig
+// ======================================================
+// BORG PROTOCOL – 3×2 (Vorwärts)
+// ======================================================
+function borgProtocol(r){
+  const result = { status:"OK", action:"", message:"" };
+
+  // 1) Flow MUSS existieren (3×2 hat echten Flow)
   if(!r.flow){
     result.status = "ERROR";
     result.action = "ADD_FLOW";
-    result.message = "Unvollständige Sequenz erkannt. Ergänzung erforderlich.";
+    result.message = "Flow fehlt. Vorwärts-Sequenz unvollständig.";
     return result;
   }
 
-  // 2) Achse fehlt → struktureller Fehler
+  // 2) Achsen prüfen
   if(!r.axis1 || !r.axis2){
     result.status = "ERROR";
     result.action = "ADD_AXIS";
@@ -41,48 +45,127 @@ function borgProtocol(r){
     return result;
   }
 
-  // 3) Kritische Moves → Warnung
+  // 3) Kritische Moves
   if(r.move === "NV" || r.move === "SG" || r.move === "HX"){
     result.status = "WARN";
     result.action = "CHECK_PATH";
-    result.message = "Fehlstelle lokalisiert. Kohärenz bricht. Reparatur empfohlen.";
+    result.message = "Kritischer Move. Pfad prüfen.";
     return result;
   }
 
-  // 4) Stabile Moves → OK
-  if(r.move === "AN" || r.move === "SC" || r.move === "END"){
+  // 4) Stabile Moves
+  if(r.move === "AN" || r.move === "SC" || r.move === "ST" || r.move === "END"){
     result.status = "OK";
     result.action = "CONTINUE";
-    result.message = "Sequenz stabil. Fortfahren.";
+    result.message = "Vorwärts-Sequenz stabil.";
     return result;
   }
 
   // 5) Default
   result.status = "INFO";
   result.action = "ANALYZE";
-  result.message = "Analyse läuft. Kontext wird eingefordert.";
+  result.message = "Analyse läuft.";
   return result;
 }
 
-// ------------------------------------------------------
-// SUPER-ID (6 Felder + TAT2 Erweiterung)
-// ------------------------------------------------------
-const SUPER_IDS = ["⟡A1","⟡A2","⟡B1","⟡B2","⟡C1","⟡C2","F0","F1"];
+// ======================================================
+// VIER-SCHICHTEN-KERN (R°, F°, L°, E°)
+// ======================================================
+function vierSchichtenKern(r){
+  const R = r.R ? "OK" : "MISS";
+  const F = r.F ? "OK" : "MISS";
+  const L = r.L ? "OK" : "MISS";
+  const E = r.E ? "OK" : "MISS";
 
-// Moves (minimal + TAT2 Erweiterung)
+  const full = (R==="OK" && F==="OK" && L==="OK" && E==="OK");
+
+  return {
+    R, F, L, E,
+    status: full ? "FULL" : "PARTIAL",
+    message: full
+      ? "Komplettum aktiv. System schwebt."
+      : "Vier‑Schichten‑Kohärenz unvollständig."
+  };
+}
+
+// ======================================================
+// 3×2 – SUPER-IDs
+// ======================================================
+const SUPER_IDS = ["⟡A1","⟡A2","⟡B1","⟡B2","⟡C1","⟡C2"];
+
+// Moves
 const MOVES = {
-  "⟡A1":"AN","⟡A2":"SC",
-  "⟡B1":"NV","⟡B2":"ST",
-  "⟡C1":"SG","⟡C2":"HX",
-  "F0":"F0⁺¹",
-  "F1":"F1⁺¹"
+  "⟡A1":"AN",
+  "⟡A2":"SC",
+  "⟡B1":"NV",
+  "⟡B2":"ST",
+  "⟡C1":"SG",
+  "⟡C2":"HX"
 };
 
-// Achsen (1D/2D/3D-konform)
-const AXIS_PRIMARY   = ["I","I","Z","Z","W","W","F","F"];
+// Achsen
+const AXIS_PRIMARY   = ["I","I","Z","Z","W","W"];
 const AXIS_SECONDARY = ["K","T"];
 
-// Flow + TAT2 Erweiterung
+// Flow-Kette
 const FLOW = {
-  AN:"SC", SC:"NV", NV:"ST", ST:"SG", SG:"HX", HX:"END",
-  "F0⁺¹":"
+  AN:"SC",
+  SC:"NV",
+  NV:"ST",
+  ST:"SG",
+  SG:"HX",
+  HX:"END"
+};
+
+// ======================================================
+// OPERATOR 3×2
+// ======================================================
+function OP6(index){
+  const sid = SUPER_IDS[index];
+  const move = MOVES[sid];
+  const axis1 = AXIS_PRIMARY[index];
+  const axis2 = AXIS_SECONDARY[index % 2];
+  const flow = FLOW[move] || null;
+
+  return { sid, move, axis1, axis2, flow };
+}
+
+// ======================================================
+// UI
+// ======================================================
+const grid = document.getElementById("grid");
+const out  = document.getElementById("out");
+
+SUPER_IDS.forEach((sid, index)=>{
+  const d=document.createElement("div");
+  d.className="cell";
+  d.textContent=sid;
+
+  d.onclick = ()=>{
+    const r = OP6(index);
+    window.lastF = r; // Vorwärts-Schicht speichern
+
+    const borg = borgProtocol(r);
+    const vsk = vierSchichtenKern({
+      R: window.lastR,
+      F: window.lastF,
+      L: window.lastL,
+      E: window.lastE
+    });
+
+    out.textContent =
+`${r.sid}
+MOVE=${r.move}
+AXIS=${r.axis1}/${r.axis2}
+FLOW=${r.flow}
+
+[BORG] ${borg.message}
+[VSK] ${vsk.message}`;
+  };
+
+  grid.appendChild(d);
+});
+</script>
+
+</body>
+</html>
