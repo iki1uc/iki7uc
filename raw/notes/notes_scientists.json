@@ -1,1 +1,38 @@
+{
+  "id": {
+    "huhn": "H-NT-SCI-L00-R00",
+    "ei": "E-notes-notes_scientists-v1",
+    "omelett": "O-NT-BEAM_PHASE-NT-SCI",
+    "satt": "S-01-NT-L00",
+    "beam": "B-BEAM_PHASE-NT-SCI"
+  },
+  "meta": {
+    "axis": "NT",
+    "layer": "SCI",
+    "language": "L00",
+    "resume": "R00",
+    "beam_type": "BEAM_PHASE"
+  },
+  "content": {
+    "mask_word": "",
+    "story": { "de": "", "en": "", "tr": "" },
+    "artists": [],
+    "scientists": []
+  },
+  "links": {
+    "molecule": "",
+    "code": "",
+    "maxi": "",
+    "eich": "",
+    "48bahn": ""
+  },
+  "error_check": {
+    "axis_valid": true,
+    "layer_valid": true,
+    "language_valid": true,
+    "resume_valid": true,
+    "beam_valid": true,
+    "file_valid": true
+  }
+}
 
