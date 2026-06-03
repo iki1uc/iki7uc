@@ -15,25 +15,31 @@
 <pre id="out">READY</pre>
 
 <script>
-// SUPER-ID (3 Felder)
-const SUPER_IDS = ["⟡A1","⟡B1","⟡C1"];
+// SUPER-ID (3 Felder + TAT1 Erweiterung)
+const SUPER_IDS = ["⟡A1","⟡B1","⟡C1","R0","R1"];
 
-// Moves (inverse)
+// Moves (inverse + TAT1 Erweiterung)
 const MOVES = {
   "⟡A1":"AN⁻¹",
   "⟡B1":"NV⁻¹",
-  "⟡C1":"SG⁻¹"
+  "⟡C1":"SG⁻¹",
+  "R0":"R0⁻¹",   // TAT1 NEU
+  "R1":"R1⁻¹"    // TAT1 NEU
 };
 
 // Achsen
-const AXIS_PRIMARY   = ["I","Z","W"];
-const AXIS_SECONDARY = ["R"]; // Rückwärts-Achse
+const AXIS_PRIMARY   = ["I","Z","W","R","R"]; 
+// 1D/2D/3D-konform: R0/R1 bekommen eigene Primärachse
 
-// Inverser Flow
+const AXIS_SECONDARY = ["R"]; // Rückwärts-Achse bleibt gleich
+
+// Inverser Flow + TAT1 Erweiterung
 const FLOW_INV = {
   "AN⁻¹":"END",
   "NV⁻¹":"AN",
-  "SG⁻¹":"NV"
+  "SG⁻¹":"NV",
+  "R0⁻¹":"R0",   // TAT1 NEU
+  "R1⁻¹":"R1"    // TAT1 NEU
 };
 
 // Operator
@@ -63,4 +69,3 @@ SUPER_IDS.forEach((sid,i)=>{
 
 </body>
 </html>
-
