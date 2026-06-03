@@ -1,105 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>3×7 – RAWWATOR SCHALTWERK</title>
+<title>3×7 – Weltmatrix</title>
 <style>
-  body{
-    margin:0;
-    background:#000;
-    color:#0ff;
-    font-family:monospace;
-    padding:20px;
-  }
-  .cell{
-    padding:6px;
-    margin:4px;
-    border:1px solid #033;
-    display:inline-block;
-    width:90px;
-    text-align:center;
-    cursor:pointer;
-  }
+  body{background:#000;color:#0ff;font-family:monospace;padding:20px;}
+  .cell{padding:6px;margin:4px;border:1px solid #033;display:inline-block;width:90px;text-align:center;}
 </style>
 </head>
 <body>
 
-<h2>3×7 SCHALTWERK</h2>
+<h2>3×7 – WELT‑MATRIX</h2>
 <div id="grid"></div>
 <pre id="out">READY</pre>
 
 <script>
-// ======================================================
-// SUPER-ID (⟡ + 2 Zeichen) — 21 Felder
-// ======================================================
-const SUPER_IDS = [
-  "⟡A1","⟡A2","⟡A3","⟡A4","⟡A5","⟡A6","⟡A7",
-  "⟡B1","⟡B2","⟡B3","⟡B4","⟡B5","⟡B6","⟡B7",
-  "⟡C1","⟡C2","⟡C3","⟡C4","⟡C5","⟡C6","⟡C7"
-];
+// Achsen
+const AXIS = ["I","Z","W"];
 
-// ======================================================
-// MOVE-SET (21 Schaltungen) — RAW-WAR-Reduktion
-// ======================================================
-const MOVES = {
-  "⟡A1":"AN","⟡A2":"SC","⟡A3":"NV","⟡A4":"ST","⟡A5":"SG","⟡A6":"HX","⟡A7":"MX",
-  "⟡B1":"IQ","⟡B2":"AL","⟡B3":"SH","⟡B4":"CU","⟡B5":"MO","⟡B6":"PI","⟡B7":"AX",
-  "⟡C1":"BC","⟡C2":"RW","⟡C3":"ER","⟡C4":"IQ","⟡C5":"CU","⟡C6":"AX","⟡C7":"RW"
-};
+// Zustände
+const STATES = ["AN","SC","NV","ST","SG","HX","END"];
 
-// ======================================================
-// ACHSEN (3 × 7 = 21 Kombinationen)
-// ======================================================
-const AXIS_PRIMARY   = ["I","Z","W"];
-const AXIS_SECONDARY = ["K","T","P","R","S","E","U"]; 
-// U = Überlagerung (7. Sekundärachse)
-
-// ======================================================
-// DURCHLAUF-KETTE (Schaltung → Weiterleitung)
-// ======================================================
-const FLOW = {
-  AN:"ST", SC:"AL", NV:"PI", ST:"IQ", SG:"AL", HX:"END", MX:"MO",
-  IQ:"CU", AL:"AX", SH:"PI", CU:"RW", MO:"END", PI:"IQ", AX:"END",
-  BC:"AX", RW:"END", ER:"RW"
-};
-
-// ======================================================
-// OPERATOR-FORMEL (Master)
-// ======================================================
-function OP(index){
-  const sid  = SUPER_IDS[index];
-  const move = MOVES[sid];
-
-  const row = Math.floor(index / 7);
-  const col = index % 7;
-
-  const axis1 = AXIS_PRIMARY[row];
-  const axis2 = AXIS_SECONDARY[col];
-
-  const chain = FLOW[move];
-
-  return { sid, move, axis1, axis2, chain };
+// Weltmarker
+function worldMarker(move){
+  if(move==="AN"||move==="SC"||move==="END") return "⟡L+";
+  if(move==="NV"||move==="SG"||move==="HX") return "⟡L-";
+  return "";
 }
 
-// ======================================================
-// UI (minimal – nur zum Anklicken der Schaltung)
-// ======================================================
-const grid = document.getElementById("grid");
-const out  = document.getElementById("out");
+// Matrix erzeugen
+const grid=document.getElementById("grid");
+const out=document.getElementById("out");
 
-SUPER_IDS.forEach((sid, index)=>{
-  const div = document.createElement("div");
-  div.className = "cell";
-  div.textContent = sid;
-  div.onclick = ()=>{
-    const r = OP(index);
-    out.textContent =
-      `${r.sid}\nMOVE=${r.move}\nAXIS=${r.axis1}/${r.axis2}\nFLOW=${r.chain}`;
-  };
-  grid.appendChild(div);
+STATES.forEach(state=>{
+  AXIS.forEach(axis=>{
+    const d=document.createElement("div");
+    d.className="cell";
+    d.textContent = state + " " + worldMarker(state);
+    d.onclick = ()=>{ out.textContent = `${axis}\n${state}\n${worldMarker(state)}` };
+    grid.appendChild(d);
+  });
 });
 </script>
 
 </body>
 </html>
-
