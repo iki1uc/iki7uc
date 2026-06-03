@@ -1,57 +1,8 @@
 {
-  "station": {
-    "id": "AXXX",
-    "role": "RUNG",
-    "zone": "0-120"
-  },
-
-  "matrix": {
-    "mode": "3x3",
-    "self": "AXXX",
-    "north": null,
-    "south": null,
-    "east": null,
-    "west": null,
-    "ne": null,
-    "nw": null,
-    "se": null,
-    "sw": null
-  },
-
-  "sensorik": {
-    "px": true,
-    "scan": "pending",
-    "result": null
-  },
-
-  "routing": {
-    "up": "AXUP",
-    "down": "AXDOWN",
-    "rew": "AXREW",
-    "me": "AXME",
-    "for": "AXFOR",
-    "zack": "AXZACK",
-    "klick": "AXKLICK"
-  },
-
-  "anchors": {
-    "self": "A-AXXX",
-    "beam": "AX11",
-    "all4all": "AX08",
-    "all8all": "AX08"
-  },
-
-  "backup": {
-    "primary": "AXXX",
-    "secondary": "AXYY",
-    "mode": "auto"
-  },
-
-  "borg": {
-    "status": "pending"
-  },
-
-  "upgx": {
-    "status": "pending"
-  }
+  "axis": "3x2",
+  "id": { "tech": "T-3x2", "eich": "E-3x2", "gen": "G-3x2" },
+  "zoom": [4,16,64,128],
+  "axes": { "main":12, "eich":1, "gen":1, "total":14 },
+  "raw_ref": "RAW-ID-CORE",
+  "payload": ["mini","maxi"]
 }
