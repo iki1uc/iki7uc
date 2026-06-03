@@ -1,1 +1,38 @@
+{
+  "id": {
+    "huhn": "H-ST-DE-L01-R00",
+    "ei": "E-story-story_de-v1",
+    "omelett": "O-ST-BEAM_GHOST-ST-DE",
+    "satt": "S-01-ST-L01",
+    "beam": "B-BEAM_GHOST-ST-DE"
+  },
+  "meta": {
+    "axis": "ST",
+    "layer": "DE",
+    "language": "L01",
+    "resume": "R00",
+    "beam_type": "BEAM_GHOST"
+  },
+  "content": {
+    "mask_word": "",
+    "story": { "de": "", "en": "", "tr": "" },
+    "artists": [],
+    "scientists": []
+  },
+  "links": {
+    "molecule": "",
+    "code": "",
+    "maxi": "",
+    "eich": "",
+    "48bahn": ""
+  },
+  "error_check": {
+    "axis_valid": true,
+    "layer_valid": true,
+    "language_valid": true,
+    "resume_valid": true,
+    "beam_valid": true,
+    "file_valid": true
+  }
+}
 
