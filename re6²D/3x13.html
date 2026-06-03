@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>3×13 – UPG‑X ANKER / ALL4ALL / RAW‑BORG</title>
+<title>3×13 – ALL4ALL MASTER / UPG‑X / RAW‑BORG</title>
 <style>
   body{
     margin:0;
@@ -45,11 +45,17 @@
   button.active{
     border-color:#0ff;
   }
+  #all4all{
+    margin-top:10px;
+    font-size:11px;
+    color:#0aa;
+    white-space:pre;
+  }
 </style>
 </head>
 <body>
 
-<h2>3×13 – UPG‑X / ANKER / ALL4ALL</h2>
+<h2>3×13 – ALL4ALL MASTER / UPG‑X</h2>
 
 <div class="bar">
   SOURCE:
@@ -59,22 +65,18 @@
 </div>
 
 <div class="grid" id="grid"></div>
-<pre id="out">UPG‑X ANKER READY (1‑gegen‑1 GEN‑Modus)</pre>
+<pre id="out">ALL4ALL MASTER READY (1‑gegen‑1 GEN‑Modus)</pre>
+<pre id="all4all">[ALL4ALL] noch keine Anker gesetzt.</pre>
 
 <script>
 // ======================================================
-// UMGEBUNG: GEN‑QUELLEN (werden von 3×2 / 3×6 / 3×7 gefüttert)
+// GEN‑QUELLEN (werden von 3×2 / 3×6 / 3×7 gefüttert)
 // ======================================================
-// Erwartet wird, dass andere Module sowas setzen:
-// window.genSources["3x2"] = { sid, move, axis1, axis2, flow, ... }
-// window.genSources["3x6"] = { ... }
-// window.genSources["3x7"] = { ... }
-
 window.genSources = window.genSources || {};
-let activeSourceKey = "3x2"; // Default: 3×2
+let activeSourceKey = "3x2"; // Default
 
 // ======================================================
-// RAW‑BORG‑CHECK (leicht, nur Status‑Tagging)
+// RAW‑BORG‑CHECK
 // ======================================================
 function rawBorgCheck(sig){
   if(!sig) return { status:"NONE", msg:"kein Signal" };
@@ -93,7 +95,7 @@ function rawBorgCheck(sig){
 // ======================================================
 // 3×13 – IDs
 // ======================================================
-const ROW_TAGS = ["R","F","X"]; // R° / F° / L°+E° symbolisch
+const ROW_TAGS = ["R","F","X"]; // symbolisch
 const COL_COUNT = 13;
 
 function makeSuperId(row, col){
@@ -103,28 +105,61 @@ function makeSuperId(row, col){
 }
 
 // ======================================================
-// UPG‑X ANKER‑OPERATOR
-// – Achsen verlassen (axisExit = true)
-// – ALL4ALL‑Funktion
-// – 1‑gegen‑1: genau EINE GEN‑Quelle pro Anker
+// ALL4ALL MASTER – ANKER‑OPERATOR
 // ======================================================
+const anchorLog = []; // globale Liste aller Anker
+
 function ANKER_UPGX(row, col, sourceKey){
   const sid = makeSuperId(row, col);
   const incoming = window.genSources[sourceKey] || null;
-
   const borg = rawBorgCheck(incoming);
 
   const anchor = {
     sid,
-    move: "AN",          // reiner Anker
-    func: "ALL4ALL",     // ALL4ALL‑Träger
-    axisExit: true,      // Achsen verlassen
-    sourceKey,           // welche GEN‑Quelle
-    borgStatus: borg,    // RAW/BORG‑Tag
-    source: incoming     // Original‑Signal (unvermischt)
+    move: "AN",
+    func: "ALL4ALL",
+    axisExit: true,
+    sourceKey,
+    borgStatus: borg,
+    source: incoming,
+    t: Date.now()
   };
 
+  anchorLog.push(anchor);
+  updateAll4AllPanel();
   return anchor;
+}
+
+// ======================================================
+// ALL4ALL‑PANEL (Master‑Übersicht)
+// ======================================================
+const all4all = document.getElementById("all4all");
+
+function updateAll4AllPanel(){
+  if(anchorLog.length === 0){
+    all4all.textContent = "[ALL4ALL] noch keine Anker gesetzt.";
+    return;
+  }
+
+  const counts = { "3x2":0, "3x6":0, "3x7":0, other:0 };
+  anchorLog.forEach(a=>{
+    if(counts[a.sourceKey] !== undefined) counts[a.sourceKey]++; else counts.other++;
+  });
+
+  const last = anchorLog[anchorLog.length-1];
+
+  all4all.textContent =
+`[ALL4ALL MASTER]
+Total Anker: ${anchorLog.length}
+3×2 (F°):    ${counts["3x2"]}
+3×6 (L°‑F):  ${counts["3x6"]}
+3×7 (L°‑W):  ${counts["3x7"]}
+OTHER:       ${counts.other}
+
+Letzter Anker:
+  SID=${last.sid}
+  SRC=${last.sourceKey}
+  BORG=${last.borgStatus.status}`;
 }
 
 // ======================================================
@@ -139,7 +174,7 @@ srcButtons.forEach(btn=>{
     srcButtons.forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
     activeSourceKey = btn.dataset.src;
-    out.textContent = `UPG‑X ANKER READY – aktive Quelle: ${activeSourceKey}`;
+    out.textContent = `ALL4ALL MASTER READY – aktive Quelle: ${activeSourceKey}`;
   };
 });
 srcButtons[0].classList.add("active");
