@@ -1,1 +1,54 @@
+{
+  "axes": [
+    {
+      "id": "AX48",
+      "func": "huhn",
+      "angle": 360,
+      "beat": "1/4",
+      "band_12plus1": { "index": 0, "up": "AX12", "down": "AX24" },
+      "anchor_id": "A48",
+      "links": { "next": "AX47", "prev": "AX45" }
+    },
+    {
+      "id": "AX47",
+      "func": "ei",
+      "angle": 352.5,
+      "beat": "1/4",
+      "band_12plus1": { "index": 1, "up": "AX12", "down": "AX24" },
+      "anchor_id": "A47",
+      "links": { "next": "AX46", "prev": "AX48" }
+    },
+    {
+      "id": "AX46",
+      "func": "omelett",
+      "angle": 345,
+      "beat": "1/4",
+      "band_12plus1": { "index": 2, "up": "AX12", "down": "AX24" },
+      "anchor_id": "A46",
+      "links": { "next": "AX45", "prev": "AX47" }
+    },
+    {
+      "id": "AX45",
+      "func": "satt",
+      "angle": 337.5,
+      "beat": "1/4",
+      "band_12plus1": { "index": 3, "up": "AX12", "down": "AX24" },
+      "anchor_id": "A45",
+      "links": { "next": "AX48", "prev": "AX46" }
+    }
+  ],
+  "generation": {
+    "auto_next": true,
+    "create_before_satt": true
+  },
+  "anchor_chain": {
+    "all4all": "AX08",
+    "all8all": "AX08",
+    "beam": "AX11"
+  },
+  "radar": {
+    "mode": "360",
+    "visible": true
+  }
+}
 
