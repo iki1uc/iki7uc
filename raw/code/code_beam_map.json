@@ -1,1 +1,38 @@
+{
+  "id": {
+    "huhn": "H-CB-MAP-L00-R00",
+    "ei": "E-code-code_beam_map-v1",
+    "omelett": "O-CB-BEAM_PHASE-CB-MAP",
+    "satt": "S-01-CB-L00",
+    "beam": "B-BEAM_PHASE-CB-MAP"
+  },
+  "meta": {
+    "axis": "CB",
+    "layer": "MAP",
+    "language": "L00",
+    "resume": "R00",
+    "beam_type": "BEAM_PHASE"
+  },
+  "content": {
+    "mask_word": "",
+    "story": { "de": "", "en": "", "tr": "" },
+    "artists": [],
+    "scientists": []
+  },
+  "links": {
+    "molecule": "",
+    "code": "",
+    "maxi": "",
+    "eich": "",
+    "48bahn": ""
+  },
+  "error_check": {
+    "axis_valid": true,
+    "layer_valid": true,
+    "language_valid": true,
+    "resume_valid": true,
+    "beam_valid": true,
+    "file_valid": true
+  }
+}
 
