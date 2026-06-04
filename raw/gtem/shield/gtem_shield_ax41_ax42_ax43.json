@@ -2,20 +2,21 @@
   "station": {
     "id": "AXXX",
     "role": "GENERIC_NODE",
-    "task": "observe_and_contribute"
+    "task": "observe_and_contribute",
+    "active": true
   },
 
   "sensorik": {
     "px_live": true,
-    "scan_state": "pending",
+    "scan_state": "idle",
     "scan_result": null,
     "history": []
   },
 
   "matrix_3x3": {
-    "center": "SELF",
-    "north": null,
-    "south": null,
+    "center": "AXXX",
+    "north": "AX12",
+    "south": "AX24",
     "east": null,
     "west": null,
     "ne": null,
@@ -28,21 +29,22 @@
     "primary_axis": "AXXX",
     "backup_axis": "AXYY",
     "mode": "auto_failover",
-    "status": "armed"
+    "status": "ready"
   },
 
   "controls": {
-    "up": true,
-    "zack": true,
-    "all4all": true,
-    "klick": true,
-    "down": true,
-    "rew": true,
-    "me": true,
-    "for": true
+    "up": false,
+    "zack": false,
+    "all4all": false,
+    "klick": false,
+    "down": false,
+    "rew": false,
+    "me": false,
+    "for": false
   },
 
   "beat": "1/4",
+
   "band_12plus1": {
     "index": 0,
     "up": "AX12",
@@ -59,17 +61,17 @@
   },
 
   "generation": {
-    "huhn": "pending",
-    "ei": "pending",
-    "omelett": "pending",
-    "satt": "pending",
+    "huhn": "idle",
+    "ei": "idle",
+    "omelett": "idle",
+    "satt": "idle",
     "auto_next": true
   },
 
   "meta": {
     "ready": true,
     "empty": false,
-    "contributes_to_system": true
+    "contributes_to_system": true,
+    "finalized": true
   }
 }
-
