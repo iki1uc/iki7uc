@@ -1,81 +1,50 @@
-// --- Basiszustand -------------------------------------------------
+let currentMode = "A";
+let isRendering = false;
 
-const PARZELLEN = [
-  { id: 0, name: "P0", state: "idle", ticks: 0 },
-  { id: 1, name: "P1", state: "idle", ticks: 0 },
-  { id: 2, name: "P2", state: "idle", ticks: 0 }
-];
+function showState() {
+  console.log("MODE:", currentMode);
+}
 
-let firstLoopWinner = null;   // welche Technik startet als erste einen Kreislauf?
-const LOOP_THRESHOLD = 3;     // ab wie vielen Ticks gilt "Kreislauf gestartet"?
+function renderUI() {
+  if (isRendering) return;
+  isRendering = true;
 
-// --- Techniken (A, B, B) ------------------------------------------
+  showState();
+  const row = lines[Math.floor(Math.random() * lines.length)];
 
-const TECHNIKEN = {
-  A: {
-    name: "Technik A",
-    apply(parzelle) {
-      // einfache, markante Änderung
-      parzelle.state = "A_ACTIVE";
-      parzelle.ticks = 0;
-    }
-  },
-  B: {
-    name: "Technik B",
-    apply(parzelle) {
-      parzelle.state = "B_ACTIVE";
-      parzelle.ticks = 0;
-    }
+  switch (currentMode) {
+    case "A": renderDOM(document.getElementById("topLine"), row); break;
+    case "B": renderCanvas(document.getElementById("bottomLine1"), row); break;
+    case "C": renderSVG(document.getElementById("bottomLine2"), row); break;
+    case "D": renderCSS(document.getElementById("mainUI"), row); break;
+    case "E": resetUI(); break;
   }
-  // C könntest du später ergänzen
-};
 
-// --- Logging ------------------------------------------------------
-
-const logEl = document.getElementById("log");
-function log(msg) {
-  logEl.textContent += msg + "\n";
+  isRendering = false;
 }
 
-// --- Trigger-Handler ----------------------------------------------
-
-function handleTrigger(techKey, slotIndex) {
-  const tech = TECHNIKEN[techKey];
-  const parzelle = PARZELLEN[slotIndex];
-
-  if (!tech || !parzelle) return;
-
-  // Trigger = Push → Technik → Parzelle
-  tech.apply(parzelle);
-  log(`Trigger: ${tech.name} auf ${parzelle.name}`);
-
-  // nach dem Apply simulieren wir ein paar Ticks
-  simulateTicks(techKey, parzelle);
+function setMode(mode) {
+  if (currentMode === mode) return;
+  currentMode = mode;
+  renderUI();
 }
 
-// --- Kreislauf-Simulation -----------------------------------------
-
-function simulateTicks(techKey, parzelle) {
-  for (let i = 0; i < LOOP_THRESHOLD; i++) {
-    parzelle.ticks++;
-
-    // hier super simpel: wenn Zustand gleich bleibt → Kreislauf
-    const isLoop = parzelle.state.endsWith("_ACTIVE");
-
-    if (isLoop && parzelle.ticks >= LOOP_THRESHOLD && !firstLoopWinner) {
-      firstLoopWinner = techKey;
-      log(`KREISLAUF gestartet von: ${TECHNIKEN[techKey].name} auf ${parzelle.name}`);
-    }
-  }
+function resetUI() {
+  document.getElementById("topLine").innerHTML = "";
+  document.getElementById("bottomLine1").innerHTML = "";
+  document.getElementById("bottomLine2").innerHTML = "";
+  document.getElementById("mainUI").innerHTML =
+    "<h3 style='text-align:center;'>UI‑Fenster (33%)</h3>";
 }
 
-// --- Buttons verdrahten -------------------------------------------
+// UI läuft weiter
+setInterval(renderUI, 1500);
 
-document.querySelectorAll("button[data-tech]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const techKey = btn.dataset.tech;
-    const slotIndex = Number(btn.dataset.slot);
-    handleTrigger(techKey, slotIndex);
-  });
-});
+// AUTO‑WECHSEL ABCDE
+const modes = ["A", "B", "C", "D", "E"];
+let modeIndex = 0;
 
+setInterval(() => {
+  modeIndex = (modeIndex + 1) % modes.length;
+  setMode(modes[modeIndex]);
+}, 3000);
