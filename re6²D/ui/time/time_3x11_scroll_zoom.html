@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>TIME 3×11 Scroll + Zoom</title>
+<title>TIME 3×11 Scroll + Zoom + Move</title>
 
 <style>
   .toolbar {
@@ -23,6 +23,7 @@
     border: 1px solid #444;
     padding: 10px;
     box-sizing: border-box;
+    touch-action: pan-x pan-y;
   }
 
   .zoom-wrapper {
@@ -45,6 +46,12 @@
     align-items: center;
     font-family: sans-serif;
     background: #f8f8f8;
+    user-select: none;
+  }
+
+  .cell.active {
+    outline: 3px solid #0077ff;
+    background: rgba(0,120,255,0.15);
   }
 </style>
 </head>
@@ -65,9 +72,13 @@
 
 <script>
 // ------------------------------------------------------
-// Zoom-Logik
+// Zoom
 // ------------------------------------------------------
 let zoom = 1;
+
+function applyZoom(){
+  document.getElementById("zoomWrapper").style.transform = `scale(${zoom})`;
+}
 
 document.getElementById("zoomIn").onclick = () => {
   zoom = Math.min(zoom + 0.1, 3);
@@ -84,12 +95,8 @@ document.getElementById("zoomReset").onclick = () => {
   applyZoom();
 };
 
-function applyZoom(){
-  document.getElementById("zoomWrapper").style.transform = `scale(${zoom})`;
-}
-
 // ------------------------------------------------------
-// Renderer für 3×11
+// Grid Renderer
 // ------------------------------------------------------
 function render3x11(mask){
   const grid = document.getElementById("grid");
@@ -99,16 +106,22 @@ function render3x11(mask){
     for(let c=1; c<=11; c++){
       const cell = document.createElement("div");
       cell.className = "cell";
+      cell.id = `cell-${r}-${c}`;
 
       const hit = mask.find(s => s.pos[0] === r && s.pos[1] === c);
-      cell.textContent = hit ? hit.ref : "";
+
+      if(hit){
+        if(hit.refs) cell.textContent = hit.refs.join(", ");
+        else cell.textContent = hit.ref || "";
+      }
+
       grid.appendChild(cell);
     }
   }
 }
 
 // ------------------------------------------------------
-// Beispiel: TIME‑3×11 present‑Zone
+// Beispielmaske
 // ------------------------------------------------------
 const timeExample = [
   { pos:[1,4], refs:["M-001"] },
@@ -117,17 +130,72 @@ const timeExample = [
   { pos:[1,10], refs:["M-777"] }
 ];
 
-// 3×11 erzeugen
 const mask3x11 = timeExample.map(s => ({
   pos: s.pos,
-  ref: s.refs?.[0] || s.ref || "?",
+  refs: s.refs || (s.ref ? [s.ref] : ["?"]),
   phase: s.phase || null
 }));
 
-// Rendern
 render3x11(mask3x11);
+
+// ------------------------------------------------------
+// Movement Engine (Auto-Move + Wrap-Around)
+// ------------------------------------------------------
+let active = { r: 1, c: 1 };
+
+function highlightActive(){
+  document.querySelectorAll(".cell").forEach(c => c.classList.remove("active"));
+  const el = document.getElementById(`cell-${active.r}-${active.c}`);
+  if(el) el.classList.add("active");
+}
+
+function move(dir){
+  const rows = 3;
+  const cols = 11;
+
+  if(dir === "left")  active.c = (active.c - 1 + cols) % cols || cols;
+  if(dir === "right") active.c = (active.c % cols) + 1;
+  if(dir === "up")    active.r = (active.r - 1 + rows) % rows || rows;
+  if(dir === "down")  active.r = (active.r % rows) + 1;
+
+  highlightActive();
+}
+
+highlightActive();
+
+// ------------------------------------------------------
+// Keyboard Movement
+// ------------------------------------------------------
+document.addEventListener("keydown", e => {
+  if(e.key === "ArrowLeft")  move("left");
+  if(e.key === "ArrowRight") move("right");
+  if(e.key === "ArrowUp")    move("up");
+  if(e.key === "ArrowDown")  move("down");
+});
+
+// ------------------------------------------------------
+// Touch Swipe Movement
+// ------------------------------------------------------
+let startX = 0, startY = 0;
+
+grid.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+});
+
+grid.addEventListener("touchend", e => {
+  const dx = e.changedTouches[0].clientX - startX;
+  const dy = e.changedTouches[0].clientY - startY;
+
+  if(Math.abs(dx) > Math.abs(dy)){
+    if(dx > 20) move("right");
+    if(dx < -20) move("left");
+  } else {
+    if(dy > 20) move("down");
+    if(dy < -20) move("up");
+  }
+});
 </script>
 
 </body>
 </html>
-
