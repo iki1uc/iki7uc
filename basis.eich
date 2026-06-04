@@ -1,1 +1,35 @@
+{
+  "nullpunkte": [
+    "N1",
+    "N2"
+  ],
+  "zustaende": [
+    "Z1",
+    "Z2",
+    "Z3",
+    "Z4",
+    "Z5",
+    "Z6"
+  ],
+  "zeit": {
+    "start": 0,
+    "einheit": "tick"
+  },
+  "ist_soll_schema": {
+    "felder": ["ist", "soll", "delta"],
+    "delta_berechnung": "delta = ist - soll"
+  },
+  "move": {
+    "name": "EICH_MOVE",
+    "beschreibung": "Übergang von Zustand zu Zustand mit Ist/Soll-Abgleich",
+    "formel": "V(t+1) = T(V(t))",
+    "parameter": [
+      "zustand",
+      "nullpunkt",
+      "ist",
+      "soll",
+      "zeit"
+    ]
+  }
+}
 
