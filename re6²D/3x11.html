@@ -1,6 +1,17 @@
 {
   "axis": "TIME-3x11",
+
+  "submasks": {
+    "3x4": { "cols": 4, "inherit": "zones" },
+    "3x3": { "cols": 3, "inherit": "zones" },
+    "3x2": { "cols": 2, "inherit": "zones" },
+    "3x1": { "cols": 1, "inherit": "zones" }
+  },
+
   "zones": {
+    "past":   { "slots": [] },
+    "future": { "slots": [] },
+
     "present": {
       "slots": [
         {
@@ -11,5 +22,6 @@
       ]
     }
   },
+
   "raw_ref": "RAW-ID-CORE"
 }
