@@ -1,31 +1,51 @@
 {
-  "meta_raum": {
-    "beschreibung": "Abstrakte Ebene für alle Bahnen (Geraden, Diagonalen, Skalen)",
-    "punkte": "r1..rn",
-    "notation": "R = {r1, r2, ..., rn}"
-  },
-  "skalen": {
-    "mini": {
-      "name": "mini",
-      "sigma": 0.1
+  "axis": "META-3xN",
+
+  "competence": {
+    "core": {
+      "raum": {
+        "punkte": "r1..rn",
+        "notation": "R = {r1, r2, ..., rn}"
+      },
+      "skalen": {
+        "mini": { "sigma": 0.1 },
+        "maxi": { "sigma": 1.0 }
+      },
+      "move": {
+        "formel": "M(n, sigma) = r0 + sigma * v(n)",
+        "vektoren": ["gerade", "diagonal", "tiefe"]
+      }
     },
-    "maxi": {
-      "name": "maxi",
-      "sigma": 1.0
-    }
+    "gen":  "GEN-META-NEW",
+    "tech": "TECH-META-NEW",
+    "eich": "EICH-META-NEW"
   },
-  "move_operator": {
-    "name": "M",
-    "beschreibung": "läuft alle Bahnen ab, unabhängig von mini/maxi",
-    "formel": "M(n, sigma) = r0 + sigma * v(n)",
-    "vektor_v": {
-      "beschreibung": "Basis- und Diagonalvektoren",
-      "typen": [
-        "gerade",
-        "diagonal",
-        "tiefe"
-      ]
+
+  "orbit": {
+    "gold": true,
+    "slot": "3x4-ready"
+  },
+
+  "zoom": [4,16,64,128],
+
+  "legacy": {
+    "meta_raum": {
+      "beschreibung": "Abstrakte Ebene für alle Bahnen (Geraden, Diagonalen, Skalen)",
+      "punkte": "r1..rn",
+      "notation": "R = {r1, r2, ..., rn}"
+    },
+    "skalen": {
+      "mini": { "name": "mini", "sigma": 0.1 },
+      "maxi": { "name": "maxi", "sigma": 1.0 }
+    },
+    "move_operator": {
+      "name": "M",
+      "beschreibung": "läuft alle Bahnen ab, unabhängig von mini/maxi",
+      "formel": "M(n, sigma) = r0 + sigma * v(n)",
+      "vektor_v": {
+        "beschreibung": "Basis- und Diagonalvektoren",
+        "typen": ["gerade", "diagonal", "tiefe"]
+      }
     }
   }
 }
-
