@@ -1,113 +1,28 @@
-<div id="topLine"></div>
+let currentMode = "A"; // neuer Zustand
 
-<div id="mainUI" style="height:33vh; border:1px solid #444; margin:10px 0;">
-  <h3 style="text-align:center;">UI‑Fenster (33%)</h3>
-</div>
+function renderUI() {
+  const row = lines[Math.floor(Math.random() * lines.length)];
 
-<div id="bottomLine1"></div>
-<div id="bottomLine2"></div>
-
-<script>
-const lines = [
-  { lang:"Deutsch", resume:"Kurzfassung", fairy:"Es war einmal ein großer Wald..." },
-  { lang:"English", resume:"Short summary", fairy:"Once upon a time..." },
-  { lang:"Français", resume:"Résumé court", fairy:"Il était une fois..." }
-];
-
-// ---------------------------
-// TECHNIK A: DOM‑Text (oben)
-// ---------------------------
-function renderDOM(target, row){
-  target.innerHTML = `
-    <div style="padding:8px; border:1px solid #444;">
-      <div style="font-size:20px; font-weight:bold; transform:rotate(3deg); transform-origin:left center;">
-        ${row.lang}
-      </div>
-      <div style="font-size:14px; margin-top:4px;">${row.resume}</div>
-      <div style="font-size:18px; margin-top:8px;">${row.fairy}</div>
-    </div>
-  `;
+  switch (currentMode) {
+    case "A":
+      renderDOM(document.getElementById("topLine"), row);
+      break;
+    case "B":
+      renderCanvas(document.getElementById("bottomLine1"), row);
+      break;
+    case "C":
+      renderSVG(document.getElementById("bottomLine2"), row);
+      break;
+    case "D":
+      renderCSS(document.getElementById("mainUI"), row);
+      break;
+  }
 }
 
-// ---------------------------
-// TECHNIK B: Canvas‑Text
-// ---------------------------
-function renderCanvas(target, row){
-  target.innerHTML = "";
-  const canvas = document.createElement("canvas");
-  canvas.width = 600;
-  canvas.height = 120;
-  const ctx = canvas.getContext("2d");
-
-  ctx.font = "20px sans-serif";
-  ctx.save();
-  ctx.translate(20, 30);
-  ctx.rotate(-0.05);
-  ctx.fillText(row.lang, 0, 0);
-  ctx.restore();
-
-  ctx.font = "14px sans-serif";
-  ctx.fillText(row.resume, 20, 60);
-
-  ctx.font = "18px sans-serif";
-  ctx.fillText(row.fairy, 20, 100);
-
-  target.appendChild(canvas);
+function setMode(mode) {
+  currentMode = mode;
+  renderUI();
 }
 
-// ---------------------------
-// TECHNIK C: SVG‑Text
-// ---------------------------
-function renderSVG(target, row){
-  target.innerHTML = "";
-  const svgNS = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(svgNS, "svg");
-  svg.setAttribute("width", "600");
-  svg.setAttribute("height", "120");
-
-  const lang = document.createElementNS(svgNS, "text");
-  lang.setAttribute("x", "20");
-  lang.setAttribute("y", "30");
-  lang.setAttribute("font-size", "20");
-  lang.setAttribute("font-weight", "bold");
-  lang.setAttribute("transform", "rotate(4 20 30)");
-  lang.textContent = row.lang;
-  svg.appendChild(lang);
-
-  const resume = document.createElementNS(svgNS, "text");
-  resume.setAttribute("x", "20");
-  resume.setAttribute("y", "60");
-  resume.setAttribute("font-size", "14");
-  resume.textContent = row.resume;
-  svg.appendChild(resume);
-
-  const fairy = document.createElementNS(svgNS, "text");
-  fairy.setAttribute("x", "20");
-  fairy.setAttribute("y", "100");
-  fairy.setAttribute("font-size", "18");
-  fairy.textContent = row.fairy;
-  svg.appendChild(fairy);
-
-  target.appendChild(svg);
-}
-
-// ---------------------------
-// TECHNIK D: CSS‑Transform
-// ---------------------------
-function renderCSS(target, row){
-  target.innerHTML = `
-    <div style="padding:8px; border:1px solid #444;">
-      <div style="font-size:20px; font-weight:bold; transform:skewX(10deg);">
-        ${row.lang}
-      </div>
-      <div style="font-size:14px; margin-top:4px;">${row.resume}</div>
-      <div style="font-size:18px; margin-top:8px;">${row.fairy}</div>
-    </div>
-  `;
-}
-
-// Rendern
-renderDOM(document.getElementById("topLine"), lines[0]);
-renderCanvas(document.getElementById("bottomLine1"), lines[1]);
-renderSVG(document.getElementById("bottomLine2"), lines[2]);
-</script>
+// UI läuft weiter
+setInterval(renderUI, 1500);
