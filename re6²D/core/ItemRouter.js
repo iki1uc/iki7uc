@@ -1,26 +1,46 @@
-export function ITEM_ROUTER(m) {
-    const direction = m.navi?.direction ?? "neutral";
-    const value = m.impulse?.value ?? 0;
-    const mult = m.impulse?.mult ?? 1;
+import { ITEM_ROUTER } from "./ItemRouter.js";
 
-    const xx = {
-        roh: m.xx?.roh ?? "",
-        signatur: m.xx?.signatur ?? "",
-        länge: (m.xx?.signatur ?? "").length
-    };
+export const RoutingEngine = {
 
-    const balance = BALANCE_88(m);
+  routeItem(item, node, cluster){
+    const routed = ITEM_ROUTER(item);
 
-    const coreInput = { direction, value, mult };
-    const coreResult = processImpulse(coreInput);
+    const direction = routed.input.direction;
+    const nextNodeId = this.resolveDirection(direction, node);
+
+    if(!nextNodeId) {
+      return {
+        ...routed,
+        routed_to: null,
+        status: "blocked"
+      };
+    }
+
+    const nextNode = cluster.find(n => n.station.id === nextNodeId);
 
     return {
-        pos: m.pos,
-        meta: m.meta,
-        xx,
-        balance,
-        input: coreInput,
-        core: coreResult
+      ...routed,
+      routed_to: nextNodeId,
+      status: "ok",
+      nextNode
     };
-}
+  },
 
+  resolveDirection(direction, node){
+    const m = node.matrix_3x3;
+
+    switch(direction){
+      case "north": return m.north;
+      case "south": return m.south;
+      case "east":  return m.east;
+      case "west":  return m.west;
+      case "ne":    return m.ne;
+      case "nw":    return m.nw;
+      case "se":    return m.se;
+      case "sw":    return m.sw;
+      case "neutral":
+      default:
+        return null;
+    }
+  }
+};
