@@ -1,1 +1,42 @@
+{
+  "parzellen": [
+    {
+      "id": "P1",
+      "typ": "molekuel",
+      "zustaende": [
+        "Z1",
+        "Z2",
+        "Z3",
+        "Z4",
+        "Z5",
+        "Z6"
+      ],
+      "kontext": {
+        "gruppe": "A",
+        "prioritaet": 1
+      }
+    },
+    {
+      "id": "P2",
+      "typ": "item",
+      "zustaende": [
+        "Z1",
+        "Z2",
+        "Z3",
+        "Z4",
+        "Z5",
+        "Z6"
+      ],
+      "kontext": {
+        "gruppe": "B",
+        "prioritaet": 2
+      }
+    }
+  ],
+  "merge_regel": {
+    "beschreibung": "so viele Parcellen wie möglich zusammenlegen",
+    "strategie": "union",
+    "formel": "P_merge = ⋃ P_i"
+  }
+}
 
