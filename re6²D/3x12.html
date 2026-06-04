@@ -1,12 +1,35 @@
 {
   "axis": "AX-3x12",
-  "id": { "tech": "T-12XX", "eich": "E-12XX", "gen": "G-12XX" },
-  "zoom": { "levels": [4,16,64,128] },
-  "axes": { "main":12, "eich":1, "gen":1, "total":14 },
+
+  "id": {
+    "tech": "T-12XX",
+    "eich": "E-12XX",
+    "gen":  "G-12XX"
+  },
+
+  "zoom": {
+    "levels": [4, 16, 64, 128]
+  },
+
+  "axes": {
+    "main": 12,
+    "eich": 1,
+    "gen": 1,
+    "total": 14
+  },
+
+  "submasks": {
+    "3x4": { "cols": 4, "inherit": "rotation" },
+    "3x3": { "cols": 3, "inherit": "rotation" },
+    "3x2": { "cols": 2, "inherit": "rotation" },
+    "3x1": { "cols": 1, "inherit": "rotation" }
+  },
+
   "rotation": {
     "block_A": { "$ref": "3x4" },
     "block_B": { "$ref": "3x4", "mode": "invert" },
     "block_C": { "$ref": "3x4", "mode": "rotate" }
   },
+
   "raw_ref": "RAW-ID-CORE"
 }
