@@ -1,1 +1,36 @@
+{
+  "id": "GTEM-U4-AX12-AX24-AX40",
+  "meta": {
+    "unit": "u4",
+    "depth": ["ax12", "ax24", "ax40"],
+    "axis": "U4",
+    "layer": "GTEM",
+    "state": "active"
+  },
+  "anchors": {
+    "ax12": {
+      "type": "depth",
+      "index": 12,
+      "mode": "anchor"
+    },
+    "ax24": {
+      "type": "depth",
+      "index": 24,
+      "mode": "impulse"
+    },
+    "ax40": {
+      "type": "depth",
+      "index": 40,
+      "mode": "boost"
+    }
+  },
+  "links": {
+    "route": [
+      "ax12",
+      "ax24",
+      "ax40"
+    ],
+    "zickzack": true
+  }
+}
 
