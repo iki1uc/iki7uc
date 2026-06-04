@@ -1,35 +1,46 @@
 {
-  "nullpunkte": [
-    "N1",
-    "N2"
-  ],
-  "zustaende": [
-    "Z1",
-    "Z2",
-    "Z3",
-    "Z4",
-    "Z5",
-    "Z6"
-  ],
-  "zeit": {
-    "start": 0,
-    "einheit": "tick"
+  "axis": "EICH-3xN",
+
+  "competence": {
+    "core": {
+      "nullpunkte": ["N1","N2"],
+      "zustaende": ["Z1","Z2","Z3","Z4","Z5","Z6"],
+      "zeit": { "start": 0, "einheit": "tick" },
+      "ist_soll": {
+        "felder": ["ist","soll","delta"],
+        "delta_formel": "delta = ist - soll"
+      },
+      "move": {
+        "name": "EICH_MOVE",
+        "formel": "V(t+1) = T(V(t))",
+        "parameter": ["zustand","nullpunkt","ist","soll","zeit"]
+      }
+    },
+    "gen":  "GEN-EICH-NEW",
+    "tech": "TECH-EICH-NEW",
+    "eich": "EICH-EICH-NEW"
   },
-  "ist_soll_schema": {
-    "felder": ["ist", "soll", "delta"],
-    "delta_berechnung": "delta = ist - soll"
+
+  "orbit": {
+    "gold": true,
+    "slot": "3x4-ready"
   },
-  "move": {
-    "name": "EICH_MOVE",
-    "beschreibung": "Übergang von Zustand zu Zustand mit Ist/Soll-Abgleich",
-    "formel": "V(t+1) = T(V(t))",
-    "parameter": [
-      "zustand",
-      "nullpunkt",
-      "ist",
-      "soll",
-      "zeit"
-    ]
+
+  "zoom": [4,16,64,128],
+
+  "legacy": {
+    "nullpunkte": ["N1","N2"],
+    "zustaende": ["Z1","Z2","Z3","Z4","Z5","Z6"],
+    "zeit": { "start": 0, "einheit": "tick" },
+    "ist_soll_schema": {
+      "felder": ["ist","soll","delta"],
+      "delta_berechnung": "delta = ist - soll"
+    },
+    "move": {
+      "name": "EICH_MOVE",
+      "beschreibung": "Übergang von Zustand zu Zustand mit Ist/Soll-Abgleich",
+      "formel": "V(t+1) = T(V(t))",
+      "parameter": ["zustand","nullpunkt","ist","soll","zeit"]
+    }
   }
 }
-
