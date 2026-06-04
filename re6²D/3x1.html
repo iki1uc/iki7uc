@@ -1,8 +1,38 @@
-{
-  "axis": "3x1",
-  "id": { "tech": "T-3x1", "eich": "E-3x1", "gen": "G-3x1" },
-  "zoom": [4,16,64,128],
-  "axes": { "main":12, "eich":1, "gen":1, "total":14 },
-  "raw_ref": "RAW-ID-CORE",
-  "payload": ["rew","me","for"]
+function parse3x1(r){
+  const out = {
+    axis: "3x1",
+    core: [],
+    gen: null,
+    tech: null,
+    eich: null,
+    orbit: null,
+    zoom: r.zoom || [4,16,64,128],
+    mode: ""
+  };
+
+  // NEUER MODUS
+  if(r.competence){
+    out.core = r.competence.core;
+    out.gen = r.competence.gen;
+    out.tech = r.competence.tech;
+    out.eich = r.competence.eich;
+    out.orbit = r.orbit || null;
+    out.mode = "NEW";
+    return out;
+  }
+
+  // ALTER MODUS
+  if(r.payload){
+    out.core = r.payload;
+    out.gen = r.id?.gen || null;
+    out.tech = r.id?.tech || null;
+    out.eich = r.id?.eich || null;
+    out.orbit = null;
+    out.mode = "LEGACY";
+    return out;
+  }
+
+  // FALLBACK
+  out.mode = "EMPTY";
+  return out;
 }
