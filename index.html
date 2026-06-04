@@ -1,225 +1,113 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>TIME Viewer – Mode Switch</title>
+<div id="topLine"></div>
 
-<style>
-  /* Grundstyles */
-  .cell {
-    border: 1px solid #444;
-    padding: 12px;
-    text-align: center;
-    min-height: 40px;
-    font-family: sans-serif;
-  }
-
-  #modeBar button {
-    margin: 4px;
-    padding: 6px 12px;
-  }
-
-  .scroll-container {
-    width: 100%;
-    overflow-x: auto;
-    border: 1px solid #444;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-
-  .zoom-wrapper {
-    transform-origin: top left;
-    transition: transform 0.2s ease;
-  }
-</style>
-</head>
-
-<body>
-
-<h2>TIME Viewer – Mode Switch</h2>
-
-<div id="modeBar">
-  <button data-mode="3x3">3×3</button>
-  <button data-mode="3x4">3×4</button>
-  <button data-mode="3x7">3×7</button>
-  <button data-mode="scroll">3×11 Scroll</button>
-  <button data-mode="zoom">3×11 Scroll + Zoom</button>
+<div id="mainUI" style="height:33vh; border:1px solid #444; margin:10px 0;">
+  <h3 style="text-align:center;">UI‑Fenster (33%)</h3>
 </div>
 
-<div id="viewer"></div>
+<div id="bottomLine1"></div>
+<div id="bottomLine2"></div>
 
 <script>
-/* Beispiel-Daten */
-const example = [
-  { pos:[1,4], ref:"M-001" },
-  { pos:[2,5], ref:"M-017" },
-  { pos:[3,2], ref:"M-099" },
-  { pos:[1,10], ref:"M-777" }
+const lines = [
+  { lang:"Deutsch", resume:"Kurzfassung", fairy:"Es war einmal ein großer Wald..." },
+  { lang:"English", resume:"Short summary", fairy:"Once upon a time..." },
+  { lang:"Français", resume:"Résumé court", fairy:"Il était une fois..." }
 ];
 
-/* Mode-State */
-let mode = "3x3";
-
-/* Mode-Switch */
-document.getElementById("modeBar").addEventListener("click", e => {
-  if(e.target.dataset.mode){
-    mode = e.target.dataset.mode;
-    render();
-  }
-});
-
-/* Haupt-Render-Funktion */
-function render(){
-  const viewer = document.getElementById("viewer");
-  viewer.innerHTML = "";
-
-  if(mode === "3x3") render3x3(viewer);
-  if(mode === "3x4") render3x4(viewer);
-  if(mode === "3x7") render3x7(viewer);
-  if(mode === "scroll") renderScroll(viewer);
-  if(mode === "zoom") renderScrollZoom(viewer);
+// ---------------------------
+// TECHNIK A: DOM‑Text (oben)
+// ---------------------------
+function renderDOM(target, row){
+  target.innerHTML = `
+    <div style="padding:8px; border:1px solid #444;">
+      <div style="font-size:20px; font-weight:bold; transform:rotate(3deg); transform-origin:left center;">
+        ${row.lang}
+      </div>
+      <div style="font-size:14px; margin-top:4px;">${row.resume}</div>
+      <div style="font-size:18px; margin-top:8px;">${row.fairy}</div>
+    </div>
+  `;
 }
 
-/* 3×3 */
-function render3x3(root){
-  const grid = document.createElement("div");
-  grid.style.display = "grid";
-  grid.style.gridTemplateColumns = "repeat(3, 1fr)";
-  grid.style.gap = "8px";
-  grid.style.width = "300px";
-  grid.style.margin = "20px auto";
+// ---------------------------
+// TECHNIK B: Canvas‑Text
+// ---------------------------
+function renderCanvas(target, row){
+  target.innerHTML = "";
+  const canvas = document.createElement("canvas");
+  canvas.width = 600;
+  canvas.height = 120;
+  const ctx = canvas.getContext("2d");
 
-  for(let r=1; r<=3; r++){
-    for(let c=1; c<=3; c++){
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      const hit = example.find(s => s.pos[0]===r && s.pos[1]===c);
-      cell.textContent = hit ? hit.ref : "";
-      grid.appendChild(cell);
-    }
-  }
-  root.appendChild(grid);
+  ctx.font = "20px sans-serif";
+  ctx.save();
+  ctx.translate(20, 30);
+  ctx.rotate(-0.05);
+  ctx.fillText(row.lang, 0, 0);
+  ctx.restore();
+
+  ctx.font = "14px sans-serif";
+  ctx.fillText(row.resume, 20, 60);
+
+  ctx.font = "18px sans-serif";
+  ctx.fillText(row.fairy, 20, 100);
+
+  target.appendChild(canvas);
 }
 
-/* 3×4 */
-function render3x4(root){
-  const grid = document.createElement("div");
-  grid.style.display = "grid";
-  grid.style.gridTemplateColumns = "repeat(4, 1fr)";
-  grid.style.gap = "8px";
-  grid.style.width = "400px";
-  grid.style.margin = "20px auto";
+// ---------------------------
+// TECHNIK C: SVG‑Text
+// ---------------------------
+function renderSVG(target, row){
+  target.innerHTML = "";
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("width", "600");
+  svg.setAttribute("height", "120");
 
-  for(let r=1; r<=3; r++){
-    for(let c=1; c<=4; c++){
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      const hit = example.find(s => s.pos[0]===r && s.pos[1]===c);
-      cell.textContent = hit ? hit.ref : "";
-      grid.appendChild(cell);
-    }
-  }
-  root.appendChild(grid);
+  const lang = document.createElementNS(svgNS, "text");
+  lang.setAttribute("x", "20");
+  lang.setAttribute("y", "30");
+  lang.setAttribute("font-size", "20");
+  lang.setAttribute("font-weight", "bold");
+  lang.setAttribute("transform", "rotate(4 20 30)");
+  lang.textContent = row.lang;
+  svg.appendChild(lang);
+
+  const resume = document.createElementNS(svgNS, "text");
+  resume.setAttribute("x", "20");
+  resume.setAttribute("y", "60");
+  resume.setAttribute("font-size", "14");
+  resume.textContent = row.resume;
+  svg.appendChild(resume);
+
+  const fairy = document.createElementNS(svgNS, "text");
+  fairy.setAttribute("x", "20");
+  fairy.setAttribute("y", "100");
+  fairy.setAttribute("font-size", "18");
+  fairy.textContent = row.fairy;
+  svg.appendChild(fairy);
+
+  target.appendChild(svg);
 }
 
-/* 3×7 */
-function render3x7(root){
-  const grid = document.createElement("div");
-  grid.style.display = "grid";
-  grid.style.gridTemplateColumns = "repeat(7, 1fr)";
-  grid.style.gap = "8px";
-  grid.style.width = "700px";
-  grid.style.margin = "20px auto";
-
-  for(let r=1; r<=3; r++){
-    for(let c=1; c<=7; c++){
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      const hit = example.find(s => s.pos[0]===r && s.pos[1]===c);
-      cell.textContent = hit ? hit.ref : "";
-      grid.appendChild(cell);
-    }
-  }
-  root.appendChild(grid);
+// ---------------------------
+// TECHNIK D: CSS‑Transform
+// ---------------------------
+function renderCSS(target, row){
+  target.innerHTML = `
+    <div style="padding:8px; border:1px solid #444;">
+      <div style="font-size:20px; font-weight:bold; transform:skewX(10deg);">
+        ${row.lang}
+      </div>
+      <div style="font-size:14px; margin-top:4px;">${row.resume}</div>
+      <div style="font-size:18px; margin-top:8px;">${row.fairy}</div>
+    </div>
+  `;
 }
 
-/* 3×11 Scroll */
-function renderScroll(root){
-  const scroll = document.createElement("div");
-  scroll.className = "scroll-container";
-
-  const grid = document.createElement("div");
-  grid.style.display = "grid";
-  grid.style.gridTemplateColumns = "repeat(11, 80px)";
-  grid.style.gridTemplateRows = "repeat(3, 60px)";
-  grid.style.gap = "6px";
-
-  for(let r=1; r<=3; r++){
-    for(let c=1; c<=11; c++){
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      const hit = example.find(s => s.pos[0]===r && s.pos[1]===c);
-      cell.textContent = hit ? hit.ref : "";
-      grid.appendChild(cell);
-    }
-  }
-
-  scroll.appendChild(grid);
-  root.appendChild(scroll);
-}
-
-/* 3×11 Scroll + Zoom */
-let zoom = 1;
-
-function renderScrollZoom(root){
-  const scroll = document.createElement("div");
-  scroll.className = "scroll-container";
-
-  const zoomWrap = document.createElement("div");
-  zoomWrap.className = "zoom-wrapper";
-  zoomWrap.style.transform = `scale(${zoom})`;
-
-  const grid = document.createElement("div");
-  grid.style.display = "grid";
-  grid.style.gridTemplateColumns = "repeat(11, 80px)";
-  grid.style.gridTemplateRows = "repeat(3, 60px)";
-  grid.style.gap = "6px";
-
-  for(let r=1; r<=3; r++){
-    for(let c=1; c<=11; c++){
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      const hit = example.find(s => s.pos[0]===r && s.pos[1]===c);
-      cell.textContent = hit ? hit.ref : "";
-      grid.appendChild(cell);
-    }
-  }
-
-  zoomWrap.appendChild(grid);
-  scroll.appendChild(zoomWrap);
-  root.appendChild(scroll);
-
-  // Zoom Buttons
-  const zIn = document.createElement("button");
-  zIn.textContent = "Zoom +";
-  zIn.onclick = () => { zoom += 0.1; render(); };
-
-  const zOut = document.createElement("button");
-  zOut.textContent = "Zoom -";
-  zOut.onclick = () => { zoom -= 0.1; render(); };
-
-  const zReset = document.createElement("button");
-  zReset.textContent = "Reset";
-  zReset.onclick = () => { zoom = 1; render(); };
-
-  root.appendChild(zIn);
-  root.appendChild(zOut);
-  root.appendChild(zReset);
-}
-
-/* Start */
-render();
+// Rendern
+renderDOM(document.getElementById("topLine"), lines[0]);
+renderCanvas(document.getElementById("bottomLine1"), lines[1]);
+renderSVG(document.getElementById("bottomLine2"), lines[2]);
 </script>
-
-</body>
-</html>
