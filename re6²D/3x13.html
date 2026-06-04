@@ -1,11 +1,41 @@
 {
   "axis": "AX-3x13",
-  "id": { "tech": "T-13XX", "eich": "E-13XX", "gen": "G-13XX" },
-  "zoom": { "levels": [4,16,64,128] },
-  "axes": { "main":12, "eich":1, "gen":1, "total":14 },
+
+  "id": {
+    "tech": "T-13XX",
+    "eich": "E-13XX",
+    "gen":  "G-13XX"
+  },
+
+  "zoom": {
+    "levels": [4, 16, 64, 128]
+  },
+
+  "axes": {
+    "main": 12,
+    "eich": 1,
+    "gen": 1,
+    "total": 14
+  },
+
+  "submasks": {
+    "3x4": { "cols": 4, "inherit": "projection" },
+    "3x3": { "cols": 3, "inherit": "projection" },
+    "3x2": { "cols": 2, "inherit": "projection" },
+    "3x1": { "cols": 1, "inherit": "projection" }
+  },
+
   "projection": {
     "grid": 39,
-    "source": ["3x4","3x6","3x9","3x5","3x10","3x11"]
+    "source": [
+      "3x4",
+      "3x6",
+      "3x9",
+      "3x5",
+      "3x10",
+      "3x11"
+    ]
   },
+
   "raw_ref": "RAW-ID-CORE"
 }
