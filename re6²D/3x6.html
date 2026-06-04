@@ -1,5 +1,19 @@
 {
-  "axis": "P-3x6",
+  "axis": "P-3xX",
+
+  "grid": {
+    "rows": 3,
+    "cols": 6,
+    "valid_subgrids": [
+      { "name": "3x1", "cols": 1 },
+      { "name": "3x2", "cols": 2 },
+      { "name": "3x3", "cols": 3 },
+      { "name": "3x4", "cols": 4 },
+      { "name": "3x5", "cols": 5 },
+      { "name": "3x6", "cols": 6 }
+    ]
+  },
+
   "slots": [
     { "pos": [1,1], "prime": 2,  "dev": 0.02 },
     { "pos": [1,2], "prime": 3,  "dev": 0.05 },
@@ -21,5 +35,11 @@
     { "pos": [3,4], "prime": 53, "dev": 0.89 },
     { "pos": [3,5], "prime": 59, "dev": 0.94 },
     { "pos": [3,6], "prime": 61, "dev": 0.97 }
-  ]
+  ],
+
+  "soll_logic": {
+    "rule": "subgrid must be valid for requested X",
+    "fallback": "truncate to X",
+    "priority": "soll-overrides-ist"
+  }
 }
