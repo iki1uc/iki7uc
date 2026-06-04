@@ -1,1 +1,28 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>2x3 Trigger Prüfstand</title>
+  <script type="module" src="engine.js"></script>
+  <style>
+    body { background:#000; color:#0f0; font-family: monospace; }
+    .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; max-width:320px; margin:20px auto; }
+    button { padding:10px; background:#111; color:#0f0; border:1px solid #0f0; cursor:pointer; }
+    .log { max-width:480px; margin:20px auto; font-size:12px; white-space:pre-wrap; }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <button data-tech="A" data-slot="0">A1</button>
+    <button data-tech="A" data-slot="1">A2</button>
+    <button data-tech="A" data-slot="2">A3</button>
+
+    <button data-tech="B" data-slot="0">B1</button>
+    <button data-tech="B" data-slot="1">B2</button>
+    <button data-tech="B" data-slot="2">B3</button>
+  </div>
+
+  <div class="log" id="log"></div>
+</body>
+</html>
 
