@@ -1,42 +1,43 @@
 {
-  "parzellen": [
-    {
-      "id": "P1",
-      "typ": "molekuel",
-      "zustaende": [
-        "Z1",
-        "Z2",
-        "Z3",
-        "Z4",
-        "Z5",
-        "Z6"
-      ],
-      "kontext": {
-        "gruppe": "A",
-        "prioritaet": 1
-      }
-    },
-    {
-      "id": "P2",
-      "typ": "item",
-      "zustaende": [
-        "Z1",
-        "Z2",
-        "Z3",
-        "Z4",
-        "Z5",
-        "Z6"
-      ],
-      "kontext": {
-        "gruppe": "B",
-        "prioritaet": 2
-      }
-    }
-  ],
-  "merge_regel": {
-    "beschreibung": "so viele Parcellen wie möglich zusammenlegen",
+  "axis": "P-3xN",
+
+  "competence": {
+    "core": [
+      { "id": "P1", "typ": "molekuel", "zustaende": ["Z1","Z2","Z3","Z4","Z5","Z6"] },
+      { "id": "P2", "typ": "item",     "zustaende": ["Z1","Z2","Z3","Z4","Z5","Z6"] }
+    ],
+    "gen":  "GEN-PARCEL-NEW",
+    "tech": "TECH-PARCEL-NEW",
+    "eich": "EICH-PARCEL-NEW"
+  },
+
+  "orbit": {
+    "gold": true,
+    "slot": "3x4-ready"
+  },
+
+  "zoom": [4,16,64,128],
+
+  "merge": {
     "strategie": "union",
+    "beschreibung": "so viele Parcellen wie möglich zusammenlegen",
     "formel": "P_merge = ⋃ P_i"
+  },
+
+  "legacy": {
+    "parzellen": [
+      {
+        "id": "P1",
+        "typ": "molekuel",
+        "zustaende": ["Z1","Z2","Z3","Z4","Z5","Z6"],
+        "kontext": { "gruppe": "A", "prioritaet": 1 }
+      },
+      {
+        "id": "P2",
+        "typ": "item",
+        "zustaende": ["Z1","Z2","Z3","Z4","Z5","Z6"],
+        "kontext": { "gruppe": "B", "prioritaet": 2 }
+      }
+    ]
   }
 }
-
