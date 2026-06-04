@@ -1,38 +1,54 @@
-{
-  "id": {
-    "huhn": "H-AN-ALL4ALL-L00-R00",
-    "ei": "E-anchors-all4all-v1",
-    "omelett": "O-AN-BEAM_PHASE-AN-ALL4ALL",
-    "satt": "S-01-AN-L00",
-    "beam": "B-BEAM_PHASE-AN-ALL4ALL"
+// Beispiel-Datenzeile
+const row = lines[Math.floor(Math.random() * lines.length)];
+
+// ALL4ALL-Dokument
+const ALL4ALL_DATA = {
+  id: {
+    huhn: "H-AN-ALL4ALL-L00-R00",
+    ei: "E-anchors-all4all-v1",
+    omelett: "O-AN-BEAM_PHASE-AN-ALL4ALL",
+    satt: "S-01-AN-L00",
+    beam: "B-BEAM_PHASE-AN-ALL4ALL"
   },
-  "meta": {
-    "axis": "AN",
-    "layer": "ALL4ALL",
-    "language": "L00",
-    "resume": "R00",
-    "beam_type": "BEAM_PHASE"
+  meta: {
+    axis: "AN",
+    layer: "ALL4ALL",
+    language: "L00",
+    resume: "R00",
+    beam_type: "BEAM_PHASE"
   },
-  "content": {
-    "mask_word": "",
-    "story": { "de": "", "en": "", "tr": "" },
-    "artists": [],
-    "scientists": []
-  },
-  "links": {
-    "molecule": "",
-    "code": "",
-    "maxi": "",
-    "eich": "",
-    "48bahn": ""
-  },
-  "error_check": {
-    "axis_valid": true,
-    "layer_valid": true,
-    "language_valid": true,
-    "resume_valid": true,
-    "beam_valid": true,
-    "file_valid": true
+  content: { mask_word: "", story:{de:"",en:"",tr:""}, artists:[], scientists:[] },
+  links: { molecule:"", code:"", maxi:"", eich:"", "48bahn":"" },
+  error_check: {
+    axis_valid:true, layer_valid:true, language_valid:true,
+    resume_valid:true, beam_valid:true, file_valid:true
   }
+};
+
+function renderAN(target, data) {
+  target.innerHTML = `
+    <div style="padding:10px; border:1px solid #0ff; color:#0ff; font-family:monospace;">
+      <div><b>AXIS:</b> ${data.meta.axis}</div>
+      <div><b>LAYER:</b> ${data.meta.layer}</div>
+      <div><b>LANG:</b> ${data.meta.language}</div>
+      <div><b>BEAM:</b> ${data.meta.beam_type}</div>
+      <pre style="font-size:12px; margin-top:6px;">
+${JSON.stringify(data.id, null, 2)}
+      </pre>
+    </div>
+  `;
 }
 
+function resetUIBlock(target) {
+  target.innerHTML = "<div style='padding:8px; border:1px solid #444;'>RESET</div>";
+}
+
+// einmalige Sortier‑Darstellung aller Modi
+renderDOM(document.getElementById("mode-A"), row);
+renderCanvas(document.getElementById("mode-B"), row);
+renderSVG(document.getElementById("mode-C"), row);
+renderCSS(document.getElementById("mode-D"), row);
+resetUIBlock(document.getElementById("mode-E"));
+renderAN(document.getElementById("mode-AN"), ALL4ALL_DATA);
+// optional:
+// renderZ(document.getElementById("mode-Z"));
