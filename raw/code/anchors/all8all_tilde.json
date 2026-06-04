@@ -1,38 +1,17 @@
-{
-  "id": {
-    "huhn": "H-AN-ALL8ALL-L00-R00",
-    "ei": "E-anchors-all8all_tilde-v1",
-    "omelett": "O-AN-BEAM_PHASE-AN-ALL8ALL",
-    "satt": "S-01-AN-L00",
-    "beam": "B-BEAM_PHASE-AN-ALL8ALL"
-  },
-  "meta": {
-    "axis": "AN",
-    "layer": "ALL8ALL",
-    "language": "L00",
-    "resume": "R00",
-    "beam_type": "BEAM_PHASE"
-  },
-  "content": {
-    "mask_word": "",
-    "story": { "de": "", "en": "", "tr": "" },
-    "artists": [],
-    "scientists": []
-  },
-  "links": {
-    "molecule": "",
-    "code": "",
-    "maxi": "",
-    "eich": "",
-    "48bahn": ""
-  },
-  "error_check": {
-    "axis_valid": true,
-    "layer_valid": true,
-    "language_valid": true,
-    "resume_valid": true,
-    "beam_valid": true,
-    "file_valid": true
-  }
-}
+function timeJump() {
+  const seq = [
+    { mode: "A", delay:   0 },
+    { mode: "B", delay: 120 },
+    { mode: "AN", delay: 260 },
+    { mode: "E", delay: 420 },
+    { mode: "Z", delay: 620 },
+    { mode: "A", delay: 900 }
+  ];
 
+  seq.forEach(step => {
+    setTimeout(() => {
+      currentMode = step.mode;
+      renderUI();
+    }, step.delay);
+  });
+}
