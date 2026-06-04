@@ -1,22 +1,20 @@
-import { paket } from "./tam/6iygo.js";
-
-const grid = {
-  r0c0: document.getElementById("r0c0"),
-  r0c1: document.getElementById("r0c1"),
-  r0c2: document.getElementById("r0c2"),
-  r1c0: document.getElementById("r1c0"),
-  r1c1: document.getElementById("r1c1"),
-  r1c2: document.getElementById("r1c2"),
-  r2c0: document.getElementById("r2c0"),
-  r2c1: document.getElementById("r2c1"),
-  r2c2: document.getElementById("r2c2")
-};
-
 function tam(item) {
-  grid[item.ort].textContent = item.molekuel;
-}
+  // 1) 3×‑NEU Format
+  const ort_new = item?.legacy?.ort;
+  const mol_new = item?.competence?.core?.[0];
 
-document.getElementById("btn").onclick = () => {
-  paket.items.forEach(tam);
-};
-1
+  // 2) ALT Format
+  const ort_alt = item?.ort;
+  const mol_alt = item?.molekuel;
+
+  // 3) REPAIR Format
+  const ort_rep = item?.ort;
+  const mol_rep = item?.typ;
+
+  // FINAL: Priorität
+  const ort = ort_new || ort_alt || ort_rep;
+  const mol = mol_new || mol_alt || mol_rep || "?";
+
+  if (!ort || !grid[ort]) return;
+  grid[ort].textContent = mol;
+}
