@@ -1,28 +1,31 @@
-let currentMode = "A"; // neuer Zustand
+let currentMode = "A";
+let isRendering = false;
+
+function showState() {
+  console.log("MODE:", currentMode);
+}
 
 function renderUI() {
+  if (isRendering) return;
+  isRendering = true;
+
+  showState();
   const row = lines[Math.floor(Math.random() * lines.length)];
 
   switch (currentMode) {
-    case "A":
-      renderDOM(document.getElementById("topLine"), row);
-      break;
-    case "B":
-      renderCanvas(document.getElementById("bottomLine1"), row);
-      break;
-    case "C":
-      renderSVG(document.getElementById("bottomLine2"), row);
-      break;
-    case "D":
-      renderCSS(document.getElementById("mainUI"), row);
-      break;
+    case "A": renderDOM(document.getElementById("topLine"), row); break;
+    case "B": renderCanvas(document.getElementById("bottomLine1"), row); break;
+    case "C": renderSVG(document.getElementById("bottomLine2"), row); break;
+    case "D": renderCSS(document.getElementById("mainUI"), row); break;
   }
+
+  isRendering = false;
 }
 
 function setMode(mode) {
+  if (currentMode === mode) return;
   currentMode = mode;
   renderUI();
 }
 
-// UI läuft weiter
 setInterval(renderUI, 1500);
