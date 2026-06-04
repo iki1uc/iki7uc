@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>TIME 3×11 Scroll Viewer</title>
+
+<style>
+  .scroll-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #444;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(11, 80px);
+    grid-template-rows: repeat(3, 60px);
+    gap: 6px;
+    width: max-content;
+  }
+
+  .cell {
+    border: 1px solid #444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+    background: #f8f8f8;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="scroll-container">
+  <div id="grid" class="grid"></div>
+</div>
+
+<script>
+// ------------------------------------------------------
+// Renderer für 3×11
+// ------------------------------------------------------
+function render3x11(mask){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  for(let r=1; r<=3; r++){
+    for(let c=1; c<=11; c++){
+      const cell = document.createElement("div");
+      cell.className = "cell";
+
+      const hit = mask.find(s => s.pos[0] === r && s.pos[1] === c);
+      cell.textContent = hit ? hit.ref : "";
+      grid.appendChild(cell);
+    }
+  }
+}
+
+// ------------------------------------------------------
+// Beispiel: TIME‑3×11 present‑Zone
+// ------------------------------------------------------
+const timeExample = [
+  { pos:[1,4], refs:["M-001"] },
+  { pos:[2,5], refs:["M-017","M-023"], phase:[0.2,0.7] },
+  { pos:[3,2], refs:["M-099"] },
+  { pos:[1,10], refs:["M-777"] }
+];
+
+// ------------------------------------------------------
+// 3×11 erzeugen
+// ------------------------------------------------------
+const mask3x11 = timeExample.map(s => ({
+  pos: s.pos,
+  ref: s.refs?.[0] || s.ref || "?",
+  phase: s.phase || null
+}));
+
+// Rendern
+render3x11(mask3x11);
+</script>
+
+</body>
+</html>
 
