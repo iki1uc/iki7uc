@@ -1,1 +1,31 @@
+{
+  "meta_raum": {
+    "beschreibung": "Abstrakte Ebene für alle Bahnen (Geraden, Diagonalen, Skalen)",
+    "punkte": "r1..rn",
+    "notation": "R = {r1, r2, ..., rn}"
+  },
+  "skalen": {
+    "mini": {
+      "name": "mini",
+      "sigma": 0.1
+    },
+    "maxi": {
+      "name": "maxi",
+      "sigma": 1.0
+    }
+  },
+  "move_operator": {
+    "name": "M",
+    "beschreibung": "läuft alle Bahnen ab, unabhängig von mini/maxi",
+    "formel": "M(n, sigma) = r0 + sigma * v(n)",
+    "vektor_v": {
+      "beschreibung": "Basis- und Diagonalvektoren",
+      "typen": [
+        "gerade",
+        "diagonal",
+        "tiefe"
+      ]
+    }
+  }
+}
 
