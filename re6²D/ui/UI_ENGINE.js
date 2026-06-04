@@ -1,24 +1,42 @@
-/* UI ENGINE – verbindet DOM mit IMPULSE_ENGINE */
+import { render3x3 } from "./time/render_3x3.js";
+import { render3x4 } from "./time/render_3x4.js";
+import { render3x7 } from "./time/render_3x7.js";
+import { renderScroll } from "./time/render_scroll.js";
+import { renderScrollZoom } from "./time/render_scroll_zoom.js";
 
-document.getElementById("runBtn").addEventListener("click", () => {
-    const raw = document.getElementById("inputValue").value;
+let lastResult = null;
 
-    const data = {
-        value: Number(raw),
-        direction: "forward",
-        mult: 1
-    };
+function updateTimeViewer(result){
+    lastResult = result;
 
-    const result = processImpulse(data);
-    updateLanes(result);
-});
+    const mask = result.timeSlots.map(s => ({
+        pos: s.pos,
+        ref: s.ref || "?",
+        phase: s.phase || null
+    }));
 
-/* Lane Renderer */
-function updateLanes(result){
-    const lanes = document.querySelectorAll(".lane");
-    lanes.forEach((lane, i) => {
-        const L = result.lanes[i];
-        lane.textContent = `${i} | ${L.code} | ×${L.factor} | ${L.result}`;
-    });
+    const container = document.getElementById("timeViewer");
+    container.innerHTML = "";
+
+    switch(timeMode){
+        case "3x3":
+            render3x3(container, mask);
+            break;
+
+        case "3x4":
+            render3x4(container, mask);
+            break;
+
+        case "3x7":
+            render3x7(container, mask);
+            break;
+
+        case "scroll":
+            renderScroll(container, mask);
+            break;
+
+        case "zoom":
+            renderScrollZoom(container, mask);
+            break;
+    }
 }
-
