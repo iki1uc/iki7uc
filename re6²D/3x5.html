@@ -1,24 +1,31 @@
 {
   "axis": "TIME-3x5",
+
   "zones": {
     "past": {
       "slots": [
         { "pos": [1,1], "ref": "M-001", "weight": 0.3 },
-        ...
+        { "pos": [2,3], "ref": "M-002", "weight": 0.5 },
+        { "pos": [3,5], "ref": "M-003", "weight": 0.2 }
       ]
     },
+
     "present": {
       "slots": [
-        { "pos": [1,1], "ref": "M-017", "weight": 1.0 },
-        ...
+        { "pos": [1,2], "ref": "M-017", "weight": 1.0 },
+        { "pos": [2,4], "ref": "M-018", "weight": 0.9 },
+        { "pos": [3,1], "ref": "M-019", "weight": 0.8 }
       ]
     },
+
     "future": {
       "slots": [
-        { "pos": [1,1], "ref": "M-101", "weight": 0.6 },
-        ...
+        { "pos": [1,5], "ref": "M-101", "weight": 0.6 },
+        { "pos": [2,2], "ref": "M-102", "weight": 0.7 },
+        { "pos": [3,3], "ref": "M-103", "weight": 0.4 }
       ]
     }
   },
+
   "raw_ref": "RAW-ID-CORE"
 }
