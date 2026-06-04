@@ -1,1 +1,80 @@
 
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>TIME 3×11 → 3×4</title>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    width: 400px;
+    margin: 20px auto;
+  }
+  .cell {
+    border: 1px solid #444;
+    padding: 12px;
+    text-align: center;
+    min-height: 40px;
+    font-family: sans-serif;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="grid" class="grid"></div>
+
+<script>
+// ------------------------------------------------------
+// TIME‑3×11 → 3×4 Schnitt
+// ------------------------------------------------------
+function sliceTime3x11to3x4(slots){
+  return slots
+    .filter(s => s.pos[1] <= 4)
+    .map(s => ({
+      pos: s.pos,
+      ref: s.refs?.[0] || s.ref || "?",
+      phase: s.phase || null
+    }));
+}
+
+// ------------------------------------------------------
+// Renderer
+// ------------------------------------------------------
+function render3x4(mask){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  for(let r=1; r<=3; r++){
+    for(let c=1; c<=4; c++){
+      const cell = document.createElement("div");
+      cell.className = "cell";
+
+      const hit = mask.find(s => s.pos[0] === r && s.pos[1] === c);
+      cell.textContent = hit ? hit.ref : "";
+      grid.appendChild(cell);
+    }
+  }
+}
+
+// ------------------------------------------------------
+// Beispiel: TIME‑3×11 present‑Zone
+// ------------------------------------------------------
+const timeExample = [
+  { pos:[1,4], refs:["M-001"] },
+  { pos:[2,5], refs:["M-017","M-023"], phase:[0.2,0.7] },
+  { pos:[3,2], refs:["M-099"] }
+];
+
+// 3×4 erzeugen
+const mask3x4 = sliceTime3x11to3x4(timeExample);
+
+// Rendern
+render3x4(mask3x4);
+</script>
+
+</body>
+</html>
