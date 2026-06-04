@@ -1,16 +1,20 @@
 {
+  "id": "GTEM-U4-AX12-AX24-AX40",
+  "meta": {
+    "unit": "u4",
+    "depth": ["ax12", "ax24", "ax40"]
+  },
+
   "phi": {
-    "ratio": 1.6180339887,
-    "mode": "golden_path",
-    "apply_to": ["ax12", "ax24", "ax40"],
-    "weights": {
-      "ax12": 1.0,
-      "ax24": 1.618,
-      "ax40": 2.618
-    },
-    "zickzack": {
-      "pattern": ["ax12", "ax24", "ax40", "ax24"],
-      "loop": true
-    }
+    "r": 1.618,
+    "d": ["ax12", "ax24", "ax40"],
+    "w": [1.0, 1.618, 2.618],
+    "p": [0, 1, 2, 1]
+  },
+
+  "anchors": {
+    "ax12": {},
+    "ax24": {},
+    "ax40": {}
   }
 }
