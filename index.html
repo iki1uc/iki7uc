@@ -1,49 +1,78 @@
-let currentMode = "A";
-let isRendering = false;
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>UI START</title>
 
-function showState() {
-  console.log("MODE:", currentMode);
-  // KEIN TEXT IN DER UI
-}
-
-function renderUI() {
-  if (isRendering) return;
-  isRendering = true;
-
-  showState();
-  const row = lines[Math.floor(Math.random() * lines.length)];
-
-  const ui = document.getElementById("mainUI");
-  ui.style.transition = "0.3s";
-
-  switch (currentMode) {
-    case "A":
-      ui.style.background = "#222";
-      renderDOM(document.getElementById("topLine"), row);
-      break;
-
-    case "B":
-      ui.style.background = "#004";
-      renderCanvas(document.getElementById("bottomLine1"), row);
-      break;
-
-    case "C":
-      ui.style.background = "#040";
-      renderSVG(document.getElementById("bottomLine2"), row);
-      break;
-
-    case "D":
-      ui.style.background = "#400";
-      renderCSS(document.getElementById("mainUI"), row);
-      break;
+<style>
+  body {
+    margin: 0;
+    background: #000;
+    font-family: sans-serif;
   }
 
-  isRendering = false;
-}
+  .toolbar {
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    background: #111;
+  }
 
-function setMode(mode) {
-  currentMode = mode;
-  renderUI();
-}
+  .toolbar button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background: #222;
+    border: 1px solid #555;
+    color: #fff;
+    cursor: pointer;
+  }
 
-setInterval(renderUI, 1500);
+  #mainUI {
+    height: calc(100vh - 60px);
+    background: #000;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #topLine {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  #bottomLine1 {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+  }
+
+  #bottomLine2 {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ⭐ 3 BUTTONS SOFORT SICHTBAR ⭐ -->
+<div class="toolbar">
+  <button onclick="setMode('A')">A</button>
+  <button onclick="setMode('B')">B</button>
+  <button onclick="setMode('C')">C</button>
+</div>
+
+<!-- ⭐ UI-BEREICH FÜR DEINE ENGINE ⭐ -->
+<div id="mainUI">
+  <div id="topLine"></div>
+  <canvas id="bottomLine1" width="300" height="80"></canvas>
+  <svg id="bottomLine2" width="300" height="80"></svg>
+</div>
+
+<!-- ⭐ DEINE ENGINE LADEN ⭐ -->
+<script src="engine.js"></script>
+
+</body>
+</html>
