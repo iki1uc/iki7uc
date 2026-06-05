@@ -3,6 +3,7 @@ let isRendering = false;
 
 function showState() {
   console.log("MODE:", currentMode);
+  document.getElementById("modeDisplay").textContent = "MODE: " + currentMode;
 }
 
 function renderUI() {
@@ -12,18 +13,36 @@ function renderUI() {
   showState();
   const row = lines[Math.floor(Math.random() * lines.length)];
 
+  // Sichtbare Reaktion je nach Modus
+  const ui = document.getElementById("mainUI");
+  ui.style.transition = "0.3s";
+
   switch (currentMode) {
-    case "A": renderDOM(document.getElementById("topLine"), row); break;
-    case "B": renderCanvas(document.getElementById("bottomLine1"), row); break;
-    case "C": renderSVG(document.getElementById("bottomLine2"), row); break;
-    case "D": renderCSS(document.getElementById("mainUI"), row); break;
+    case "A":
+      ui.style.background = "#222";
+      renderDOM(document.getElementById("topLine"), row);
+      break;
+
+    case "B":
+      ui.style.background = "#004";
+      renderCanvas(document.getElementById("bottomLine1"), row);
+      break;
+
+    case "C":
+      ui.style.background = "#040";
+      renderSVG(document.getElementById("bottomLine2"), row);
+      break;
+
+    case "D":
+      ui.style.background = "#400";
+      renderCSS(document.getElementById("mainUI"), row);
+      break;
   }
 
   isRendering = false;
 }
 
 function setMode(mode) {
-  if (currentMode === mode) return;
   currentMode = mode;
   renderUI();
 }
