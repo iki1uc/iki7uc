@@ -1,1 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>TOOLOMAT SCRIPTS</title>
+<style>
+body{background:#000;color:#0f0;font-family:monospace;}
+textarea{width:48%;height:200px;background:#111;color:#0f0;}
+.row{display:flex;gap:4px;margin-bottom:8px;}
+pre{background:#111;padding:8px;white-space:pre-wrap;}
+</style>
+</head>
+<body>
+<h1>TOOLOMAT SCRIPTS – Mechanismen</h1>
 
+<div class="row">
+<textarea id="h1"></textarea>
+<textarea id="h2"></textarea>
+</div>
+<div class="row">
+<textarea id="h3"></textarea>
+<textarea id="h4"></textarea>
+</div>
+
+<button onclick="scan()">SCAN</button>
+
+<pre id="out"></pre>
+
+<script>
+function scanOne(html,label){
+ const p=new DOMParser();
+ const d=p.parseFromString(html,"text/html");
+ const s=[...d.querySelectorAll("script")];
+ const ext=s.filter(x=>x.src).map(x=>x.src);
+ const inline=s.filter(x=>!x.src).length;
+ const onclick=[...d.querySelectorAll("[onclick]")].length;
+ return {label,scripts:s.length,inline,ext,onclick};
+}
+function scan(){
+ const arr=[
+  {v:h1.value,label:"HTML1"},
+  {v:h2.value,label:"HTML2"},
+  {v:h3.value,label:"HTML3"},
+  {v:h4.value,label:"HTML4"}
+ ];
+ let o="";
+ arr.forEach(a=>{
+  if(!a.v.trim())return;
+  const r=scanOne(a.v,a.label);
+  o+=`${r.label}\nScripts: ${r.scripts}\nInline: ${r.inline}\nOnclick: ${r.onclick}\nExterne:\n`;
+  r.ext.forEach(e=>o+=`  ${e}\n`);
+  o+="\n";
+ });
+ out.textContent=o||"Keine Eingabe.";
+}
+</script>
+</body>
+</html>
