@@ -3,7 +3,7 @@ let isRendering = false;
 
 function showState() {
   console.log("MODE:", currentMode);
-  document.getElementById("modeDisplay").textContent = "MODE: " + currentMode;
+  // KEIN TEXT MEHR IN DER UI
 }
 
 function renderUI() {
@@ -13,7 +13,6 @@ function renderUI() {
   showState();
   const row = lines[Math.floor(Math.random() * lines.length)];
 
-  // Sichtbare Reaktion je nach Modus
   const ui = document.getElementById("mainUI");
   ui.style.transition = "0.3s";
 
