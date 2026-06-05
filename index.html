@@ -3,111 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <title>SEEÜ UI</title>
+
 <style>
   body {
     margin: 0;
     background: #000;
     color: #fff;
     font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
   }
 
+  /* Toolbar mit alten Tasten */
   .toolbar {
-    padding: 8px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
+    height: 60px;
     background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
   }
 
   .toolbar button {
-    padding: 6px 12px;
+    padding: 10px 20px;
+    font-size: 18px;
     background: #222;
     border: 1px solid #555;
     color: #fff;
     cursor: pointer;
   }
 
-  .toolbar input[type="range"] {
-    width: 200px;
-  }
-
-  #mainUI {
-    width: 100vw;
-    height: calc(100vh - 50px);
+  /* 33% UI-Bereich */
+  #uiZone {
+    height: 33%;
     background: #000;
-    position: relative;
-    overflow: hidden;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  #axisCanvas {
-    width: 100%;
-    height: 100%;
-    display: block;
+  /* Restlicher Bereich */
+  #mainZone {
+    flex: 1;
+    background: #000;
   }
 </style>
 </head>
+
 <body>
 
+<!-- Alte Tasten -->
 <div class="toolbar">
   <button onclick="setMode('A')">A</button>
   <button onclick="setMode('B')">B</button>
   <button onclick="setMode('C')">C</button>
-
-  <!-- Zoom-Regler -->
-  <span>Zoom</span>
-  <input id="zoomSlider" type="range" min="0.5" max="3" step="0.1" value="1">
 </div>
 
-<div id="mainUI">
-  <!-- Canvas für Achsen + Zoom -->
-  <canvas id="axisCanvas"></canvas>
+<!-- 33% UI -->
+<div id="uiZone">
+  <canvas id="uiCanvas" width="400" height="200"></canvas>
 </div>
+
+<!-- Restlicher Bereich -->
+<div id="mainZone"></div>
 
 <script src="engine.js"></script>
-<script>
-  const canvas = document.getElementById('axisCanvas');
-  const ctx = canvas.getContext('2d');
-  const zoomSlider = document.getElementById('zoomSlider');
-
-  function resizeCanvas() {
-    canvas.width = mainUI.clientWidth;
-    canvas.height = mainUI.clientHeight;
-    drawAxes(currentZoom);
-  }
-
-  let currentZoom = 1;
-
-  function drawAxes(zoom) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.scale(zoom, zoom);
-
-    // X-Achse
-    ctx.strokeStyle = '#0f0';
-    ctx.beginPath();
-    ctx.moveTo(-canvas.width, 0);
-    ctx.lineTo(canvas.width, 0);
-    ctx.stroke();
-
-    // Y-Achse
-    ctx.strokeStyle = '#0ff';
-    ctx.beginPath();
-    ctx.moveTo(0, -canvas.height);
-    ctx.lineTo(0, canvas.height);
-    ctx.stroke();
-
-    ctx.restore();
-  }
-
-  zoomSlider.addEventListener('input', () => {
-    currentZoom = parseFloat(zoomSlider.value);
-    drawAxes(currentZoom);
-  });
-
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
-</script>
 
 </body>
 </html>
