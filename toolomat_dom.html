@@ -1,1 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>TOOLOMAT DOM</title>
+<style>
+body{background:#000;color:#0f0;font-family:monospace;}
+textarea{width:48%;height:200px;background:#111;color:#0f0;}
+.row{display:flex;gap:4px;margin-bottom:8px;}
+pre{background:#111;padding:8px;white-space:pre-wrap;}
+</style>
+</head>
+<body>
+<h1>TOOLOMAT DOM – Struktur/Masse</h1>
+
+<div class="row">
+<textarea id="h1" placeholder="HTML 1"></textarea>
+<textarea id="h2" placeholder="HTML 2"></textarea>
+</div>
+<div class="row">
+<textarea id="h3" placeholder="HTML 3"></textarea>
+<textarea id="h4" placeholder="HTML 4"></textarea>
+</div>
+
+<button onclick="scan()">SCAN</button>
+
+<pre id="out"></pre>
+
+<script>
+function scanOne(html,label){
+ const p=new DOMParser();
+ const d=p.parseFromString(html,"text/html");
+ const tags={};
+ d.querySelectorAll("*").forEach(e=>{
+   const t=e.tagName.toLowerCase();
+   tags[t]=(tags[t]||0)+1;
+ });
+ const ids=[...d.querySelectorAll("[id]")].map(e=>e.id);
+ const cls=[...d.querySelectorAll("[class]")].flatMap(e=>e.className.split(/\s+/));
+ return {label,tags,ids,cls};
+}
+function scan(){
+ const arr=[
+  {v:h1.value,label:"HTML1"},
+  {v:h2.value,label:"HTML2"},
+  {v:h3.value,label:"HTML3"},
+  {v:h4.value,label:"HTML4"}
+ ];
+ let o="";
+ arr.forEach(a=>{
+  if(!a.v.trim())return;
+  const r=scanOne(a.v,a.label);
+  o+=`${r.label}\nTAGS:\n`;
+  Object.keys(r.tags).sort().forEach(t=>o+=`  ${t}: ${r.tags[t]}\n`);
+  o+=`IDs: ${r.ids.join(", ")||"-"}\n`;
+  o+=`CLASSES: ${r.cls.join(", ")||"-"}\n\n`;
+ });
+ out.textContent=o||"Keine Eingabe.";
+}
+</script>
+</body>
+</html>
 
