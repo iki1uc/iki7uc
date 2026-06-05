@@ -1,76 +1,56 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>SEEÜ UI</title>
+const canvas = document.getElementById("uiCanvas");
+const ctx = canvas.getContext("2d");
 
-<style>
-  body {
-    margin: 0;
-    background: #000;
-    color: #fff;
-    font-family: sans-serif;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
+let ax = 0; // Achse A (links)
+let by = 0; // Achse B (mitte)
+let cz = 0; // Achse C (rechts)
 
-  /* Toolbar mit alten Tasten */
-  .toolbar {
-    height: 60px;
-    background: #111;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-  }
+// Taste A/B/C steuern jeweils ihr Drittel
+function setMode(mode) {
+  if (mode === "A") ax += 10;
+  if (mode === "B") by += 10;
+  if (mode === "C") cz += 10;
+  drawAxes();
+}
 
-  .toolbar button {
-    padding: 10px 20px;
-    font-size: 18px;
-    background: #222;
-    border: 1px solid #555;
-    color: #fff;
-    cursor: pointer;
-  }
+function drawAxes() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  /* 33% UI-Bereich */
-  #uiZone {
-    height: 33%;
-    background: #000;
-    border-top: 1px solid #333;
-    border-bottom: 1px solid #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  const w = canvas.width / 3;
+  const h = canvas.height;
 
-  /* Restlicher Bereich */
-  #mainZone {
-    flex: 1;
-    background: #000;
-  }
-</style>
-</head>
+  // 1) Linkes Drittel – Achse A (rot)
+  ctx.save();
+  ctx.translate(w/2, h/2);
+  ctx.rotate(ax * Math.PI/180);
+  ctx.strokeStyle = "red";
+  ctx.beginPath();
+  ctx.moveTo(-50, 0);
+  ctx.lineTo(50, 0);
+  ctx.stroke();
+  ctx.restore();
 
-<body>
+  // 2) Mittleres Drittel – Achse B (grün)
+  ctx.save();
+  ctx.translate(w + w/2, h/2);
+  ctx.rotate(by * Math.PI/180);
+  ctx.strokeStyle = "lime";
+  ctx.beginPath();
+  ctx.moveTo(-50, 0);
+  ctx.lineTo(50, 0);
+  ctx.stroke();
+  ctx.restore();
 
-<!-- Alte Tasten -->
-<div class="toolbar">
-  <button onclick="setMode('A')">A</button>
-  <button onclick="setMode('B')">B</button>
-  <button onclick="setMode('C')">C</button>
-</div>
+  // 3) Rechtes Drittel – Achse C (blau)
+  ctx.save();
+  ctx.translate(2*w + w/2, h/2);
+  ctx.rotate(cz * Math.PI/180);
+  ctx.strokeStyle = "cyan";
+  ctx.beginPath();
+  ctx.moveTo(-50, 0);
+  ctx.lineTo(50, 0);
+  ctx.stroke();
+  ctx.restore();
+}
 
-<!-- 33% UI -->
-<div id="uiZone">
-  <canvas id="uiCanvas" width="400" height="200"></canvas>
-</div>
-
-<!-- Restlicher Bereich -->
-<div id="mainZone"></div>
-
-<script src="engine.js"></script>
-
-</body>
-</html>
+drawAxes();
