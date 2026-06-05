@@ -35,44 +35,67 @@
     overflow: hidden;
   }
 
-  #topLine {
+  /* UNSICHTBARES GRID FÜR tam() */
+  #gridContainer {
+    display: grid;
+    grid-template-columns: repeat(11, 40px);
+    grid-template-rows: repeat(3, 40px);
+    gap: 4px;
     position: absolute;
     top: 10px;
-    left: 10px;
-  }
-
-  #bottomLine1 {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-  }
-
-  #bottomLine2 {
-    position: absolute;
-    bottom: 10px;
     right: 10px;
+    opacity: 0; /* UNSICHTBAR */
+    pointer-events: none;
+  }
+
+  .gcell {
+    width: 40px;
+    height: 40px;
+    background: #222;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
   }
 </style>
 </head>
 
 <body>
 
-<!-- ⭐ 3 BUTTONS SOFORT SICHTBAR ⭐ -->
 <div class="toolbar">
   <button onclick="setMode('A')">A</button>
   <button onclick="setMode('B')">B</button>
   <button onclick="setMode('C')">C</button>
 </div>
 
-<!-- ⭐ UI-BEREICH FÜR DEINE ENGINE ⭐ -->
 <div id="mainUI">
   <div id="topLine"></div>
   <canvas id="bottomLine1" width="300" height="80"></canvas>
   <svg id="bottomLine2" width="300" height="80"></svg>
+
+  <!-- UNSICHTBARES GRID FÜR tam() -->
+  <div id="gridContainer"></div>
 </div>
 
-<!-- ⭐ DEINE ENGINE LADEN ⭐ -->
 <script src="engine.js"></script>
+
+<script>
+// GRID AUFBAU (3x11)
+const grid = {};
+const gridContainer = document.getElementById("gridContainer");
+
+for (let r = 1; r <= 3; r++) {
+  for (let c = 1; c <= 11; c++) {
+    const id = `r${r}c${c}`;
+    const cell = document.createElement("div");
+    cell.className = "gcell";
+    cell.id = id;
+    grid[id] = cell;
+    gridContainer.appendChild(cell);
+  }
+}
+</script>
 
 </body>
 </html>
