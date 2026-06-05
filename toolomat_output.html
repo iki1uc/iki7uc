@@ -1,1 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>TOOLOMAT OUTPUT</title>
+<style>
+body{background:#000;color:#0f0;font-family:monospace;}
+textarea{width:48%;height:200px;background:#111;color:#0f0;}
+.row{display:flex;gap:4px;margin-bottom:8px;}
+pre{background:#111;padding:8px;white-space:pre-wrap;}
+</style>
+</head>
+<body>
+<h1>TOOLOMAT OUTPUT – 3×X Kopierblock</h1>
+
+<div class="row">
+<textarea id="h1"></textarea>
+<textarea id="h2"></textarea>
+</div>
+<div class="row">
+<textarea id="h3"></textarea>
+<textarea id="h4"></textarea>
+</div>
+
+<button onclick="make()">GENERIEREN</button>
+
+<pre id="out"></pre>
+
+<script>
+function make(){
+ const arr=[h1.value,h2.value,h3.value,h4.value].filter(v=>v.trim());
+ let o="=== 3×X OUTPUT BLOCK ===\n";
+ arr.forEach((v,i)=>{
+   o+=`--- QUADRANT ${i+1} ---\n`;
+   o+=`LÄNGE: ${v.length}\n`;
+   o+=`HASH: ${hash(v)}\n\n`;
+ });
+ out.textContent=o;
+}
+function hash(str){
+ let h=0;
+ for(let i=0;i<str.length;i++){
+   h=((h<<5)-h)+str.charCodeAt(i);
+   h|=0;
+ }
+ return h;
+}
+</script>
+</body>
+</html>
 
