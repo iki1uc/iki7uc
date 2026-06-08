@@ -1,7 +1,8 @@
-respo: "Q2"
-id_op: "Q2"
-base: 2
-
-line: "L(n)=3n"
-instance: "I(n)=base+3n"
-axis: "A(n)=floor(n/3)+1"
+respo:
+  count: 4
+  layout: "golden_quarter"
+  satellites:
+    - { id: R1, angle: 0 }
+    - { id: R2, angle: 126 }
+    - { id: R3, angle: 180 }
+    - { id: R4, angle: 306 }
