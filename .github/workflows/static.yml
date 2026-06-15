@@ -1,8 +1,13 @@
-respo:
-  count: 4
-  layout: "golden_quarter"
-  satellites:
-    - { id: R1, angle: 0 }
-    - { id: R2, angle: 126 }
-    - { id: R3, angle: 180 }
-    - { id: R4, angle: 306 }
+name: iki7uc-Richtung
+
+on:
+  workflow_run:
+    workflows: ["iki1uc-Sensorik"]
+    types: [completed]
+
+jobs:
+  richtung:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Richtung liefert Vektor an OP
+        run: echo "iki7uc → OP: Richtungsvektor übertragen"
