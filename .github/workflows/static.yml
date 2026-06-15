@@ -1,16 +1,17 @@
-name: iki7uc-Richtung
+name: respo-${{ github.repository }}
 
 on:
   workflow_run:
-    workflows: ["iki1uc-Sensorik"]
+    workflows: ["OP-Master"]
     types: [completed]
 
 jobs:
-  richtung:
+  modul_ok:
     runs-on: ubuntu-latest
-    steps:
-      - name: iki7uc empfängt Kern-ID
-        run: echo "iki7uc: Kern-ID empfangen"
 
-      - name: iki7uc OK + VERIFY
-        run: echo "iki7uc: OK – VERIFY – Dienst aktiv"
+    steps:
+      - name: respo empfängt OP Kern-ID
+        run: echo "respo: OP Kern-ID empfangen – Modul = ${{ github.repository }}"
+
+      - name: respo OK + VERIFY
+        run: echo "respo: OK – VERIFY – Dienst aktiv – Modul = ${{ github.repository }}"
