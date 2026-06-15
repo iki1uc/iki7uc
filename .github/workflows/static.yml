@@ -9,5 +9,8 @@ jobs:
   richtung:
     runs-on: ubuntu-latest
     steps:
-      - name: Richtung liefert Vektor an OP
-        run: echo "iki7uc → OP: Richtungsvektor übertragen"
+      - name: iki7uc empfängt Kern-ID
+        run: echo "iki7uc: Kern-ID empfangen"
+
+      - name: iki7uc OK + VERIFY
+        run: echo "iki7uc: OK – VERIFY – Dienst aktiv"
